@@ -1,1406 +1,2873 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GlucoCare — Your Diabetes Companion</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
-<style>
-:root{
-  --g:#58CC02;--gd:#3A8600;--gl:#D7F5B1;
-  --b:#1CB0F6;--bl:#DDF4FF;
-  --r:#FF4B4B;--rl:#FFDFE0;
-  --o:#FF9600;--ol:#FFF0D3;
-  --y:#FFC800;--yl:#FFF6CC;
-  --p:#CE82FF;--pl:#F0D9FF;
-  --teal:#028090;--teal-d:#016070;--teal-l:#E1F5EE;
-  --bg:#F7F7F7;--card:#fff;--text:#3C3C3C;--muted:#888;--border:#E5E5E5;
-  --nav-w:82px;
-  /* Glucy state colors */
-  --glucy-happy:#58CC02;--glucy-sad:#FF4B4B;--glucy-warn:#FFC800;--glucy-run:#1CB0F6;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
 
-/* ═══════════════════════════════════════════
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlucoCare — Your Diabetes Companion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --g: #58CC02;
+      --gd: #3A8600;
+      --gl: #D7F5B1;
+      --b: #1CB0F6;
+      --bl: #DDF4FF;
+      --r: #FF4B4B;
+      --rl: #FFDFE0;
+      --o: #FF9600;
+      --ol: #FFF0D3;
+      --y: #FFC800;
+      --yl: #FFF6CC;
+      --p: #CE82FF;
+      --pl: #F0D9FF;
+      --teal: #028090;
+      --teal-d: #016070;
+      --teal-l: #E1F5EE;
+      --bg: #F7F7F7;
+      --card: #fff;
+      --text: #3C3C3C;
+      --muted: #888;
+      --border: #E5E5E5;
+      --nav-w: 82px;
+      /* Glucy state colors */
+      --glucy-happy: #58CC02;
+      --glucy-sad: #FF4B4B;
+      --glucy-warn: #FFC800;
+      --glucy-run: #1CB0F6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════════
    SPLASH SCREEN
 ═══════════════════════════════════════════ */
-#splash{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.splash-logo{font-family:'Fredoka One',cursive;font-size:52px;color:var(--g);opacity:0;animation:fadeIn .8s ease .4s forwards;}
-.splash-sub{font-size:15px;font-weight:700;color:var(--muted);margin-top:6px;opacity:0;animation:fadeIn .6s ease 1s forwards;}
-#splash-canvas{width:160px;height:160px;margin-bottom:12px;}
-.splash-bar-wrap{width:180px;height:10px;background:var(--border);border-radius:100px;margin-top:24px;overflow:hidden;opacity:0;animation:fadeIn .4s ease 1.3s forwards;}
-.splash-bar{height:100%;background:linear-gradient(90deg,var(--g),var(--b));border-radius:100px;width:0;animation:loadBar 2.2s ease 1.5s forwards;}
-.splash-tip{font-size:13px;font-weight:700;color:var(--teal);margin-top:16px;opacity:0;animation:fadeIn .4s ease 1.5s forwards;max-width:260px;text-align:center;}
-@keyframes fadeIn{to{opacity:1;}}
-@keyframes loadBar{to{width:100%;}}
-@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
-@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
-@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
-@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
-@keyframes tada{0%{transform:scale(1) rotate(0);}10%,20%{transform:scale(.9) rotate(-3deg);}30%,50%,70%,90%{transform:scale(1.1) rotate(3deg);}40%,60%,80%{transform:scale(1.1) rotate(-3deg);}100%{transform:scale(1) rotate(0);}}
-@keyframes slideIn{from{opacity:0;transform:translateX(-16px);}to{opacity:1;transform:translateX(0);}}
-@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-/* ═══════════════════════════════════════════
+    .splash-logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 52px;
+      color: var(--g);
+      opacity: 0;
+      animation: fadeIn .8s ease .4s forwards;
+    }
+
+    .splash-sub {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 6px;
+      opacity: 0;
+      animation: fadeIn .6s ease 1s forwards;
+    }
+
+    #splash-canvas {
+      width: 160px;
+      height: 160px;
+      margin-bottom: 12px;
+    }
+
+    .splash-bar-wrap {
+      width: 180px;
+      height: 10px;
+      background: var(--border);
+      border-radius: 100px;
+      margin-top: 24px;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn .4s ease 1.3s forwards;
+    }
+
+    .splash-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--g), var(--b));
+      border-radius: 100px;
+      width: 0;
+      animation: loadBar 2.2s ease 1.5s forwards;
+    }
+
+    .splash-tip {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-top: 16px;
+      opacity: 0;
+      animation: fadeIn .4s ease 1.5s forwards;
+      max-width: 260px;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes loadBar {
+      to {
+        width: 100%;
+      }
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-6px);
+      }
+
+      75% {
+        transform: translateX(6px);
+      }
+    }
+
+    @keyframes tada {
+      0% {
+        transform: scale(1) rotate(0);
+      }
+
+      10%,
+      20% {
+        transform: scale(.9) rotate(-3deg);
+      }
+
+      30%,
+      50%,
+      70%,
+      90% {
+        transform: scale(1.1) rotate(3deg);
+      }
+
+      40%,
+      60%,
+      80% {
+        transform: scale(1.1) rotate(-3deg);
+      }
+
+      100% {
+        transform: scale(1) rotate(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ═══════════════════════════════════════════
    GLUCY FLOATING COMPANION
 ═══════════════════════════════════════════ */
-#glucy-companion{
-  position:fixed;bottom:24px;right:20px;z-index:500;
-  display:flex;flex-direction:column;align-items:flex-end;gap:8px;
-  pointer-events:none;
-}
-#glucy-canvas-main{width:80px;height:80px;cursor:pointer;pointer-events:all;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));transition:transform .2s;}
-#glucy-canvas-main:hover{transform:scale(1.1);}
-#glucy-speech{
-  background:#fff;border-radius:16px 16px 4px 16px;
-  padding:10px 14px;max-width:200px;
-  font-size:12px;font-weight:700;color:var(--text);
-  border:2px solid var(--border);
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-  pointer-events:all;cursor:pointer;
-  opacity:0;transition:opacity .3s;
-  line-height:1.5;
-}
-#glucy-speech.show{opacity:1;}
-#glucy-state-indicator{
-  width:14px;height:14px;border-radius:50%;
-  border:3px solid #fff;
-  position:absolute;bottom:4px;right:4px;
-  transition:background .5s;
-}
+    #glucy-companion {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      pointer-events: none;
+    }
 
-/* Achievement pop */
-#achievement-pop{
-  position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-100px);
-  background:linear-gradient(120deg,var(--g),var(--b));
-  color:#fff;border-radius:20px;padding:14px 24px;
-  font-family:'Fredoka One',cursive;font-size:18px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.2);z-index:600;
-  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
-  text-align:center;
-}
-#achievement-pop.show{transform:translateX(-50%) translateY(0);}
+    #glucy-canvas-main {
+      width: 80px;
+      height: 80px;
+      cursor: pointer;
+      pointer-events: all;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+      transition: transform .2s;
+    }
 
-/* ═══════════════════════════════════════════
+    #glucy-canvas-main:hover {
+      transform: scale(1.1);
+    }
+
+    #glucy-speech {
+      background: #fff;
+      border-radius: 16px 16px 4px 16px;
+      padding: 10px 14px;
+      max-width: 200px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      border: 2px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      pointer-events: all;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity .3s;
+      line-height: 1.5;
+    }
+
+    #glucy-speech.show {
+      opacity: 1;
+    }
+
+    #glucy-state-indicator {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      transition: background .5s;
+    }
+
+    /* Achievement pop */
+    #achievement-pop {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: linear-gradient(120deg, var(--g), var(--b));
+      color: #fff;
+      border-radius: 20px;
+      padding: 14px 24px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      z-index: 600;
+      transition: transform .5s cubic-bezier(.34, 1.56, .64, 1);
+      text-align: center;
+    }
+
+    #achievement-pop.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ═══════════════════════════════════════════
    APP LAYOUT — VERTICAL LEFT NAV
 ═══════════════════════════════════════════ */
-#app{display:none;}
-#app.show{display:flex;min-height:100vh;}
-.sidebar{
-  width:var(--nav-w);background:var(--card);
-  border-right:2px solid var(--border);
-  display:flex;flex-direction:column;align-items:center;
-  padding:16px 0;position:fixed;height:100vh;z-index:100;gap:4px;
-}
-.sb-logo{font-family:'Fredoka One',cursive;font-size:16px;color:var(--g);margin-bottom:12px;text-align:center;line-height:1.2;}
-.nav-divider{width:44px;height:2px;background:var(--border);margin:6px 0;}
-.nav-item{
-  width:66px;height:66px;border-radius:16px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  cursor:pointer;gap:3px;border:none;background:transparent;
-  color:var(--muted);transition:all .18s;position:relative;
-}
-.nav-item:hover{background:var(--bg);}
-.nav-item.active{background:var(--gl);color:var(--gd);}
-.nav-item.active .nav-icon{transform:scale(1.1);}
-.nav-icon{font-size:23px;line-height:1;transition:transform .18s;}
-.nav-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;}
-/* Nav animation on tab change */
-.nav-item.active::after{
-  content:'';position:absolute;left:-2px;top:50%;transform:translateY(-50%);
-  width:4px;height:32px;background:var(--g);border-radius:0 4px 4px 0;
-}
-.main{margin-left:var(--nav-w);flex:1;padding:24px;max-width:calc(100vw - var(--nav-w));}
-.page{display:none;}
-.page.active{display:block;animation:slideIn .25s ease;}
+    #app {
+      display: none;
+    }
 
-/* ═══════════════════════════════════════════
+    #app.show {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: var(--nav-w);
+      background: var(--card);
+      border-right: 2px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      position: fixed;
+      height: 100vh;
+      z-index: 100;
+      gap: 4px;
+    }
+
+    .sb-logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 16px;
+      color: var(--g);
+      margin-bottom: 12px;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .nav-divider {
+      width: 44px;
+      height: 2px;
+      background: var(--border);
+      margin: 6px 0;
+    }
+
+    .nav-item {
+      width: 66px;
+      height: 66px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      gap: 3px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      transition: all .18s;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      background: var(--bg);
+    }
+
+    .nav-item.active {
+      background: var(--gl);
+      color: var(--gd);
+    }
+
+    .nav-item.active .nav-icon {
+      transform: scale(1.1);
+    }
+
+    .nav-icon {
+      font-size: 23px;
+      line-height: 1;
+      transition: transform .18s;
+    }
+
+    .nav-lbl {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    /* Nav animation on tab change */
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      left: -2px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 32px;
+      background: var(--g);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .main {
+      margin-left: var(--nav-w);
+      flex: 1;
+      padding: 24px;
+      max-width: calc(100vw - var(--nav-w));
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+      animation: slideIn .25s ease;
+    }
+
+    /* ═══════════════════════════════════════════
    TOP BAR
 ═══════════════════════════════════════════ */
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
-.topbar h1{font-family:'Fredoka One',cursive;font-size:26px;}
-.topbar p{font-size:13px;font-weight:700;color:var(--muted);}
-.topbar-right{display:flex;align-items:center;gap:10px;}
-.badge-pill{display:flex;align-items:center;gap:5px;border:2px solid;border-radius:100px;padding:7px 13px;font-weight:800;font-size:13px;cursor:pointer;transition:transform .1s;}
-.badge-pill:active{transform:scale(.96);}
-.streak-pill{background:var(--ol);border-color:var(--o);color:var(--o);}
-.xp-pill{background:var(--pl);border-color:var(--p);color:#9650CC;}
-.pts-pill{background:var(--yl);border-color:var(--y);color:#AA8800;}
-.notif-btn{width:42px;height:42px;border-radius:50%;background:var(--card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;position:relative;box-shadow:0 2px 0 #E0E0E0;}
-.notif-dot{position:absolute;top:5px;right:5px;width:9px;height:9px;background:var(--r);border-radius:50%;border:2px solid #fff;}
-.avatar-circle{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--b));display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:15px;cursor:pointer;border:2px solid var(--border);}
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-/* ═══════════════════════════════════════════
+    .topbar h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 26px;
+    }
+
+    .topbar p {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border: 2px solid;
+      border-radius: 100px;
+      padding: 7px 13px;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      transition: transform .1s;
+    }
+
+    .badge-pill:active {
+      transform: scale(.96);
+    }
+
+    .streak-pill {
+      background: var(--ol);
+      border-color: var(--o);
+      color: var(--o);
+    }
+
+    .xp-pill {
+      background: var(--pl);
+      border-color: var(--p);
+      color: #9650CC;
+    }
+
+    .pts-pill {
+      background: var(--yl);
+      border-color: var(--y);
+      color: #AA8800;
+    }
+
+    .notif-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      position: relative;
+      box-shadow: 0 2px 0 #E0E0E0;
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 9px;
+      height: 9px;
+      background: var(--r);
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+
+    .avatar-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--g), var(--b));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+      border: 2px solid var(--border);
+    }
+
+    /* ═══════════════════════════════════════════
    CARDS & GRIDS
 ═══════════════════════════════════════════ */
-.card{background:var(--card);border-radius:18px;border:2px solid var(--border);box-shadow:0 4px 0 #E0E0E0;padding:18px;animation:slideUp .3s ease;}
-.card-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:12px;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
-@media(max-width:900px){.g4{grid-template-columns:1fr 1fr;}.g3{grid-template-columns:1fr 1fr;}}
-@media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr;}.sidebar{width:64px;}.main{margin-left:64px;padding:14px;}}
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      border: 2px solid var(--border);
+      box-shadow: 0 4px 0 #E0E0E0;
+      padding: 18px;
+      animation: slideUp .3s ease;
+    }
 
-/* ═══════════════════════════════════════════
+    .card-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .g2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .g3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    .g4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    @media(max-width:900px) {
+      .g4 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .g3 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media(max-width:600px) {
+
+      .g2,
+      .g3,
+      .g4 {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        width: 64px;
+      }
+
+      .main {
+        margin-left: 64px;
+        padding: 14px;
+      }
+    }
+
+    /* ═══════════════════════════════════════════
    METRIC CARDS
 ═══════════════════════════════════════════ */
-.mc{border-radius:18px;border:2px solid;padding:16px;box-shadow:0 4px 0;position:relative;overflow:hidden;transition:transform .15s;}
-.mc:hover{transform:translateY(-2px);}
-.mc.gr{background:var(--gl);border-color:var(--g);box-shadow:0 4px 0 var(--gd);}
-.mc.bl{background:var(--bl);border-color:var(--b);box-shadow:0 4px 0 #0E8AC4;}
-.mc.or{background:var(--ol);border-color:var(--o);box-shadow:0 4px 0 #CC7800;}
-.mc.pu{background:var(--pl);border-color:var(--p);box-shadow:0 4px 0 #A460CC;}
-.mc.ye{background:var(--yl);border-color:var(--y);box-shadow:0 4px 0 #CC9900;}
-.mc.red{background:var(--rl);border-color:var(--r);box-shadow:0 4px 0 #CC3B3B;}
-.mc-icon{font-size:26px;margin-bottom:6px;}
-.mc-val{font-family:'Fredoka One',cursive;font-size:34px;line-height:1;}
-.mc-lbl{font-size:11px;font-weight:700;text-transform:uppercase;opacity:.65;margin-top:3px;}
-.mc-ch{font-size:12px;font-weight:700;margin-top:5px;}
+    .mc {
+      border-radius: 18px;
+      border: 2px solid;
+      padding: 16px;
+      box-shadow: 0 4px 0;
+      position: relative;
+      overflow: hidden;
+      transition: transform .15s;
+    }
 
-/* ═══════════════════════════════════════════
+    .mc:hover {
+      transform: translateY(-2px);
+    }
+
+    .mc.gr {
+      background: var(--gl);
+      border-color: var(--g);
+      box-shadow: 0 4px 0 var(--gd);
+    }
+
+    .mc.bl {
+      background: var(--bl);
+      border-color: var(--b);
+      box-shadow: 0 4px 0 #0E8AC4;
+    }
+
+    .mc.or {
+      background: var(--ol);
+      border-color: var(--o);
+      box-shadow: 0 4px 0 #CC7800;
+    }
+
+    .mc.pu {
+      background: var(--pl);
+      border-color: var(--p);
+      box-shadow: 0 4px 0 #A460CC;
+    }
+
+    .mc.ye {
+      background: var(--yl);
+      border-color: var(--y);
+      box-shadow: 0 4px 0 #CC9900;
+    }
+
+    .mc.red {
+      background: var(--rl);
+      border-color: var(--r);
+      box-shadow: 0 4px 0 #CC3B3B;
+    }
+
+    .mc-icon {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+
+    .mc-val {
+      font-family: 'Fredoka One', cursive;
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .mc-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      opacity: .65;
+      margin-top: 3px;
+    }
+
+    .mc-ch {
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 5px;
+    }
+
+    /* ═══════════════════════════════════════════
    GLUCY STATUS CARD (inline with body)
 ═══════════════════════════════════════════ */
-.glucy-status-card{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 18px;border-radius:18px;border:2px solid;
-  margin-bottom:18px;transition:all .4s;
-}
-.glucy-status-card.happy{background:var(--gl);border-color:var(--g);}
-.glucy-status-card.sad{background:var(--rl);border-color:var(--r);}
-.glucy-status-card.warn{background:var(--yl);border-color:var(--y);}
-.glucy-status-card.run{background:var(--bl);border-color:var(--b);}
-.glucy-status-card.eat{background:var(--ol);border-color:var(--o);}
-.gsc-canvas{width:60px;height:60px;flex-shrink:0;}
-.gsc-text h3{font-size:15px;font-weight:900;margin-bottom:3px;}
-.gsc-text p{font-size:13px;font-weight:600;opacity:.8;line-height:1.5;}
+    .glucy-status-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 18px;
+      border: 2px solid;
+      margin-bottom: 18px;
+      transition: all .4s;
+    }
 
-/* ═══════════════════════════════════════════
+    .glucy-status-card.happy {
+      background: var(--gl);
+      border-color: var(--g);
+    }
+
+    .glucy-status-card.sad {
+      background: var(--rl);
+      border-color: var(--r);
+    }
+
+    .glucy-status-card.warn {
+      background: var(--yl);
+      border-color: var(--y);
+    }
+
+    .glucy-status-card.run {
+      background: var(--bl);
+      border-color: var(--b);
+    }
+
+    .glucy-status-card.eat {
+      background: var(--ol);
+      border-color: var(--o);
+    }
+
+    .gsc-canvas {
+      width: 60px;
+      height: 60px;
+      flex-shrink: 0;
+    }
+
+    .gsc-text h3 {
+      font-size: 15px;
+      font-weight: 900;
+      margin-bottom: 3px;
+    }
+
+    .gsc-text p {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: .8;
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════
    WELCOME BANNER
 ═══════════════════════════════════════════ */
-.welcome-banner{background:linear-gradient(120deg,var(--teal),var(--b));border-radius:22px;padding:20px 24px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;border:2px solid rgba(255,255,255,.2);}
-.wb-emoji{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:56px;opacity:.25;}
-.wb-h{font-family:'Fredoka One',cursive;font-size:22px;margin-bottom:4px;}
-.wb-p{font-size:13px;font-weight:600;opacity:.9;}
-.sunday-banner{background:linear-gradient(120deg,var(--p),var(--b));}
+    .welcome-banner {
+      background: linear-gradient(120deg, var(--teal), var(--b));
+      border-radius: 22px;
+      padding: 20px 24px;
+      color: #fff;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, .2);
+    }
 
-/* ═══════════════════════════════════════════
+    .wb-emoji {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 56px;
+      opacity: .25;
+    }
+
+    .wb-h {
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .wb-p {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: .9;
+    }
+
+    .sunday-banner {
+      background: linear-gradient(120deg, var(--p), var(--b));
+    }
+
+    /* ═══════════════════════════════════════════
    BODY CANVAS
 ═══════════════════════════════════════════ */
-.body-wrap{display:flex;align-items:center;justify-content:center;gap:16px;padding:8px 0;}
-.body-canvas{width:110px;height:200px;}
-.body-stats{display:flex;flex-direction:column;gap:10px;}
-.body-stat{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;}
-.body-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;}
+    .body-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 8px 0;
+    }
 
-/* ═══════════════════════════════════════════
+    .body-canvas {
+      width: 110px;
+      height: 200px;
+    }
+
+    .body-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .body-stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .body-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 2s infinite;
+    }
+
+    /* ═══════════════════════════════════════════
    FOOD LOG
 ═══════════════════════════════════════════ */
-.food-input-row{display:flex;gap:10px;margin-bottom:14px;}
-.f-input{flex:1;padding:13px 16px;border:2px solid var(--border);border-radius:14px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:600;outline:none;transition:border .15s;}
-.f-input:focus{border-color:var(--g);}
-.btn{padding:13px 20px;border-radius:14px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;border:none;cursor:pointer;transition:all .12s;}
-.btn:active{transform:translateY(2px);}
-.btn-gr{background:var(--g);color:#fff;box-shadow:0 4px 0 var(--gd);}
-.btn-bl{background:var(--b);color:#fff;box-shadow:0 4px 0 #0E8AC4;}
-.btn-out{background:#fff;color:var(--text);border:2px solid var(--border);box-shadow:0 4px 0 var(--border);}
-.food-item{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:14px;border:2px solid var(--border);margin-bottom:8px;background:#fff;transition:all .15s;}
-.food-item:hover{border-color:var(--g);background:var(--gl);}
-.fi-left{display:flex;align-items:center;gap:10px;}
-.f-emoji{font-size:24px;}
-.f-name{font-size:14px;font-weight:700;}
-.f-sub{font-size:12px;color:var(--muted);font-weight:600;}
-.f-badge{font-size:11px;font-weight:800;padding:4px 10px;border-radius:100px;}
-.bg-good{background:var(--gl);color:var(--gd);border:1.5px solid var(--g);}
-.bg-ok{background:var(--yl);color:#886600;border:1.5px solid var(--y);}
-.bg-avoid{background:var(--rl);color:var(--r);border:1.5px solid var(--r);}
+    .food-input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
 
-/* ═══════════════════════════════════════════
+    .f-input {
+      flex: 1;
+      padding: 13px 16px;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      outline: none;
+      transition: border .15s;
+    }
+
+    .f-input:focus {
+      border-color: var(--g);
+    }
+
+    .btn {
+      padding: 13px 20px;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      transition: all .12s;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+    }
+
+    .btn-gr {
+      background: var(--g);
+      color: #fff;
+      box-shadow: 0 4px 0 var(--gd);
+    }
+
+    .btn-bl {
+      background: var(--b);
+      color: #fff;
+      box-shadow: 0 4px 0 #0E8AC4;
+    }
+
+    .btn-out {
+      background: #fff;
+      color: var(--text);
+      border: 2px solid var(--border);
+      box-shadow: 0 4px 0 var(--border);
+    }
+
+    .food-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 2px solid var(--border);
+      margin-bottom: 8px;
+      background: #fff;
+      transition: all .15s;
+    }
+
+    .food-item:hover {
+      border-color: var(--g);
+      background: var(--gl);
+    }
+
+    .fi-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .f-emoji {
+      font-size: 24px;
+    }
+
+    .f-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .f-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .f-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    .bg-good {
+      background: var(--gl);
+      color: var(--gd);
+      border: 1.5px solid var(--g);
+    }
+
+    .bg-ok {
+      background: var(--yl);
+      color: #886600;
+      border: 1.5px solid var(--y);
+    }
+
+    .bg-avoid {
+      background: var(--rl);
+      color: var(--r);
+      border: 1.5px solid var(--r);
+    }
+
+    /* ═══════════════════════════════════════════
    DIET TABS
 ═══════════════════════════════════════════ */
-.tab-row{display:flex;gap:5px;margin-bottom:18px;background:var(--bg);border-radius:14px;padding:4px;border:2px solid var(--border);}
-.tab-btn{flex:1;padding:9px 10px;border-radius:10px;border:none;background:transparent;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;transition:all .15s;}
-.tab-btn.active{background:#fff;color:var(--text);box-shadow:0 2px 6px rgba(0,0,0,.08);}
+    .tab-row {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 18px;
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 4px;
+      border: 2px solid var(--border);
+    }
 
-/* ═══════════════════════════════════════════
+    .tab-btn {
+      flex: 1;
+      padding: 9px 10px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .tab-btn.active {
+      background: #fff;
+      color: var(--text);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+    }
+
+    /* ═══════════════════════════════════════════
    DIET RECOMMENDATION CARDS
 ═══════════════════════════════════════════ */
-.dc{border-radius:16px;padding:14px;border:2px solid;display:flex;gap:12px;margin-bottom:10px;}
-.dc.eat{background:var(--gl);border-color:var(--g);}
-.dc.avoid{background:var(--rl);border-color:var(--r);}
-.dc.mod{background:var(--yl);border-color:var(--y);}
-.dc-emoji{font-size:30px;flex-shrink:0;}
-.dc h4{font-size:14px;font-weight:800;margin-bottom:3px;}
-.dc p{font-size:12px;font-weight:600;opacity:.7;line-height:1.5;}
+    .dc {
+      border-radius: 16px;
+      padding: 14px;
+      border: 2px solid;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
 
-/* ═══════════════════════════════════════════
+    .dc.eat {
+      background: var(--gl);
+      border-color: var(--g);
+    }
+
+    .dc.avoid {
+      background: var(--rl);
+      border-color: var(--r);
+    }
+
+    .dc.mod {
+      background: var(--yl);
+      border-color: var(--y);
+    }
+
+    .dc-emoji {
+      font-size: 30px;
+      flex-shrink: 0;
+    }
+
+    .dc h4 {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .dc p {
+      font-size: 12px;
+      font-weight: 600;
+      opacity: .7;
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════
    RISK
 ═══════════════════════════════════════════ */
-.risk-desc{font-size:13px;font-weight:700;color:var(--muted);line-height:1.6;margin-top:8px;padding:10px 14px;background:var(--bg);border-radius:10px;}
-.i-label{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;display:flex;justify-content:space-between;}
-.i-val{color:var(--text);}
-.i-group{margin-bottom:15px;}
-.range-input{width:100%;height:8px;-webkit-appearance:none;background:var(--border);border-radius:100px;outline:none;}
-.range-input::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--g);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer;}
-.shap-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
-.shap-lbl{font-size:12px;font-weight:700;min-width:120px;}
-.shap-track{flex:1;height:18px;background:var(--bg);border-radius:8px;overflow:hidden;}
-.shap-bar{height:100%;border-radius:8px;display:flex;align-items:center;padding:0 6px;}
-.shap-bar span{font-size:10px;font-weight:800;color:#fff;white-space:nowrap;}
+    .risk-desc {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: var(--bg);
+      border-radius: 10px;
+    }
 
-/* ═══════════════════════════════════════════
+    .i-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .i-val {
+      color: var(--text);
+    }
+
+    .i-group {
+      margin-bottom: 15px;
+    }
+
+    .range-input {
+      width: 100%;
+      height: 8px;
+      -webkit-appearance: none;
+      background: var(--border);
+      border-radius: 100px;
+      outline: none;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--g);
+      border: 3px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+      cursor: pointer;
+    }
+
+    .shap-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+
+    .shap-lbl {
+      font-size: 12px;
+      font-weight: 700;
+      min-width: 120px;
+    }
+
+    .shap-track {
+      flex: 1;
+      height: 18px;
+      background: var(--bg);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .shap-bar {
+      height: 100%;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+    }
+
+    .shap-bar span {
+      font-size: 10px;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    /* ═══════════════════════════════════════════
    PILL SCHEDULE
 ═══════════════════════════════════════════ */
-.pill-time-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
-.pt{border-radius:16px;border:2px solid;padding:12px 16px;text-align:center;min-width:86px;cursor:pointer;transition:all .15s;}
-.pt:hover{transform:translateY(-2px);}
-.pt.done{background:var(--gl);border-color:var(--g);}
-.pt.pend{background:var(--ol);border-color:var(--o);}
-.pt.miss{background:var(--rl);border-color:var(--r);}
-.pt-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;opacity:.65;}
-.pt-val{font-size:15px;font-weight:900;margin-top:2px;}
-.pt-ico{font-size:18px;margin-top:4px;}
+    .pill-time-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
 
-/* ═══════════════════════════════════════════
+    .pt {
+      border-radius: 16px;
+      border: 2px solid;
+      padding: 12px 16px;
+      text-align: center;
+      min-width: 86px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .pt:hover {
+      transform: translateY(-2px);
+    }
+
+    .pt.done {
+      background: var(--gl);
+      border-color: var(--g);
+    }
+
+    .pt.pend {
+      background: var(--ol);
+      border-color: var(--o);
+    }
+
+    .pt.miss {
+      background: var(--rl);
+      border-color: var(--r);
+    }
+
+    .pt-lbl {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      opacity: .65;
+    }
+
+    .pt-val {
+      font-size: 15px;
+      font-weight: 900;
+      margin-top: 2px;
+    }
+
+    .pt-ico {
+      font-size: 18px;
+      margin-top: 4px;
+    }
+
+    /* ═══════════════════════════════════════════
    CHAT
 ═══════════════════════════════════════════ */
-.chat-wrap{display:flex;flex-direction:column;height:380px;}
-.chat-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:4px 0;}
-.msg{max-width:78%;}
-.msg-doc{align-self:flex-start;}
-.msg-pat{align-self:flex-end;}
-.msg-bubble{padding:11px 15px;border-radius:18px;font-size:13px;font-weight:600;line-height:1.5;}
-.msg-doc .msg-bubble{background:var(--bg);border:2px solid var(--border);border-bottom-left-radius:5px;}
-.msg-pat .msg-bubble{background:var(--g);color:#fff;border-bottom-right-radius:5px;}
-.msg-name{font-size:10px;font-weight:800;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;}
-.chat-input-row{display:flex;gap:8px;margin-top:12px;border-top:2px solid var(--border);padding-top:12px;}
+    .chat-wrap {
+      display: flex;
+      flex-direction: column;
+      height: 380px;
+    }
 
-/* ═══════════════════════════════════════════
+    .chat-msgs {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 4px 0;
+    }
+
+    .msg {
+      max-width: 78%;
+    }
+
+    .msg-doc {
+      align-self: flex-start;
+    }
+
+    .msg-pat {
+      align-self: flex-end;
+    }
+
+    .msg-bubble {
+      padding: 11px 15px;
+      border-radius: 18px;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .msg-doc .msg-bubble {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-bottom-left-radius: 5px;
+    }
+
+    .msg-pat .msg-bubble {
+      background: var(--g);
+      color: #fff;
+      border-bottom-right-radius: 5px;
+    }
+
+    .msg-name {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      border-top: 2px solid var(--border);
+      padding-top: 12px;
+    }
+
+    /* ═══════════════════════════════════════════
    REWARDS
 ═══════════════════════════════════════════ */
-.points-big{font-family:'Fredoka One',cursive;font-size:56px;color:var(--y);text-align:center;line-height:1;}
-.streak-big{font-family:'Fredoka One',cursive;font-size:56px;color:var(--o);text-align:center;}
-.reward-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;}
-.reward-card{border-radius:16px;border:2px solid;padding:14px;text-align:center;cursor:pointer;transition:all .15s;}
-.reward-card:hover{transform:translateY(-3px);}
-.reward-card.locked{opacity:.45;filter:grayscale(.6);}
-.r-icon{font-size:32px;margin-bottom:6px;}
-.r-name{font-size:12px;font-weight:800;}
-.r-pts{font-size:11px;font-weight:700;color:var(--muted);}
+    .points-big {
+      font-family: 'Fredoka One', cursive;
+      font-size: 56px;
+      color: var(--y);
+      text-align: center;
+      line-height: 1;
+    }
 
-/* ═══════════════════════════════════════════
+    .streak-big {
+      font-family: 'Fredoka One', cursive;
+      font-size: 56px;
+      color: var(--o);
+      text-align: center;
+    }
+
+    .reward-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .reward-card {
+      border-radius: 16px;
+      border: 2px solid;
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .reward-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .reward-card.locked {
+      opacity: .45;
+      filter: grayscale(.6);
+    }
+
+    .r-icon {
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+
+    .r-name {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .r-pts {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    /* ═══════════════════════════════════════════
    DOCTOR CARD
 ═══════════════════════════════════════════ */
-.doc-card{display:flex;align-items:center;gap:12px;padding:13px;border-radius:16px;border:2px solid var(--border);background:#fff;margin-bottom:8px;cursor:pointer;transition:all .15s;}
-.doc-card:hover{border-color:var(--b);background:var(--bl);}
-.doc-av{width:50px;height:50px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:2px solid var(--border);}
-.doc-name{font-size:14px;font-weight:800;}
-.doc-spec{font-size:12px;color:var(--muted);font-weight:600;}
-.online{color:var(--g);font-size:12px;font-weight:700;}
-.odot{display:inline-block;width:8px;height:8px;background:var(--g);border-radius:50%;margin-right:3px;}
+    .doc-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      background: #fff;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all .15s;
+    }
 
-/* ═══════════════════════════════════════════
+    .doc-card:hover {
+      border-color: var(--b);
+      background: var(--bl);
+    }
+
+    .doc-av {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+    }
+
+    .doc-name {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .doc-spec {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .online {
+      color: var(--g);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .odot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--g);
+      border-radius: 50%;
+      margin-right: 3px;
+    }
+
+    /* ═══════════════════════════════════════════
    NOTIFICATIONS
 ═══════════════════════════════════════════ */
-.notif-item{display:flex;gap:12px;align-items:flex-start;padding:13px;border-radius:16px;border:2px solid var(--border);background:#fff;margin-bottom:8px;cursor:pointer;transition:all .15s;}
-.notif-item:hover,.notif-item.unread{border-color:var(--b);background:var(--bl);}
-.ni-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.ni-body h4{font-size:13px;font-weight:800;}
-.ni-body p{font-size:12px;color:var(--muted);font-weight:600;}
-.ni-time{font-size:11px;color:var(--muted);font-weight:700;margin-left:auto;white-space:nowrap;}
+    .notif-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 13px;
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      background: #fff;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all .15s;
+    }
 
-/* ═══════════════════════════════════════════
+    .notif-item:hover,
+    .notif-item.unread {
+      border-color: var(--b);
+      background: var(--bl);
+    }
+
+    .ni-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .ni-body h4 {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .ni-body p {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .ni-time {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* ═══════════════════════════════════════════
    MISC
 ═══════════════════════════════════════════ */
-.sec-bar{display:flex;align-items:center;gap:8px;background:var(--gl);border:2px solid var(--g);border-radius:12px;padding:9px 14px;margin-bottom:18px;font-size:13px;font-weight:700;color:var(--gd);}
-.empty-state{text-align:center;padding:36px 16px;color:var(--muted);}
-.empty-state .empty-icon{font-size:44px;margin-bottom:10px;}
-.empty-state p{font-size:14px;font-weight:700;}
-#toast{position:fixed;bottom:24px;right:24px;background:#3C3C3C;color:#fff;padding:14px 20px;border-radius:14px;font-size:14px;font-weight:700;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:300px;}
-.chart-wrap{position:relative;height:180px;}
-.progress-wrap{background:rgba(0,0,0,.08);border-radius:100px;height:10px;overflow:hidden;}
-.progress-bar{height:100%;border-radius:100px;background:currentColor;transition:width .6s ease;}
-</style>
+    .sec-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gl);
+      border: 2px solid var(--g);
+      border-radius: 12px;
+      padding: 9px 14px;
+      margin-bottom: 18px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gd);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--muted);
+    }
+
+    .empty-state .empty-icon {
+      font-size: 44px;
+      margin-bottom: 10px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #3C3C3C;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+      max-width: 300px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 180px;
+    }
+
+    .progress-wrap {
+      background: rgba(0, 0, 0, .08);
+      border-radius: 100px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 100px;
+      background: currentColor;
+      transition: width .6s ease;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ═══════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════
      SPLASH SCREEN
 ═══════════════════════════════════════════ -->
-<div id="splash">
-  <canvas id="splash-canvas" width="160" height="160"></canvas>
-  <div class="splash-logo">GlucoCare 💙</div>
-  <div class="splash-sub">Your Diabetes Companion</div>
-  <div class="splash-tip" id="splash-tip">💡 Eating vegetables before carbs reduces blood sugar spikes by 40%!</div>
-  <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
-</div>
+  <div id="splash">
+    <canvas id="splash-canvas" width="160" height="160"></canvas>
+    <div class="splash-logo">GlucoCare 💙</div>
+    <div class="splash-sub">Your Diabetes Companion</div>
+    <div class="splash-tip" id="splash-tip">💡 Eating vegetables before carbs reduces blood sugar spikes by 40%!</div>
+    <div class="splash-bar-wrap">
+      <div class="splash-bar"></div>
+    </div>
+  </div>
 
-<!-- ═══════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════
      GLUCY FLOATING COMPANION
 ═══════════════════════════════════════════ -->
-<div id="glucy-companion">
-  <div id="glucy-speech"></div>
-  <canvas id="glucy-canvas-main" width="80" height="80" onclick="toggleGlucySpeech()"></canvas>
-</div>
+  <div id="glucy-companion">
+    <div id="glucy-speech"></div>
+    <canvas id="glucy-canvas-main" width="80" height="80" onclick="toggleGlucySpeech()"></canvas>
+  </div>
 
-<!-- Achievement Pop -->
-<div id="achievement-pop">🏆 Achievement Unlocked!</div>
+  <!-- Achievement Pop -->
+  <div id="achievement-pop">🏆 Achievement Unlocked!</div>
 
-<!-- Toast -->
-<div id="toast"></div>
+  <!-- Toast -->
+  <div id="toast"></div>
 
-<!-- ═══════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════
      MAIN APP
 ═══════════════════════════════════════════ -->
-<div id="app">
-  <nav class="sidebar">
-    <div class="sb-logo">Gluco<br>Care</div>
-    <button class="nav-item active" onclick="showPage('home')" title="Home"><span class="nav-icon">🏠</span><span class="nav-lbl">Home</span></button>
-    <button class="nav-item" onclick="showPage('risk')" title="Risk"><span class="nav-icon">🔍</span><span class="nav-lbl">Risk</span></button>
-    <button class="nav-item" onclick="showPage('diet')" title="Diet"><span class="nav-icon">🥗</span><span class="nav-lbl">Diet</span></button>
-    <button class="nav-item" onclick="showPage('metrics')" title="Stats"><span class="nav-icon">📊</span><span class="nav-lbl">Stats</span></button>
-    <div class="nav-divider"></div>
-    <button class="nav-item" onclick="showPage('pills')" title="Pills"><span class="nav-icon">💊</span><span class="nav-lbl">Pills</span></button>
-    <button class="nav-item" onclick="showPage('doctor')" title="Doctor"><span class="nav-icon">👨‍⚕️</span><span class="nav-lbl">Doctor</span></button>
-    <button class="nav-item" onclick="showPage('rewards')" title="Rewards"><span class="nav-icon">🏆</span><span class="nav-lbl">Rewards</span></button>
-    <button class="nav-item" onclick="showPage('alerts')" title="Alerts"><span class="nav-icon">🔔</span><span class="nav-lbl">Alerts</span></button>
-  </nav>
+  <div id="app">
+    <nav class="sidebar">
+      <div class="sb-logo">Gluco<br>Care</div>
+      <button class="nav-item active" onclick="showPage('home')" title="Home"><span class="nav-icon">🏠</span><span
+          class="nav-lbl">Home</span></button>
+      <button class="nav-item" onclick="showPage('risk')" title="Risk"><span class="nav-icon">🔍</span><span
+          class="nav-lbl">Risk</span></button>
+      <button class="nav-item" onclick="showPage('diet')" title="Diet"><span class="nav-icon">🥗</span><span
+          class="nav-lbl">Diet</span></button>
+      <button class="nav-item" onclick="showPage('metrics')" title="Stats"><span class="nav-icon">📊</span><span
+          class="nav-lbl">Stats</span></button>
+      <div class="nav-divider"></div>
+      <button class="nav-item" onclick="showPage('pills')" title="Pills"><span class="nav-icon">💊</span><span
+          class="nav-lbl">Pills</span></button>
+      <button class="nav-item" onclick="showPage('doctor')" title="Doctor"><span class="nav-icon">👨‍⚕️</span><span
+          class="nav-lbl">Doctor</span></button>
+      <button class="nav-item" onclick="showPage('rewards')" title="Rewards"><span class="nav-icon">🏆</span><span
+          class="nav-lbl">Rewards</span></button>
+      <button class="nav-item" onclick="showPage('alerts')" title="Alerts"><span class="nav-icon">🔔</span><span
+          class="nav-lbl">Alerts</span></button>
+    </nav>
 
-  <main class="main">
+    <main class="main">
 
-    <!-- HOME -->
-    <div id="page-home" class="page active">
-      <div class="topbar">
-        <div><h1 id="home-greeting">Good morning, Amara 👋</h1><p id="home-date">Wednesday, 25 March</p></div>
-        <div class="topbar-right">
-          <div class="badge-pill streak-pill">🔥 <span id="tb-streak">12</span></div>
-          <div class="badge-pill xp-pill">⚡ <span id="tb-xp">840</span> XP</div>
-          <div class="badge-pill pts-pill">🌟 <span id="tb-pts">1,240</span></div>
-          <div class="notif-btn" onclick="showPage('alerts')">🔔<div class="notif-dot"></div></div>
-          <div class="avatar-circle" id="av-circle">AM</div>
-        </div>
-      </div>
-
-      <div class="sec-bar">🔒 HIPAA-grade encryption. Only you and your doctor can see your data.</div>
-
-      <div id="sunday-banner" style="display:none;" class="welcome-banner sunday-banner" style="margin-bottom:18px;">
-        <div class="wb-emoji">🎓</div>
-        <div class="wb-h">Fun Fact Sunday!</div>
-        <div class="wb-p" id="sunday-fact"></div>
-      </div>
-
-      <!-- Glucy Status Card - context aware -->
-      <div class="glucy-status-card happy" id="home-glucy-card">
-        <canvas class="gsc-canvas" id="home-glucy-canvas" width="60" height="60"></canvas>
-        <div class="gsc-text">
-          <h3 id="glucy-home-title">Glucy is Happy! 💚</h3>
-          <p id="glucy-home-msg">Your blood sugar is in range. You're doing amazing, Amara! Keep logging every day!</p>
-        </div>
-      </div>
-
-      <div class="welcome-banner">
-        <div class="wb-emoji">🩺</div>
-        <div class="wb-h">12-day streak! Unstoppable!</div>
-        <div class="wb-p">Blood sugar in range 8 of last 10 days. Glucy is proud of you!</div>
-      </div>
-
-      <div class="g4" style="margin-bottom:18px;">
-        <div class="mc gr"><div class="mc-icon">🩸</div><div class="mc-val" style="color:#3A8600;" id="glucose-display">112</div><div class="mc-lbl">Sugar mg/dL</div><div class="mc-ch" style="color:var(--gd);">✓ In range</div></div>
-        <div class="mc bl"><div class="mc-icon">💓</div><div class="mc-val" style="color:#0880B8;font-size:26px;">118/76</div><div class="mc-lbl">Blood Pressure</div><div class="mc-ch" style="color:var(--b);">✓ Normal</div></div>
-        <div class="mc or"><div class="mc-icon">⚖️</div><div class="mc-val" style="color:#AA6400;">27.4</div><div class="mc-lbl">BMI</div><div class="mc-ch" style="color:var(--o);">↓ -0.3</div></div>
-        <div class="mc pu"><div class="mc-icon">🏃</div><div class="mc-val" style="color:#8840BB;">6,420</div><div class="mc-lbl">Steps</div><div class="mc-ch" style="color:var(--p);">64%</div></div>
-      </div>
-
-      <div class="g2" style="margin-bottom:18px;">
-        <div class="card">
-          <div class="card-title">7-Day Blood Sugar</div>
-          <div class="chart-wrap"><canvas id="home-chart"></canvas></div>
-        </div>
-        <div class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-            <div class="card-title" style="margin-bottom:0;">Body Monitor</div>
-            <select id="gender-select" onchange="updateBodyCanvas(this.value)" style="font-family:'Nunito',sans-serif;font-size:12px;padding:4px 8px;border-radius:8px;border:1.5px solid var(--border);outline:none;">
-              <option value="female">Female</option>
-              <option value="male">Male</option>
-            </select>
+      <!-- HOME -->
+      <div id="page-home" class="page active">
+        <div class="topbar">
+          <div>
+            <h1 id="home-greeting">Good morning, Amara 👋</h1>
+            <p id="home-date">Wednesday, 25 March</p>
           </div>
-          <div class="body-wrap">
-            <canvas class="body-canvas" id="body-canvas" width="110" height="200"></canvas>
-            <div class="body-stats">
-              <div class="body-stat"><div class="body-dot" style="background:var(--g);"></div><span><strong>Sugar</strong><br><small id="bs-sugar" style="color:var(--gd);">112 ✓</small></span></div>
-              <div class="body-stat"><div class="body-dot" style="background:var(--b);animation-delay:.3s;"></div><span><strong>Heart</strong><br><small style="color:var(--b);">118/76 ✓</small></span></div>
-              <div class="body-stat"><div class="body-dot" style="background:var(--o);animation-delay:.6s;"></div><span><strong>Weight</strong><br><small style="color:var(--o);">72 kg</small></span></div>
-              <div class="body-stat"><div class="body-dot" style="background:var(--p);animation-delay:.9s;"></div><span><strong>Steps</strong><br><small style="color:var(--p);">6,420</small></span></div>
+          <div class="topbar-right">
+            <div class="badge-pill streak-pill">🔥 <span id="tb-streak">12</span></div>
+            <div class="badge-pill xp-pill">⚡ <span id="tb-xp">840</span> XP</div>
+            <div class="badge-pill pts-pill">🌟 <span id="tb-pts">1,240</span></div>
+            <div class="notif-btn" onclick="showPage('alerts')">🔔<div class="notif-dot"></div>
             </div>
+            <div class="avatar-circle" id="av-circle">AM</div>
           </div>
-          <button class="btn btn-out" style="width:100%;margin-top:8px;font-size:13px;" onclick="showPage('risk')">📊 Full Risk Check →</button>
         </div>
-      </div>
 
-      <div class="g2">
-        <div class="card">
-          <div class="card-title">Today's Checklist</div>
-          <div id="task-list"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">Medications Today</div>
-          <div class="pill-time-row">
-            <div class="pt done"><div class="pt-lbl">Morning</div><div class="pt-val">8 AM</div><div class="pt-ico">✅</div></div>
-            <div class="pt pend"><div class="pt-lbl">Afternoon</div><div class="pt-val">2 PM</div><div class="pt-ico">⏰</div></div>
-            <div class="pt pend"><div class="pt-lbl">Evening</div><div class="pt-val">8 PM</div><div class="pt-ico">⏳</div></div>
-          </div>
-          <div class="doc-card" onclick="showPage('doctor')">
-            <div class="doc-av" style="background:var(--bl);">👨‍⚕️</div>
-            <div><div class="doc-name">Dr. Samuel Osei</div><div class="doc-spec">Endocrinologist</div><div class="online"><span class="odot"></span>Online now</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
+        <div class="sec-bar">🔒 HIPAA-grade encryption. Only you and your doctor can see your data.</div>
 
-    <!-- RISK CHECK -->
-    <div id="page-risk" class="page">
-      <div class="topbar"><div><h1>Risk Check 🔍</h1><p>AI-powered diabetes risk analysis</p></div></div>
-      <!-- Glucy in risk mode -->
-      <div class="glucy-status-card happy" id="risk-glucy-card">
-        <canvas class="gsc-canvas" id="risk-glucy-canvas" width="60" height="60"></canvas>
-        <div class="gsc-text">
-          <h3 id="glucy-risk-title">Looking good! 🟢</h3>
-          <p id="glucy-risk-msg">Your current readings suggest low risk. Move the sliders to see how each factor affects your score.</p>
+        <div id="sunday-banner" style="display:none;" class="welcome-banner sunday-banner" style="margin-bottom:18px;">
+          <div class="wb-emoji">🎓</div>
+          <div class="wb-h">Fun Fact Sunday!</div>
+          <div class="wb-p" id="sunday-fact"></div>
         </div>
-      </div>
-      <div class="g2">
-        <div>
-          <div class="card" style="margin-bottom:16px;">
-            <div class="card-title">Your Health Data</div>
-            <div class="i-group"><div class="i-label"><span>Age</span><span class="i-val" id="r-age">45 yrs</span></div><input type="range" class="range-input" min="18" max="90" value="45" oninput="document.getElementById('r-age').textContent=this.value+' yrs';calcRisk()"></div>
-            <div class="i-group"><div class="i-label"><span>BMI</span><span class="i-val" id="r-bmi">27.4</span></div><input type="range" class="range-input" min="15" max="50" step="0.1" value="27.4" oninput="document.getElementById('r-bmi').textContent=parseFloat(this.value).toFixed(1);calcRisk()"></div>
-            <div class="i-group"><div class="i-label"><span>Blood Sugar (mg/dL)</span><span class="i-val" id="r-glu">112</span></div><input type="range" class="range-input" min="60" max="300" value="112" oninput="document.getElementById('r-glu').textContent=this.value;calcRisk()"></div>
-            <div class="i-group"><div class="i-label"><span>Blood Pressure</span><span class="i-val" id="r-bp">118 mmHg</span></div><input type="range" class="range-input" min="80" max="200" value="118" oninput="document.getElementById('r-bp').textContent=this.value+' mmHg';calcRisk()"></div>
-            <div class="i-group"><div class="i-label"><span>Pregnancies</span><span class="i-val" id="r-preg">1</span></div><input type="range" class="range-input" min="0" max="15" value="1" oninput="document.getElementById('r-preg').textContent=this.value;calcRisk()"></div>
-            <div style="display:flex;gap:8px;margin-top:4px;">
-              <button class="btn btn-out" id="fh-n" onclick="setFH(false)" style="flex:1;font-size:13px;">No Family History</button>
-              <button class="btn btn-gr" id="fh-y" onclick="setFH(true)" style="flex:1;font-size:13px;">Family History ✓</button>
-            </div>
+
+        <!-- Glucy Status Card - context aware -->
+        <div class="glucy-status-card happy" id="home-glucy-card">
+          <canvas class="gsc-canvas" id="home-glucy-canvas" width="60" height="60"></canvas>
+          <div class="gsc-text">
+            <h3 id="glucy-home-title">Glucy is Happy! 💚</h3>
+            <p id="glucy-home-msg">Your blood sugar is in range. You're doing amazing, Amara! Keep logging every day!
+            </p>
           </div>
         </div>
-        <div>
-          <div class="card" style="margin-bottom:16px;text-align:center;">
-            <div class="card-title">Your Risk Score</div>
-            <svg viewBox="0 0 200 120" style="width:190px;height:105px;margin:0 auto;display:block;">
-              <defs><linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#58CC02"/><stop offset="50%" style="stop-color:#FFC800"/><stop offset="100%" style="stop-color:#FF4B4B"/></linearGradient></defs>
-              <path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#E5E5E5" stroke-width="16" stroke-linecap="round"/>
-              <path id="g-arc" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="url(#gg)" stroke-width="16" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="190"/>
-              <line id="g-needle" x1="100" y1="100" x2="100" y2="30" stroke="#3C3C3C" stroke-width="3" stroke-linecap="round" transform="rotate(-80,100,100)"/>
-              <circle cx="100" cy="100" r="6" fill="#3C3C3C"/>
-            </svg>
-            <div style="font-family:'Fredoka One',cursive;font-size:52px;line-height:1;" id="risk-num">32</div>
-            <div style="font-size:16px;font-weight:800;margin-top:4px;" id="risk-lbl">🟢 Low Risk</div>
-            <div class="risk-desc" id="risk-desc">Your metrics suggest low risk. Keep going!</div>
+
+        <div class="welcome-banner">
+          <div class="wb-emoji">🩺</div>
+          <div class="wb-h">12-day streak! Unstoppable!</div>
+          <div class="wb-p">Blood sugar in range 8 of last 10 days. Glucy is proud of you!</div>
+        </div>
+
+        <div class="g4" style="margin-bottom:18px;">
+          <div class="mc gr">
+            <div class="mc-icon">🩸</div>
+            <div class="mc-val" style="color:#3A8600;" id="glucose-display">112</div>
+            <div class="mc-lbl">Sugar mg/dL</div>
+            <div class="mc-ch" style="color:var(--gd);">✓ In range</div>
+          </div>
+          <div class="mc bl">
+            <div class="mc-icon">💓</div>
+            <div class="mc-val" style="color:#0880B8;font-size:26px;">118/76</div>
+            <div class="mc-lbl">Blood Pressure</div>
+            <div class="mc-ch" style="color:var(--b);">✓ Normal</div>
+          </div>
+          <div class="mc or">
+            <div class="mc-icon">⚖️</div>
+            <div class="mc-val" style="color:#AA6400;">27.4</div>
+            <div class="mc-lbl">BMI</div>
+            <div class="mc-ch" style="color:var(--o);">↓ -0.3</div>
+          </div>
+          <div class="mc pu">
+            <div class="mc-icon">🏃</div>
+            <div class="mc-val" style="color:#8840BB;">6,420</div>
+            <div class="mc-lbl">Steps</div>
+            <div class="mc-ch" style="color:var(--p);">64%</div>
+          </div>
+        </div>
+
+        <div class="g2" style="margin-bottom:18px;">
+          <div class="card">
+            <div class="card-title">7-Day Blood Sugar</div>
+            <div class="chart-wrap"><canvas id="home-chart"></canvas></div>
           </div>
           <div class="card">
-            <div class="card-title">AI Explanation (Feature Importance)</div>
-            <div id="shap-wrap"></div>
-            <div style="font-size:11px;color:var(--muted);margin-top:10px;padding:8px 12px;background:var(--bg);border-radius:10px;font-weight:600;">🤖 Larger bars = bigger impact on your personal risk score.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DIET -->
-    <div id="page-diet" class="page">
-      <div class="topbar"><div><h1>Diet & Nutrition 🥗</h1><p>Personalised for your region and culture</p></div></div>
-      <!-- Glucy eating / worried state -->
-      <div class="glucy-status-card eat" id="diet-glucy-card">
-        <canvas class="gsc-canvas" id="diet-glucy-canvas" width="60" height="60"></canvas>
-        <div class="gsc-text">
-          <h3 id="glucy-diet-title">Glucy is hungry! 😋</h3>
-          <p id="glucy-diet-msg">Log what you eat and I'll tell you how it affects your sugar levels. I love healthy food!</p>
-        </div>
-      </div>
-      <div class="tab-row">
-        <button class="tab-btn active" onclick="dtab('log',this)">Food Log</button>
-        <button class="tab-btn" onclick="dtab('rec',this)">Eat More</button>
-        <button class="tab-btn" onclick="dtab('avo',this)">Avoid</button>
-        <button class="tab-btn" onclick="dtab('plan',this)">Meal Plan</button>
-      </div>
-      <div id="dt-log">
-        <div class="card" style="margin-bottom:14px;">
-          <div class="card-title">Log What You Ate Today</div>
-          <div class="food-input-row">
-            <input type="text" class="f-input" id="food-in" placeholder="e.g. jollof rice, eggs, kontomire..." onkeydown="if(event.key==='Enter')addFood()">
-            <button class="btn btn-gr" onclick="addFood()">+ Add</button>
-          </div>
-          <div id="food-list"></div>
-          <div id="food-empty" class="empty-state"><div class="empty-icon">🍽️</div><p>No food logged yet. Type what you ate!</p></div>
-        </div>
-        <div class="card g3" id="food-summary" style="display:none;">
-          <div class="mc gr"><div class="mc-icon">✅</div><div class="mc-val" style="color:var(--gd);" id="fc-good">0</div><div class="mc-lbl">Good choices</div></div>
-          <div class="mc ye"><div class="mc-icon">⚠️</div><div class="mc-val" style="color:#886600;" id="fc-ok">0</div><div class="mc-lbl">Moderate</div></div>
-          <div class="mc red"><div class="mc-icon">🚫</div><div class="mc-val" style="color:var(--r);" id="fc-bad">0</div><div class="mc-lbl">Avoid</div></div>
-        </div>
-      </div>
-      <div id="dt-rec" style="display:none;">
-        <div class="g2">
-          <div>
-            <div class="dc eat"><div class="dc-emoji">🥬</div><div><h4>Leafy greens (spinach, kontomire, ugu)</h4><p>Low GI, rich in magnesium. Eat freely at every meal.</p></div></div>
-            <div class="dc eat"><div class="dc-emoji">🐟</div><div><h4>Grilled fish & mackerel</h4><p>Omega-3 reduces inflammation. Great Ghanaian staple.</p></div></div>
-            <div class="dc eat"><div class="dc-emoji">🥚</div><div><h4>Eggs</h4><p>Zero carbs, high protein. Prevents post-meal spikes.</p></div></div>
-            <div class="dc eat"><div class="dc-emoji">🥜</div><div><h4>Groundnuts & seeds</h4><p>30g as a snack stabilises blood sugar for hours.</p></div></div>
-            <div class="dc mod"><div class="dc-emoji">🍌</div><div><h4>Plantain (unripe/boiled)</h4><p>Boiled green plantain is much better than ripe fried.</p></div></div>
-          </div>
-          <div>
-            <div class="card" style="background:var(--gl);border-color:var(--g);margin-bottom:12px;">
-              <div class="card-title" style="color:var(--gd);">🌍 Personalised for West Africa</div>
-              <div style="font-size:13px;font-weight:700;color:#3A8600;line-height:1.9;">✓ <strong>Kontomire stew</strong> — eat freely<br>✓ <strong>Brown rice</strong> over white rice<br>✓ <strong>Boiled yam</strong> over fried<br>✓ <strong>Kenkey (½ ball)</strong> + fish only<br>✓ <strong>Zobo (unsweetened)</strong> over malt<br>✓ <strong>Bitter leaf soup</strong> — lowers glucose naturally</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <div class="card-title" style="margin-bottom:0;">Body Monitor</div>
+              <select id="gender-select" onchange="updateBodyCanvas(this.value)"
+                style="font-family:'Nunito',sans-serif;font-size:12px;padding:4px 8px;border-radius:8px;border:1.5px solid var(--border);outline:none;">
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
             </div>
+            <div class="body-wrap">
+              <canvas class="body-canvas" id="body-canvas" width="110" height="200"></canvas>
+              <div class="body-stats">
+                <div class="body-stat">
+                  <div class="body-dot" style="background:var(--g);"></div><span><strong>Sugar</strong><br><small
+                      id="bs-sugar" style="color:var(--gd);">112 ✓</small></span>
+                </div>
+                <div class="body-stat">
+                  <div class="body-dot" style="background:var(--b);animation-delay:.3s;"></div>
+                  <span><strong>Heart</strong><br><small style="color:var(--b);">118/76 ✓</small></span>
+                </div>
+                <div class="body-stat">
+                  <div class="body-dot" style="background:var(--o);animation-delay:.6s;"></div>
+                  <span><strong>Weight</strong><br><small style="color:var(--o);">72 kg</small></span>
+                </div>
+                <div class="body-stat">
+                  <div class="body-dot" style="background:var(--p);animation-delay:.9s;"></div>
+                  <span><strong>Steps</strong><br><small style="color:var(--p);">6,420</small></span>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-out" style="width:100%;margin-top:8px;font-size:13px;" onclick="showPage('risk')">📊
+              Full Risk Check →</button>
           </div>
         </div>
-      </div>
-      <div id="dt-avo" style="display:none;">
+
         <div class="g2">
-          <div>
-            <div class="dc avoid"><div class="dc-emoji">🥤</div><div><h4>Malt, Fanta, sugary drinks</h4><p>Fastest blood sugar spike. Switch to water or zobo.</p></div></div>
-            <div class="dc avoid"><div class="dc-emoji">🍞</div><div><h4>White bread & refined flour</h4><p>Converts to glucose instantly. Switch to whole grain.</p></div></div>
-            <div class="dc avoid"><div class="dc-emoji">🍟</div><div><h4>Deep-fried foods (kelewele)</h4><p>Trans fats worsen insulin resistance. Bake or boil instead.</p></div></div>
-            <div class="dc avoid"><div class="dc-emoji">🍚</div><div><h4>White rice (large portions)</h4><p>Eat ½ cup max, always with protein and vegetables.</p></div></div>
+          <div class="card">
+            <div class="card-title">Today's Checklist</div>
+            <div id="task-list"></div>
           </div>
           <div class="card">
-            <div class="card-title">Smart Swaps 💡</div>
-            <div style="font-size:13px;font-weight:700;line-height:2.4;">
-              White rice → <span style="color:var(--gd);">Brown rice</span><br>
-              Malt/Fanta → <span style="color:var(--gd);">Zobo (unsweetened)</span><br>
-              Fried kelewele → <span style="color:var(--gd);">Boiled plantain</span><br>
-              White bread → <span style="color:var(--gd);">Oat/whole grain bread</span><br>
-              Sugar in tea → <span style="color:var(--gd);">Stevia or cinnamon</span><br>
-              Candy snack → <span style="color:var(--gd);">30g groundnuts</span>
+            <div class="card-title">Medications Today</div>
+            <div class="pill-time-row">
+              <div class="pt done">
+                <div class="pt-lbl">Morning</div>
+                <div class="pt-val">8 AM</div>
+                <div class="pt-ico">✅</div>
+              </div>
+              <div class="pt pend">
+                <div class="pt-lbl">Afternoon</div>
+                <div class="pt-val">2 PM</div>
+                <div class="pt-ico">⏰</div>
+              </div>
+              <div class="pt pend">
+                <div class="pt-lbl">Evening</div>
+                <div class="pt-val">8 PM</div>
+                <div class="pt-ico">⏳</div>
+              </div>
+            </div>
+            <div class="doc-card" onclick="showPage('doctor')">
+              <div class="doc-av" style="background:var(--bl);">👨‍⚕️</div>
+              <div>
+                <div class="doc-name">Dr. Samuel Osei</div>
+                <div class="doc-spec">Endocrinologist</div>
+                <div class="online"><span class="odot"></span>Online now</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="dt-plan" style="display:none;">
-        <div class="card" style="text-align:center;padding:32px;">
-          <div style="font-size:52px;margin-bottom:14px;">🤖</div>
-          <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--gd);margin-bottom:8px;">AI Meal Planner</div>
-          <div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:16px;line-height:1.6;">Based on your region (West Africa), diet preference (Omnivore), blood sugar (112 mg/dL)</div>
-          <div style="text-align:left;">
-            <div class="dc eat" style="margin-bottom:8px;"><div class="dc-emoji">🌅</div><div><h4>Day 1 Breakfast</h4><p>Oat porridge + groundnuts + unsweetened black tea</p></div></div>
-            <div class="dc eat" style="margin-bottom:8px;"><div class="dc-emoji">☀️</div><div><h4>Day 1 Lunch</h4><p>Kenkey (½ ball) + grilled tilapia + shito + tomato salad</p></div></div>
-            <div class="dc eat"><div class="dc-emoji">🌙</div><div><h4>Day 1 Dinner</h4><p>Kontomire stew + boiled yam (½ cup) + ¼ avocado</p></div></div>
+
+      <!-- RISK CHECK -->
+      <div id="page-risk" class="page">
+        <div class="topbar">
+          <div>
+            <h1>Risk Check 🔍</h1>
+            <p>AI-powered diabetes risk analysis</p>
+          </div>
+        </div>
+        <!-- Glucy in risk mode -->
+        <div class="glucy-status-card happy" id="risk-glucy-card">
+          <canvas class="gsc-canvas" id="risk-glucy-canvas" width="60" height="60"></canvas>
+          <div class="gsc-text">
+            <h3 id="glucy-risk-title">Looking good! 🟢</h3>
+            <p id="glucy-risk-msg">Your current readings suggest low risk. Move the sliders to see how each factor
+              affects your score.</p>
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="card" style="margin-bottom:16px;">
+              <div class="card-title">Your Health Data</div>
+              <div class="i-group">
+                <div class="i-label"><span>Age</span><span class="i-val" id="r-age">45 yrs</span></div><input
+                  type="range" class="range-input" min="18" max="90" value="45"
+                  oninput="document.getElementById('r-age').textContent=this.value+' yrs';calcRisk()">
+              </div>
+              <div class="i-group">
+                <div class="i-label"><span>BMI</span><span class="i-val" id="r-bmi">27.4</span></div><input type="range"
+                  class="range-input" min="15" max="50" step="0.1" value="27.4"
+                  oninput="document.getElementById('r-bmi').textContent=parseFloat(this.value).toFixed(1);calcRisk()">
+              </div>
+              <div class="i-group">
+                <div class="i-label"><span>Blood Sugar (mg/dL)</span><span class="i-val" id="r-glu">112</span></div>
+                <input type="range" class="range-input" min="60" max="300" value="112"
+                  oninput="document.getElementById('r-glu').textContent=this.value;calcRisk()">
+              </div>
+              <div class="i-group">
+                <div class="i-label"><span>Blood Pressure</span><span class="i-val" id="r-bp">118 mmHg</span></div>
+                <input type="range" class="range-input" min="80" max="200" value="118"
+                  oninput="document.getElementById('r-bp').textContent=this.value+' mmHg';calcRisk()">
+              </div>
+              <div class="i-group">
+                <div class="i-label"><span>Pregnancies</span><span class="i-val" id="r-preg">1</span></div><input
+                  type="range" class="range-input" min="0" max="15" value="1"
+                  oninput="document.getElementById('r-preg').textContent=this.value;calcRisk()">
+              </div>
+              <div style="display:flex;gap:8px;margin-top:4px;">
+                <button class="btn btn-out" id="fh-n" onclick="setFH(false)" style="flex:1;font-size:13px;">No Family
+                  History</button>
+                <button class="btn btn-gr" id="fh-y" onclick="setFH(true)" style="flex:1;font-size:13px;">Family History
+                  ✓</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:16px;text-align:center;">
+              <div class="card-title">Your Risk Score</div>
+              <svg viewBox="0 0 200 120" style="width:190px;height:105px;margin:0 auto;display:block;">
+                <defs>
+                  <linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#58CC02" />
+                    <stop offset="50%" style="stop-color:#FFC800" />
+                    <stop offset="100%" style="stop-color:#FF4B4B" />
+                  </linearGradient>
+                </defs>
+                <path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#E5E5E5" stroke-width="16"
+                  stroke-linecap="round" />
+                <path id="g-arc" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="url(#gg)" stroke-width="16"
+                  stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="190" />
+                <line id="g-needle" x1="100" y1="100" x2="100" y2="30" stroke="#3C3C3C" stroke-width="3"
+                  stroke-linecap="round" transform="rotate(-80,100,100)" />
+                <circle cx="100" cy="100" r="6" fill="#3C3C3C" />
+              </svg>
+              <div style="font-family:'Fredoka One',cursive;font-size:52px;line-height:1;" id="risk-num">32</div>
+              <div style="font-size:16px;font-weight:800;margin-top:4px;" id="risk-lbl">🟢 Low Risk</div>
+              <div class="risk-desc" id="risk-desc">Your metrics suggest low risk. Keep going!</div>
+            </div>
+            <div class="card">
+              <div class="card-title">AI Explanation (Feature Importance)</div>
+              <div id="shap-wrap"></div>
+              <div
+                style="font-size:11px;color:var(--muted);margin-top:10px;padding:8px 12px;background:var(--bg);border-radius:10px;font-weight:600;">
+                🤖 Larger bars = bigger impact on your personal risk score.</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- METRICS -->
-    <div id="page-metrics" class="page">
-      <div class="topbar"><div><h1>Health Stats 📊</h1><p>Simple charts everyone can understand</p></div></div>
-      <div class="g2" style="margin-bottom:16px;">
-        <div class="card"><div class="card-title">Blood Sugar — 30 Days</div><div class="chart-wrap"><canvas id="c-sugar"></canvas></div></div>
-        <div class="card"><div class="card-title">BMI Progress</div><div class="chart-wrap"><canvas id="c-bmi"></canvas></div></div>
-      </div>
-      <div class="g2">
-        <div class="card"><div class="card-title">Weekly Steps</div><div class="chart-wrap"><canvas id="c-steps"></canvas></div></div>
-        <div class="card"><div class="card-title">Blood Pressure</div><div class="chart-wrap"><canvas id="c-bp"></canvas></div></div>
-      </div>
-    </div>
-
-    <!-- PILLS -->
-    <div id="page-pills" class="page">
-      <div class="topbar"><div><h1>Medications 💊</h1><p>Never miss a dose</p></div></div>
-      <div class="g2">
-        <div class="card"><div class="card-title">Today's Schedule</div><div id="pill-sched"></div><button class="btn btn-gr" style="width:100%;margin-top:10px;">+ Add Medication</button></div>
-        <div class="card">
-          <div class="card-title">Adherence This Month</div>
-          <div style="text-align:center;padding:14px 0;">
-            <div style="font-family:'Fredoka One',cursive;font-size:58px;color:var(--g);">87%</div>
-            <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:14px;">Pills taken on time</div>
-            <div class="progress-wrap"><div class="progress-bar" style="width:87%;color:var(--g);background:var(--g);"></div></div>
+      <!-- DIET -->
+      <div id="page-diet" class="page">
+        <div class="topbar">
+          <div>
+            <h1>Diet & Nutrition 🥗</h1>
+            <p>Personalised for your region and culture</p>
           </div>
-          <div style="background:var(--ol);border:2px solid var(--o);border-radius:14px;padding:12px 14px;font-size:13px;font-weight:700;color:#774400;line-height:1.6;margin-top:10px;">⏰ <strong>Next:</strong> Metformin 500mg at 2:00 PM<br>🔔 Push notification fires 15 min before!</div>
         </div>
-      </div>
-    </div>
-
-    <!-- DOCTOR -->
-    <div id="page-doctor" class="page">
-      <div class="topbar"><div><h1>Care Team 👨‍⚕️</h1><p>Secure, encrypted messaging</p></div></div>
-      <div class="g2">
-        <div>
+        <!-- Glucy eating / worried state -->
+        <div class="glucy-status-card eat" id="diet-glucy-card">
+          <canvas class="gsc-canvas" id="diet-glucy-canvas" width="60" height="60"></canvas>
+          <div class="gsc-text">
+            <h3 id="glucy-diet-title">Glucy is hungry! 😋</h3>
+            <p id="glucy-diet-msg">Log what you eat and I'll tell you how it affects your sugar levels. I love healthy
+              food!</p>
+          </div>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="dtab('log',this)">Food Log</button>
+          <button class="tab-btn" onclick="dtab('rec',this)">Eat More</button>
+          <button class="tab-btn" onclick="dtab('avo',this)">Avoid</button>
+          <button class="tab-btn" onclick="dtab('plan',this)">Meal Plan</button>
+        </div>
+        <div id="dt-log">
           <div class="card" style="margin-bottom:14px;">
-            <div class="card-title">My Doctors</div>
-            <div class="doc-card"><div class="doc-av" style="background:var(--bl);">👨‍⚕️</div><div style="flex:1;"><div class="doc-name">Dr. Samuel Osei</div><div class="doc-spec">Endocrinologist · Diabetes Specialist</div><div class="online"><span class="odot"></span>Online now</div></div><span style="font-size:18px;">💬</span></div>
-            <div class="doc-card"><div class="doc-av" style="background:var(--gl);">👩‍⚕️</div><div style="flex:1;"><div class="doc-name">Dr. Afia Mensah</div><div class="doc-spec">Dietitian & Nutritionist</div><div class="doc-spec" style="color:var(--muted);">Last seen 2h ago</div></div><span style="font-size:18px;">💬</span></div>
-          </div>
-          <div class="card" style="background:var(--bl);border-color:var(--b);">
-            <div class="card-title" style="color:#0E6FAA;">🔒 End-to-End Encrypted</div>
-            <div style="font-size:13px;font-weight:700;color:#0E6FAA;line-height:1.7;">All messages encrypted. Your doctor cannot share your records without consent. Powered by Supabase Row Level Security.</div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Chat — Dr. Samuel Osei</div>
-          <div class="chat-wrap">
-            <div class="chat-msgs" id="chat-msgs">
-              <div class="msg msg-doc"><div class="msg-name">Dr. Samuel Osei</div><div class="msg-bubble">Good morning Amara! Readings look great. Keep the brown rice swap. 💪</div></div>
-              <div class="msg msg-pat"><div class="msg-bubble">Thank you Doctor! Feeling much better this week.</div></div>
-              <div class="msg msg-doc"><div class="msg-name">Dr. Samuel Osei</div><div class="msg-bubble">Excellent! See you Friday for your check-up. 👍</div></div>
+            <div class="card-title">Log What You Ate Today</div>
+            <div class="food-input-row">
+              <input type="text" class="f-input" id="food-in" placeholder="e.g. jollof rice, eggs, kontomire..."
+                onkeydown="if(event.key==='Enter')addFood()">
+              <button class="btn btn-gr" onclick="addFood()">+ Add</button>
             </div>
-            <div class="chat-input-row">
-              <input type="text" class="f-input" id="chat-in" placeholder="Type your message..." onkeydown="if(event.key==='Enter')sendMsg()">
-              <button class="btn btn-gr" onclick="sendMsg()">Send</button>
+            <div id="food-list"></div>
+            <div id="food-empty" class="empty-state">
+              <div class="empty-icon">🍽️</div>
+              <p>No food logged yet. Type what you ate!</p>
             </div>
           </div>
+          <div class="card g3" id="food-summary" style="display:none;">
+            <div class="mc gr">
+              <div class="mc-icon">✅</div>
+              <div class="mc-val" style="color:var(--gd);" id="fc-good">0</div>
+              <div class="mc-lbl">Good choices</div>
+            </div>
+            <div class="mc ye">
+              <div class="mc-icon">⚠️</div>
+              <div class="mc-val" style="color:#886600;" id="fc-ok">0</div>
+              <div class="mc-lbl">Moderate</div>
+            </div>
+            <div class="mc red">
+              <div class="mc-icon">🚫</div>
+              <div class="mc-val" style="color:var(--r);" id="fc-bad">0</div>
+              <div class="mc-lbl">Avoid</div>
+            </div>
+          </div>
+        </div>
+        <div id="dt-rec" style="display:none;">
+          <div class="g2">
+            <div>
+              <div class="dc eat">
+                <div class="dc-emoji">🥬</div>
+                <div>
+                  <h4>Leafy greens (spinach, kontomire, ugu)</h4>
+                  <p>Low GI, rich in magnesium. Eat freely at every meal.</p>
+                </div>
+              </div>
+              <div class="dc eat">
+                <div class="dc-emoji">🐟</div>
+                <div>
+                  <h4>Grilled fish & mackerel</h4>
+                  <p>Omega-3 reduces inflammation. Great Ghanaian staple.</p>
+                </div>
+              </div>
+              <div class="dc eat">
+                <div class="dc-emoji">🥚</div>
+                <div>
+                  <h4>Eggs</h4>
+                  <p>Zero carbs, high protein. Prevents post-meal spikes.</p>
+                </div>
+              </div>
+              <div class="dc eat">
+                <div class="dc-emoji">🥜</div>
+                <div>
+                  <h4>Groundnuts & seeds</h4>
+                  <p>30g as a snack stabilises blood sugar for hours.</p>
+                </div>
+              </div>
+              <div class="dc mod">
+                <div class="dc-emoji">🍌</div>
+                <div>
+                  <h4>Plantain (unripe/boiled)</h4>
+                  <p>Boiled green plantain is much better than ripe fried.</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="card" style="background:var(--gl);border-color:var(--g);margin-bottom:12px;">
+                <div class="card-title" style="color:var(--gd);">🌍 Personalised for West Africa</div>
+                <div style="font-size:13px;font-weight:700;color:#3A8600;line-height:1.9;">✓ <strong>Kontomire
+                    stew</strong> — eat freely<br>✓ <strong>Brown rice</strong> over white rice<br>✓ <strong>Boiled
+                    yam</strong> over fried<br>✓ <strong>Kenkey (½ ball)</strong> + fish only<br>✓ <strong>Zobo
+                    (unsweetened)</strong> over malt<br>✓ <strong>Bitter leaf soup</strong> — lowers glucose naturally
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="dt-avo" style="display:none;">
+          <div class="g2">
+            <div>
+              <div class="dc avoid">
+                <div class="dc-emoji">🥤</div>
+                <div>
+                  <h4>Malt, Fanta, sugary drinks</h4>
+                  <p>Fastest blood sugar spike. Switch to water or zobo.</p>
+                </div>
+              </div>
+              <div class="dc avoid">
+                <div class="dc-emoji">🍞</div>
+                <div>
+                  <h4>White bread & refined flour</h4>
+                  <p>Converts to glucose instantly. Switch to whole grain.</p>
+                </div>
+              </div>
+              <div class="dc avoid">
+                <div class="dc-emoji">🍟</div>
+                <div>
+                  <h4>Deep-fried foods (kelewele)</h4>
+                  <p>Trans fats worsen insulin resistance. Bake or boil instead.</p>
+                </div>
+              </div>
+              <div class="dc avoid">
+                <div class="dc-emoji">🍚</div>
+                <div>
+                  <h4>White rice (large portions)</h4>
+                  <p>Eat ½ cup max, always with protein and vegetables.</p>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Smart Swaps 💡</div>
+              <div style="font-size:13px;font-weight:700;line-height:2.4;">
+                White rice → <span style="color:var(--gd);">Brown rice</span><br>
+                Malt/Fanta → <span style="color:var(--gd);">Zobo (unsweetened)</span><br>
+                Fried kelewele → <span style="color:var(--gd);">Boiled plantain</span><br>
+                White bread → <span style="color:var(--gd);">Oat/whole grain bread</span><br>
+                Sugar in tea → <span style="color:var(--gd);">Stevia or cinnamon</span><br>
+                Candy snack → <span style="color:var(--gd);">30g groundnuts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="dt-plan" style="display:none;">
+          <div class="card" style="text-align:center;padding:32px;">
+            <div style="font-size:52px;margin-bottom:14px;">🤖</div>
+            <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--gd);margin-bottom:8px;">AI Meal
+              Planner</div>
+            <div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:16px;line-height:1.6;">Based on
+              your region (West Africa), diet preference (Omnivore), blood sugar (112 mg/dL)</div>
+            <div style="text-align:left;">
+              <div class="dc eat" style="margin-bottom:8px;">
+                <div class="dc-emoji">🌅</div>
+                <div>
+                  <h4>Day 1 Breakfast</h4>
+                  <p>Oat porridge + groundnuts + unsweetened black tea</p>
+                </div>
+              </div>
+              <div class="dc eat" style="margin-bottom:8px;">
+                <div class="dc-emoji">☀️</div>
+                <div>
+                  <h4>Day 1 Lunch</h4>
+                  <p>Kenkey (½ ball) + grilled tilapia + shito + tomato salad</p>
+                </div>
+              </div>
+              <div class="dc eat">
+                <div class="dc-emoji">🌙</div>
+                <div>
+                  <h4>Day 1 Dinner</h4>
+                  <p>Kontomire stew + boiled yam (½ cup) + ¼ avocado</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- REWARDS -->
-    <div id="page-rewards" class="page">
-      <div class="topbar"><div><h1>Rewards 🏆</h1><p>Earn points, unlock streaks, gain health knowledge</p></div></div>
-      <!-- Glucy running state when rewards page opened -->
-      <div class="glucy-status-card run" id="rewards-glucy-card">
-        <canvas class="gsc-canvas" id="rewards-glucy-canvas" width="60" height="60"></canvas>
-        <div class="gsc-text">
-          <h3>Glucy is running! 🏃</h3>
-          <p>You're on a 12-day streak — that's incredible! Keep logging daily to unlock the Monthly Report in 2 days!</p>
+      <!-- METRICS -->
+      <div id="page-metrics" class="page">
+        <div class="topbar">
+          <div>
+            <h1>Health Stats 📊</h1>
+            <p>Simple charts everyone can understand</p>
+          </div>
+        </div>
+        <div class="g2" style="margin-bottom:16px;">
+          <div class="card">
+            <div class="card-title">Blood Sugar — 30 Days</div>
+            <div class="chart-wrap"><canvas id="c-sugar"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-title">BMI Progress</div>
+            <div class="chart-wrap"><canvas id="c-bmi"></canvas></div>
+          </div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-title">Weekly Steps</div>
+            <div class="chart-wrap"><canvas id="c-steps"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Blood Pressure</div>
+            <div class="chart-wrap"><canvas id="c-bp"></canvas></div>
+          </div>
         </div>
       </div>
-      <div class="g2" style="margin-bottom:18px;">
-        <div class="card" style="text-align:center;">
-          <div class="card-title">Wellness Points</div>
-          <div class="points-big" id="pts-display">1,240</div>
-          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-top:6px;">🌟 Earn 10 pts login · 50 pts daily full log</div>
-          <button class="btn btn-gr" style="width:100%;margin-top:14px;" onclick="claimDaily()">🎁 Claim Daily Reward</button>
+
+      <!-- PILLS -->
+      <div id="page-pills" class="page">
+        <div class="topbar">
+          <div>
+            <h1>Medications 💊</h1>
+            <p>Never miss a dose</p>
+          </div>
         </div>
-        <div class="card" style="text-align:center;">
-          <div class="card-title">Health Streak</div>
-          <div class="streak-big">🔥 12</div>
-          <div style="font-size:14px;font-weight:700;color:var(--muted);margin-top:6px;">Days in a row!</div>
-          <div style="margin-top:14px;background:var(--ol);border:2px solid var(--o);border-radius:14px;padding:12px;font-size:13px;font-weight:700;color:#774400;">2 more days → unlock Monthly Trend Report 📊</div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-title">Today's Schedule</div>
+            <div id="pill-sched"></div><button class="btn btn-gr" style="width:100%;margin-top:10px;">+ Add
+              Medication</button>
+          </div>
+          <div class="card">
+            <div class="card-title">Adherence This Month</div>
+            <div style="text-align:center;padding:14px 0;">
+              <div style="font-family:'Fredoka One',cursive;font-size:58px;color:var(--g);">87%</div>
+              <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:14px;">Pills taken on time
+              </div>
+              <div class="progress-wrap">
+                <div class="progress-bar" style="width:87%;color:var(--g);background:var(--g);"></div>
+              </div>
+            </div>
+            <div
+              style="background:var(--ol);border:2px solid var(--o);border-radius:14px;padding:12px 14px;font-size:13px;font-weight:700;color:#774400;line-height:1.6;margin-top:10px;">
+              ⏰ <strong>Next:</strong> Metformin 500mg at 2:00 PM<br>🔔 Push notification fires 15 min before!</div>
+          </div>
         </div>
       </div>
-      <div class="g2" style="margin-bottom:18px;">
-        <div class="card">
-          <div class="card-title">Unlock Themes</div>
-          <div class="reward-grid">
-            <div class="reward-card" style="background:var(--gl);border-color:var(--g);"><div class="r-icon">🌿</div><div class="r-name">Forest</div><div class="r-pts">Active ✓</div></div>
-            <div class="reward-card" style="background:var(--bl);border-color:var(--b);" onclick="spendPts(200,'Ocean Blue')"><div class="r-icon">🌊</div><div class="r-name">Ocean</div><div class="r-pts">200 pts</div></div>
-            <div class="reward-card locked"><div class="r-icon">🌙</div><div class="r-name">Dark</div><div class="r-pts">500 pts</div></div>
+
+      <!-- DOCTOR -->
+      <div id="page-doctor" class="page">
+        <div class="topbar">
+          <div>
+            <h1>Care Team 👨‍⚕️</h1>
+            <p>Secure, encrypted messaging</p>
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="card" style="margin-bottom:14px;">
+              <div class="card-title">My Doctors</div>
+              <div class="doc-card">
+                <div class="doc-av" style="background:var(--bl);">👨‍⚕️</div>
+                <div style="flex:1;">
+                  <div class="doc-name">Dr. Samuel Osei</div>
+                  <div class="doc-spec">Endocrinologist · Diabetes Specialist</div>
+                  <div class="online"><span class="odot"></span>Online now</div>
+                </div><span style="font-size:18px;">💬</span>
+              </div>
+              <div class="doc-card">
+                <div class="doc-av" style="background:var(--gl);">👩‍⚕️</div>
+                <div style="flex:1;">
+                  <div class="doc-name">Dr. Afia Mensah</div>
+                  <div class="doc-spec">Dietitian & Nutritionist</div>
+                  <div class="doc-spec" style="color:var(--muted);">Last seen 2h ago</div>
+                </div><span style="font-size:18px;">💬</span>
+              </div>
+            </div>
+            <div class="card" style="background:var(--bl);border-color:var(--b);">
+              <div class="card-title" style="color:#0E6FAA;">🔒 End-to-End Encrypted</div>
+              <div style="font-size:13px;font-weight:700;color:#0E6FAA;line-height:1.7;">All messages encrypted. Your
+                doctor cannot share your records without consent. Powered by Supabase Row Level Security.</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Chat — Dr. Samuel Osei</div>
+            <div class="chat-wrap">
+              <div class="chat-msgs" id="chat-msgs">
+                <div class="msg msg-doc">
+                  <div class="msg-name">Dr. Samuel Osei</div>
+                  <div class="msg-bubble">Good morning Amara! Readings look great. Keep the brown rice swap. 💪</div>
+                </div>
+                <div class="msg msg-pat">
+                  <div class="msg-bubble">Thank you Doctor! Feeling much better this week.</div>
+                </div>
+                <div class="msg msg-doc">
+                  <div class="msg-name">Dr. Samuel Osei</div>
+                  <div class="msg-bubble">Excellent! See you Friday for your check-up. 👍</div>
+                </div>
+              </div>
+              <div class="chat-input-row">
+                <input type="text" class="f-input" id="chat-in" placeholder="Type your message..."
+                  onkeydown="if(event.key==='Enter')sendMsg()">
+                <button class="btn btn-gr" onclick="sendMsg()">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REWARDS -->
+      <div id="page-rewards" class="page">
+        <div class="topbar">
+          <div>
+            <h1>Rewards 🏆</h1>
+            <p>Earn points, unlock streaks, gain health knowledge</p>
+          </div>
+        </div>
+        <!-- Glucy running state when rewards page opened -->
+        <div class="glucy-status-card run" id="rewards-glucy-card">
+          <canvas class="gsc-canvas" id="rewards-glucy-canvas" width="60" height="60"></canvas>
+          <div class="gsc-text">
+            <h3>Glucy is running! 🏃</h3>
+            <p>You're on a 12-day streak — that's incredible! Keep logging daily to unlock the Monthly Report in 2 days!
+            </p>
+          </div>
+        </div>
+        <div class="g2" style="margin-bottom:18px;">
+          <div class="card" style="text-align:center;">
+            <div class="card-title">Wellness Points</div>
+            <div class="points-big" id="pts-display">1,240</div>
+            <div style="font-size:13px;font-weight:700;color:var(--muted);margin-top:6px;">🌟 Earn 10 pts login · 50 pts
+              daily full log</div>
+            <button class="btn btn-gr" style="width:100%;margin-top:14px;" onclick="claimDaily()">🎁 Claim Daily
+              Reward</button>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="card-title">Health Streak</div>
+            <div class="streak-big">🔥 12</div>
+            <div style="font-size:14px;font-weight:700;color:var(--muted);margin-top:6px;">Days in a row!</div>
+            <div
+              style="margin-top:14px;background:var(--ol);border:2px solid var(--o);border-radius:14px;padding:12px;font-size:13px;font-weight:700;color:#774400;">
+              2 more days → unlock Monthly Trend Report 📊</div>
+          </div>
+        </div>
+        <div class="g2" style="margin-bottom:18px;">
+          <div class="card">
+            <div class="card-title">Unlock Themes</div>
+            <div class="reward-grid">
+              <div class="reward-card" style="background:var(--gl);border-color:var(--g);">
+                <div class="r-icon">🌿</div>
+                <div class="r-name">Forest</div>
+                <div class="r-pts">Active ✓</div>
+              </div>
+              <div class="reward-card" style="background:var(--bl);border-color:var(--b);"
+                onclick="spendPts(200,'Ocean Blue')">
+                <div class="r-icon">🌊</div>
+                <div class="r-name">Ocean</div>
+                <div class="r-pts">200 pts</div>
+              </div>
+              <div class="reward-card locked">
+                <div class="r-icon">🌙</div>
+                <div class="r-name">Dark</div>
+                <div class="r-pts">500 pts</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Knowledge Unlocks 📚</div>
+            <div class="dc eat" style="margin-bottom:8px;cursor:pointer;">
+              <div class="dc-emoji">📄</div>
+              <div>
+                <h4>Top 10 Snacks PDF ✓</h4>
+                <p>Unlocked at 7-day streak — tap to download</p>
+              </div>
+            </div>
+            <div class="dc mod" style="margin-bottom:8px;">
+              <div class="dc-emoji">📊</div>
+              <div>
+                <h4>Monthly Report</h4>
+                <p>2 more days to unlock!</p>
+              </div>
+            </div>
+            <div class="dc avoid">
+              <div class="dc-emoji">🧬</div>
+              <div>
+                <h4>A1C Prediction</h4>
+                <p>Unlock at 30-day streak</p>
+              </div>
+            </div>
           </div>
         </div>
         <div class="card">
-          <div class="card-title">Knowledge Unlocks 📚</div>
-          <div class="dc eat" style="margin-bottom:8px;cursor:pointer;"><div class="dc-emoji">📄</div><div><h4>Top 10 Snacks PDF ✓</h4><p>Unlocked at 7-day streak — tap to download</p></div></div>
-          <div class="dc mod" style="margin-bottom:8px;"><div class="dc-emoji">📊</div><div><h4>Monthly Report</h4><p>2 more days to unlock!</p></div></div>
-          <div class="dc avoid"><div class="dc-emoji">🧬</div><div><h4>A1C Prediction</h4><p>Unlock at 30-day streak</p></div></div>
+          <div class="card-title">Points History</div>
+          <div id="pts-history"></div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-title">Points History</div>
-        <div id="pts-history"></div>
-      </div>
-    </div>
 
-    <!-- ALERTS -->
-    <div id="page-alerts" class="page">
-      <div class="topbar"><div><h1>Notifications 🔔</h1><p>Smart reminders keeping you on track</p></div></div>
-      <div class="g2">
-        <div><div id="notif-list"></div></div>
-        <div class="card">
-          <div class="card-title">Reminder Settings</div>
-          <div style="margin-bottom:14px;">
-            <div style="font-size:13px;font-weight:800;margin-bottom:8px;">💊 Pill reminders (Firebase push)</div>
-            <div style="background:var(--gl);border:2px solid var(--g);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--gd);margin-bottom:6px;">⏰ 8:00 AM — Metformin 500mg ✅</div>
-            <div style="background:var(--ol);border:2px solid var(--o);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;color:#774400;">⏰ 2:00 PM — Metformin 500mg (due)</div>
+      <!-- ALERTS -->
+      <div id="page-alerts" class="page">
+        <div class="topbar">
+          <div>
+            <h1>Notifications 🔔</h1>
+            <p>Smart reminders keeping you on track</p>
           </div>
-          <div style="border-top:2px solid var(--border);padding-top:14px;">
-            <div style="background:var(--bl);border:2px solid var(--b);border-radius:12px;padding:12px 14px;font-size:13px;font-weight:700;color:#0880B8;">📅 Appointment: Dr. Osei — Friday March 27 at 10:30 AM</div>
+        </div>
+        <div class="g2">
+          <div>
+            <div id="notif-list"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Reminder Settings</div>
+            <div style="margin-bottom:14px;">
+              <div style="font-size:13px;font-weight:800;margin-bottom:8px;">💊 Pill reminders (Firebase push)</div>
+              <div
+                style="background:var(--gl);border:2px solid var(--g);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--gd);margin-bottom:6px;">
+                ⏰ 8:00 AM — Metformin 500mg ✅</div>
+              <div
+                style="background:var(--ol);border:2px solid var(--o);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;color:#774400;">
+                ⏰ 2:00 PM — Metformin 500mg (due)</div>
+            </div>
+            <div style="border-top:2px solid var(--border);padding-top:14px;">
+              <div
+                style="background:var(--bl);border:2px solid var(--b);border-radius:12px;padding:12px 14px;font-size:13px;font-weight:700;color:#0880B8;">
+                📅 Appointment: Dr. Osei — Friday March 27 at 10:30 AM</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-  </main>
-</div>
+    </main>
+  </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script>
-// ═══════════════════════════════════════════════════════════════
-// GLUCY STATE MACHINE
-// States: happy | sad | warn | run | eat | doctor | dev
-// The backend would send glucy_metadata; here we compute locally
-// ═══════════════════════════════════════════════════════════════
-const GLUCY_STATE = {
-  HAPPY: 'happy',
-  SAD: 'sad',
-  WARN: 'warn',
-  RUN: 'run',
-  EAT: 'eat',
-};
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // GLUCY STATE MACHINE
+    // States: happy | sad | warn | run | eat | doctor | dev
+    // The backend would send glucy_metadata; here we compute locally
+    // ═══════════════════════════════════════════════════════════════
+    const API_BASE = 'https://glucocare-uplm.onrender.com/api/v1';
+    const GLUCY_STATE = {
+      HAPPY: 'happy',
+      SAD: 'sad',
+      WARN: 'warn',
+      RUN: 'run',
+      EAT: 'eat',
+    };
 
-const STATE_MESSAGES = {
-  happy: ["Your blood sugar is in range — keep it up! 💚","You logged today — that takes discipline! I'm so proud of you! 🌟","You're on a 12-day streak! I'm doing a happy dance! 🎉"],
-  sad: ["Oh no 😢 Your glucose is too high. Please drink water and take a short walk.","You missed a day — but today is a fresh start! Let's go! 💪","Glucose spike detected. Please rest and avoid sugary drinks right now."],
-  warn: ["Borderline reading. Let's be careful with what we eat tonight. ⚠️","Your pressure is a little high today. Deep breaths help! 🌬️","Watch your carbs today — your readings are trending up a bit."],
-  run: ["Daily Four complete! You crushed it today! 🏃 Running with joy!","You're on a winning streak! I can't stop running! 🎉","Goals done! Best version of yourself, right here, right now! 🏆"],
-  eat: ["Ooh, food time! I'm checking if it's good for your sugar levels... 😋","Logging your meals is the #1 habit for diabetes control! 🥗","I love healthy food! Let's see how this affects your glucose! 🌿"],
-};
+    const STATE_MESSAGES = {
+      happy: ["Your blood sugar is in range — keep it up! 💚", "You logged today — that takes discipline! I'm so proud of you! 🌟", "You're on a 12-day streak! I'm doing a happy dance! 🎉"],
+      sad: ["Oh no 😢 Your glucose is too high. Please drink water and take a short walk.", "You missed a day — but today is a fresh start! Let's go! 💪", "Glucose spike detected. Please rest and avoid sugary drinks right now."],
+      warn: ["Borderline reading. Let's be careful with what we eat tonight. ⚠️", "Your pressure is a little high today. Deep breaths help! 🌬️", "Watch your carbs today — your readings are trending up a bit."],
+      run: ["Daily Four complete! You crushed it today! 🏃 Running with joy!", "You're on a winning streak! I can't stop running! 🎉", "Goals done! Best version of yourself, right here, right now! 🏆"],
+      eat: ["Ooh, food time! I'm checking if it's good for your sugar levels... 😋", "Logging your meals is the #1 habit for diabetes control! 🥗", "I love healthy food! Let's see how this affects your glucose! 🌿"],
+    };
 
-let glucyCurrentState = GLUCY_STATE.HAPPY;
-let glucyT = 0;
-let glucySpeechTimer = null;
-const glucyCanvases = {};
+    let glucyCurrentState = GLUCY_STATE.HAPPY;
+    let glucyT = 0;
+    let glucySpeechTimer = null;
+    const glucyCanvases = {};
 
-// Draw Glucy on any canvas
-function drawGlucy(ctx, t, state = 'happy', size = 80) {
-  ctx.clearRect(0, 0, size, size);
-  const scale = size / 80;
-  const bob = Math.sin(t * 0.003) * (state === 'run' ? 0 : 5) * scale;
-  ctx.save();
-  ctx.translate(size / 2, size / 2 + bob);
-  ctx.scale(scale, scale);
+    // Draw Glucy on any canvas
+    function drawGlucy(ctx, t, state = 'happy', size = 80) {
+      ctx.clearRect(0, 0, size, size);
+      const scale = size / 80;
+      const bob = Math.sin(t * 0.003) * (state === 'run' ? 0 : 5) * scale;
+      ctx.save();
+      ctx.translate(size / 2, size / 2 + bob);
+      ctx.scale(scale, scale);
 
-  // Glow
-  const colors = { happy: '#58CC02', sad: '#FF4B4B', warn: '#FFC800', run: '#1CB0F6', eat: '#FF9600' };
-  const col = colors[state] || '#58CC02';
-  const grd = ctx.createRadialGradient(0, 0, 8, 0, 0, 30);
-  grd.addColorStop(0, col + '30');
-  grd.addColorStop(1, col + '00');
-  ctx.fillStyle = grd;
-  ctx.beginPath(); ctx.arc(0, 0, 30, 0, Math.PI * 2); ctx.fill();
+      // Glow
+      const colors = { happy: '#58CC02', sad: '#FF4B4B', warn: '#FFC800', run: '#1CB0F6', eat: '#FF9600' };
+      const col = colors[state] || '#58CC02';
+      const grd = ctx.createRadialGradient(0, 0, 8, 0, 0, 30);
+      grd.addColorStop(0, col + '30');
+      grd.addColorStop(1, col + '00');
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.arc(0, 0, 30, 0, Math.PI * 2); ctx.fill();
 
-  if (state === 'run') {
-    // Running Glucy - tilted
-    ctx.rotate(Math.sin(t * 0.01) * 0.15);
-  }
+      if (state === 'run') {
+        // Running Glucy - tilted
+        ctx.rotate(Math.sin(t * 0.01) * 0.15);
+      }
 
-  // Body cube
-  const cubeColors = { happy: '#7FE842', sad: '#FF8080', warn: '#FFD740', run: '#40C8FF', eat: '#FFB240' };
-  const cubeTop = { happy: '#A8F060', sad: '#FFA0A0', warn: '#FFE880', run: '#80DCFF', eat: '#FFD080' };
-  const cubeRight = { happy: '#58C502', sad: '#CC5555', warn: '#CC9900', run: '#0E9AC0', eat: '#CC8000' };
+      // Body cube
+      const cubeColors = { happy: '#7FE842', sad: '#FF8080', warn: '#FFD740', run: '#40C8FF', eat: '#FFB240' };
+      const cubeTop = { happy: '#A8F060', sad: '#FFA0A0', warn: '#FFE880', run: '#80DCFF', eat: '#FFD080' };
+      const cubeRight = { happy: '#58C502', sad: '#CC5555', warn: '#CC9900', run: '#0E9AC0', eat: '#CC8000' };
 
-  ctx.fillStyle = cubeColors[state] || '#7FE842';
-  ctx.strokeStyle = cubeRight[state] || '#3A8600';
-  ctx.lineWidth = 2.5;
-  ctx.beginPath(); ctx.roundRect(-22, -22, 44, 44, 8); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = cubeColors[state] || '#7FE842';
+      ctx.strokeStyle = cubeRight[state] || '#3A8600';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.roundRect(-22, -22, 44, 44, 8); ctx.fill(); ctx.stroke();
 
-  // Top face
-  ctx.fillStyle = cubeTop[state] || '#A8F060';
-  ctx.beginPath(); ctx.moveTo(-22, -22); ctx.lineTo(-11, -33); ctx.lineTo(33, -33); ctx.lineTo(22, -22); ctx.closePath(); ctx.fill(); ctx.stroke();
+      // Top face
+      ctx.fillStyle = cubeTop[state] || '#A8F060';
+      ctx.beginPath(); ctx.moveTo(-22, -22); ctx.lineTo(-11, -33); ctx.lineTo(33, -33); ctx.lineTo(22, -22); ctx.closePath(); ctx.fill(); ctx.stroke();
 
-  // Right face
-  ctx.fillStyle = cubeRight[state] || '#58C502';
-  ctx.beginPath(); ctx.moveTo(22, -22); ctx.lineTo(33, -33); ctx.lineTo(33, 11); ctx.lineTo(22, 22); ctx.closePath(); ctx.fill(); ctx.stroke();
+      // Right face
+      ctx.fillStyle = cubeRight[state] || '#58C502';
+      ctx.beginPath(); ctx.moveTo(22, -22); ctx.lineTo(33, -33); ctx.lineTo(33, 11); ctx.lineTo(22, 22); ctx.closePath(); ctx.fill(); ctx.stroke();
 
-  // Eyes
-  ctx.fillStyle = '#fff';
-  ctx.beginPath(); ctx.ellipse(-9, -4, 7, 9, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(9, -4, 7, 9, 0, 0, Math.PI * 2); ctx.fill();
+      // Eyes
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.ellipse(-9, -4, 7, 9, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(9, -4, 7, 9, 0, 0, Math.PI * 2); ctx.fill();
 
-  // Pupils based on state
-  ctx.fillStyle = '#3C3C3C';
-  const blink = Math.sin(t * 0.001) > 0.96;
-  if (state === 'sad') {
-    // Sad eyes - drooping
-    ctx.beginPath(); ctx.ellipse(-9, -2, 3.5, 4, -0.3, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(9, -2, 3.5, 4, 0.3, 0, Math.PI * 2); ctx.fill();
-  } else if (blink) {
-    ctx.fillRect(-15, -4, 10, 3);
-    ctx.fillRect(5, -4, 10, 3);
-  } else {
-    ctx.beginPath(); ctx.ellipse(-9, -3, 3.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(9, -3, 3.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
-  }
-  // Shine
-  ctx.fillStyle = 'rgba(255,255,255,0.8)';
-  ctx.beginPath(); ctx.ellipse(-7, -6, 1.5, 2.5, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(11, -6, 1.5, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+      // Pupils based on state
+      ctx.fillStyle = '#3C3C3C';
+      const blink = Math.sin(t * 0.001) > 0.96;
+      if (state === 'sad') {
+        // Sad eyes - drooping
+        ctx.beginPath(); ctx.ellipse(-9, -2, 3.5, 4, -0.3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(9, -2, 3.5, 4, 0.3, 0, Math.PI * 2); ctx.fill();
+      } else if (blink) {
+        ctx.fillRect(-15, -4, 10, 3);
+        ctx.fillRect(5, -4, 10, 3);
+      } else {
+        ctx.beginPath(); ctx.ellipse(-9, -3, 3.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(9, -3, 3.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+      }
+      // Shine
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      ctx.beginPath(); ctx.ellipse(-7, -6, 1.5, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(11, -6, 1.5, 2.5, 0, 0, Math.PI * 2); ctx.fill();
 
-  // Mouth based on state
-  ctx.strokeStyle = '#2d6800'; ctx.lineWidth = 2; ctx.lineCap = 'round';
-  if (state === 'sad') {
-    ctx.beginPath(); ctx.arc(0, 12, 8, 0.3, Math.PI - 0.3, true); ctx.stroke();
-    // Tears
-    ctx.fillStyle = '#80C0FF';
-    ctx.beginPath(); ctx.ellipse(-13, 6 + Math.sin(t * 0.005) * 3, 2, 3, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(13, 6 + Math.sin(t * 0.005 + 1) * 3, 2, 3, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = '#2d6800';
-  } else if (state === 'run') {
-    ctx.strokeStyle = '#2d6800';
-    ctx.beginPath(); ctx.arc(0, 5, 9, 0.1, Math.PI - 0.1); ctx.stroke();
-  } else {
-    ctx.beginPath(); ctx.arc(0, 4, 8, 0.2, Math.PI - 0.2); ctx.stroke();
-  }
+      // Mouth based on state
+      ctx.strokeStyle = '#2d6800'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+      if (state === 'sad') {
+        ctx.beginPath(); ctx.arc(0, 12, 8, 0.3, Math.PI - 0.3, true); ctx.stroke();
+        // Tears
+        ctx.fillStyle = '#80C0FF';
+        ctx.beginPath(); ctx.ellipse(-13, 6 + Math.sin(t * 0.005) * 3, 2, 3, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(13, 6 + Math.sin(t * 0.005 + 1) * 3, 2, 3, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#2d6800';
+      } else if (state === 'run') {
+        ctx.strokeStyle = '#2d6800';
+        ctx.beginPath(); ctx.arc(0, 5, 9, 0.1, Math.PI - 0.1); ctx.stroke();
+      } else {
+        ctx.beginPath(); ctx.arc(0, 4, 8, 0.2, Math.PI - 0.2); ctx.stroke();
+      }
 
-  // Cheeks
-  const blushAlpha = state === 'run' ? 0.6 : 0.35;
-  ctx.fillStyle = `rgba(255,120,120,${blushAlpha})`;
-  ctx.beginPath(); ctx.ellipse(-17, 4, 5, 3.5, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(17, 4, 5, 3.5, 0, 0, Math.PI * 2); ctx.fill();
+      // Cheeks
+      const blushAlpha = state === 'run' ? 0.6 : 0.35;
+      ctx.fillStyle = `rgba(255,120,120,${blushAlpha})`;
+      ctx.beginPath(); ctx.ellipse(-17, 4, 5, 3.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(17, 4, 5, 3.5, 0, 0, Math.PI * 2); ctx.fill();
 
-  // Arms
-  ctx.strokeStyle = cubeRight[state] || '#3A8600'; ctx.lineWidth = 4; ctx.lineCap = 'round';
-  if (state === 'run') {
-    // Running arms pumping
-    const armSwing = Math.sin(t * 0.015) * 12;
-    ctx.beginPath(); ctx.moveTo(-22, 0); ctx.lineTo(-38, armSwing - 8); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(22, 0); ctx.lineTo(38, -armSwing - 8); ctx.stroke();
-    // Running legs
-    const legSwing = Math.sin(t * 0.015) * 10;
-    ctx.strokeStyle = cubeColors[state];
-    ctx.beginPath(); ctx.moveTo(-10, 22); ctx.lineTo(-16, 36 + legSwing); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(10, 22); ctx.lineTo(16, 36 - legSwing); ctx.stroke();
-  } else if (state === 'eat') {
-    const eatAnim = Math.sin(t * 0.008) * 6;
-    ctx.beginPath(); ctx.moveTo(-22, 0); ctx.lineTo(-36, eatAnim); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(22, 0); ctx.lineTo(36, -eatAnim); ctx.stroke();
-    // Food item in hand
-    ctx.fillStyle = '#FF9600';
-    ctx.beginPath(); ctx.arc(36, -eatAnim, 5, 0, Math.PI * 2); ctx.fill();
-  } else {
-    ctx.beginPath(); ctx.moveTo(-22, 0); ctx.lineTo(-36, Math.sin(t * 0.004) * 6 - 8); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(22, 0); ctx.lineTo(36, Math.sin(t * 0.004 + 1) * 6 - 8); ctx.stroke();
-  }
+      // Arms
+      ctx.strokeStyle = cubeRight[state] || '#3A8600'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+      if (state === 'run') {
+        // Running arms pumping
+        const armSwing = Math.sin(t * 0.015) * 12;
+        ctx.beginPath(); ctx.moveTo(-22, 0); ctx.lineTo(-38, armSwing - 8); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(22, 0); ctx.lineTo(38, -armSwing - 8); ctx.stroke();
+        // Running legs
+        const legSwing = Math.sin(t * 0.015) * 10;
+        ctx.strokeStyle = cubeColors[state];
+        ctx.beginPath(); ctx.moveTo(-10, 22); ctx.lineTo(-16, 36 + legSwing); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(10, 22); ctx.lineTo(16, 36 - legSwing); ctx.stroke();
+      } else if (state === 'eat') {
+        const eatAnim = Math.sin(t * 0.008) * 6;
+        ctx.beginPath(); ctx.moveTo(-22, 0); ctx.lineTo(-36, eatAnim); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(22, 0); ctx.lineTo(36, -eatAnim); ctx.stroke();
+        // Food item in hand
+        ctx.fillStyle = '#FF9600';
+        ctx.beginPath(); ctx.arc(36, -eatAnim, 5, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.beginPath(); ctx.moveTo(-22, 0); ctx.lineTo(-36, Math.sin(t * 0.004) * 6 - 8); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(22, 0); ctx.lineTo(36, Math.sin(t * 0.004 + 1) * 6 - 8); ctx.stroke();
+      }
 
-  // Sparkles for happy state
-  if (state === 'happy' || state === 'run') {
-    for (let i = 0; i < 3; i++) {
-      const a = t * 0.002 + i * 2.1;
-      const r = 34 + Math.sin(t * 0.003 + i) * 6;
-      const sx = Math.cos(a) * r; const sy = Math.sin(a) * r;
-      const sz = 1.5 + Math.sin(t * 0.005 + i) * 1;
-      ctx.fillStyle = `rgba(255,200,0,${0.4 + Math.sin(t * 0.005 + i) * 0.4})`;
-      ctx.beginPath(); ctx.arc(sx, sy, sz, 0, Math.PI * 2); ctx.fill();
+      // Sparkles for happy state
+      if (state === 'happy' || state === 'run') {
+        for (let i = 0; i < 3; i++) {
+          const a = t * 0.002 + i * 2.1;
+          const r = 34 + Math.sin(t * 0.003 + i) * 6;
+          const sx = Math.cos(a) * r; const sy = Math.sin(a) * r;
+          const sz = 1.5 + Math.sin(t * 0.005 + i) * 1;
+          ctx.fillStyle = `rgba(255,200,0,${0.4 + Math.sin(t * 0.005 + i) * 0.4})`;
+          ctx.beginPath(); ctx.arc(sx, sy, sz, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+
+      ctx.restore();
     }
-  }
 
-  ctx.restore();
-}
-
-// Animation loop for all Glucy canvases
-function animateGlucy() {
-  glucyT += 16;
-  // Main floating Glucy
-  const mc = document.getElementById('glucy-canvas-main');
-  if (mc) drawGlucy(mc.getContext('2d'), glucyT, glucyCurrentState, 80);
-  // Inline canvas on home page
-  const hc = document.getElementById('home-glucy-canvas');
-  if (hc) drawGlucy(hc.getContext('2d'), glucyT, glucyCurrentState, 60);
-  // Risk page canvas
-  const rc = document.getElementById('risk-glucy-canvas');
-  if (rc) drawGlucy(rc.getContext('2d'), glucyT, glucyCurrentState === GLUCY_STATE.SAD ? GLUCY_STATE.SAD : GLUCY_STATE.HAPPY, 60);
-  // Diet page canvas
-  const dc = document.getElementById('diet-glucy-canvas');
-  if (dc) drawGlucy(dc.getContext('2d'), glucyT, GLUCY_STATE.EAT, 60);
-  // Rewards page canvas
-  const rwc = document.getElementById('rewards-glucy-canvas');
-  if (rwc) drawGlucy(rwc.getContext('2d'), glucyT, GLUCY_STATE.RUN, 60);
-  requestAnimationFrame(animateGlucy);
-}
-
-function setGlucyState(state) {
-  glucyCurrentState = state;
-  const colors = { happy: '#58CC02', sad: '#FF4B4B', warn: '#FFC800', run: '#1CB0F6', eat: '#FF9600' };
-  const card = document.getElementById('home-glucy-card');
-  if (card) {
-    card.className = `glucy-status-card ${state}`;
-    const msgs = STATE_MESSAGES[state] || STATE_MESSAGES.happy;
-    const msg = msgs[Math.floor(Math.random() * msgs.length)];
-    const title = { happy: 'Glucy is Happy! 💚', sad: 'Glucy is worried 😢', warn: 'Glucy is concerned ⚠️', run: 'Glucy is running! 🏃', eat: 'Glucy is snacking! 😋' };
-    document.getElementById('glucy-home-title').textContent = title[state] || title.happy;
-    document.getElementById('glucy-home-msg').textContent = msg;
-    setGlucySpeech(msg);
-  }
-}
-
-function setGlucySpeech(text) {
-  const el = document.getElementById('glucy-speech');
-  el.textContent = text;
-  el.classList.add('show');
-  if (glucySpeechTimer) clearTimeout(glucySpeechTimer);
-  glucySpeechTimer = setTimeout(() => el.classList.remove('show'), 5000);
-}
-
-function toggleGlucySpeech() {
-  const msgs = STATE_MESSAGES[glucyCurrentState] || STATE_MESSAGES.happy;
-  setGlucySpeech(msgs[Math.floor(Math.random() * msgs.length)]);
-}
-
-// Determine Glucy state from health data
-function computeGlucyState(glucose = 112, daysMissed = 0) {
-  if (daysMissed > 0) return GLUCY_STATE.SAD;
-  if (glucose > 200) return GLUCY_STATE.SAD;
-  if (glucose > 140) return GLUCY_STATE.WARN;
-  return GLUCY_STATE.HAPPY;
-}
-
-// ═══════════════════════════════════════════════════════════════
-// SPLASH SCREEN ANIMATION
-// ═══════════════════════════════════════════════════════════════
-let splashT = 0;
-const splashCtx = document.getElementById('splash-canvas').getContext('2d');
-const TIPS = [
-  '💡 Eating veggies before carbs cuts blood sugar spikes by 40%!',
-  '🏃 A 10-min walk after meals lowers glucose by 22%!',
-  '💧 Drinking water before eating reduces overeating by 30%!',
-  '🌙 Poor sleep raises blood sugar the next morning!',
-  '🥜 Groundnuts as a snack prevent late-night glucose spikes!',
-];
-let tipIdx = 0;
-function animateSplash() {
-  drawGlucy(splashCtx, splashT, GLUCY_STATE.HAPPY, 160);
-  splashT += 16;
-  requestAnimationFrame(animateSplash);
-}
-animateSplash();
-setInterval(() => {
-  tipIdx = (tipIdx + 1) % TIPS.length;
-  const el = document.getElementById('splash-tip');
-  if (el) el.textContent = TIPS[tipIdx];
-}, 2500);
-
-setTimeout(() => {
-  const splash = document.getElementById('splash');
-  splash.style.transition = 'opacity .8s';
-  splash.style.opacity = '0';
-  setTimeout(() => {
-    splash.style.display = 'none';
-    document.getElementById('app').classList.add('show');
-    animateGlucy();
-    initHomeChart();
-    renderAll();
-    setGlucyState(computeGlucyState(112, 0));
-    setTimeout(() => setGlucySpeech("Welcome back, Amara! Your blood sugar looks great today! 💚"), 800);
-    checkSunday();
-    animateBodyLoop();
-  }, 800);
-}, 4200);
-
-// ═══════════════════════════════════════════════════════════════
-// BODY CANVAS ANIMATION
-// ═══════════════════════════════════════════════════════════════
-let bodyT = 0;
-let currentGender = 'female';
-function updateBodyCanvas(g) { currentGender = g; }
-
-function drawBody(gender, glucose) {
-  const canvas = document.getElementById('body-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, 110, 200);
-  const bob = Math.sin(bodyT * 0.002) * 2;
-  ctx.save(); ctx.translate(55, 5 + bob);
-
-  // Head
-  ctx.fillStyle = '#FFD5B0'; ctx.strokeStyle = '#E0A870'; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.ellipse(0, 15, 18, 20, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-
-  // Hair
-  ctx.fillStyle = gender === 'female' ? '#8B4513' : '#4A3728';
-  if (gender === 'female') {
-    ctx.beginPath(); ctx.ellipse(0, -4, 19, 14, 0, Math.PI, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(-18, 20, 5, 12, -0.3, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(18, 20, 5, 12, 0.3, 0, Math.PI * 2); ctx.fill();
-  } else {
-    ctx.beginPath(); ctx.ellipse(0, -2, 18, 10, 0, Math.PI, Math.PI * 2); ctx.fill();
-  }
-
-  // Neck
-  ctx.fillStyle = '#FFD5B0';
-  ctx.beginPath(); ctx.rect(-6, 32, 12, 12); ctx.fill();
-
-  // Body — color reflects glucose level
-  const bodyColor = glucose > 200 ? '#FFD5D5' : glucose > 140 ? '#FFE8CC' : '#D5F0D5';
-  const bodyStroke = glucose > 200 ? '#FF4B4B' : glucose > 140 ? '#FF9600' : '#58CC02';
-  ctx.fillStyle = bodyColor; ctx.strokeStyle = bodyStroke; ctx.lineWidth = 2.5;
-  if (gender === 'female') {
-    ctx.beginPath(); ctx.moveTo(-20, 44); ctx.lineTo(-22, 90); ctx.lineTo(22, 90); ctx.lineTo(20, 44); ctx.closePath(); ctx.fill(); ctx.stroke();
-  } else {
-    ctx.beginPath(); ctx.roundRect(-22, 44, 44, 50, 6); ctx.fill(); ctx.stroke();
-  }
-
-  // Sugar indicator on body
-  ctx.fillStyle = bodyStroke; ctx.font = 'bold 10px Nunito,sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText(glucose + ' mg/dL', 0, 72);
-  ctx.font = '8px Nunito,sans-serif';
-  ctx.fillText(glucose > 200 ? '⚠ See Doctor' : glucose > 140 ? 'Borderline' : '✓ OK', 0, 84);
-
-  // Arms
-  ctx.fillStyle = '#FFD5B0'; ctx.strokeStyle = '#E0A870'; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(-22, 48); ctx.lineTo(-36, 80); ctx.lineTo(-30, 82); ctx.lineTo(-16, 52); ctx.closePath(); ctx.fill(); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(22, 48); ctx.lineTo(36, 80); ctx.lineTo(30, 82); ctx.lineTo(16, 52); ctx.closePath(); ctx.fill(); ctx.stroke();
-
-  // Legs
-  ctx.beginPath(); ctx.moveTo(-16, 90); ctx.lineTo(-18, 145); ctx.lineTo(-8, 145); ctx.lineTo(-6, 90); ctx.closePath(); ctx.fill(); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(6, 90); ctx.lineTo(8, 145); ctx.lineTo(18, 145); ctx.lineTo(16, 90); ctx.closePath(); ctx.fill(); ctx.stroke();
-
-  // Shoes
-  ctx.fillStyle = '#4A3728';
-  ctx.beginPath(); ctx.ellipse(-13, 146, 10, 5, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(13, 146, 10, 5, 0, 0, Math.PI * 2); ctx.fill();
-
-  ctx.restore();
-}
-
-function animateBodyLoop() {
-  bodyT += 16;
-  drawBody(currentGender, 112);
-  requestAnimationFrame(animateBodyLoop);
-}
-
-// ═══════════════════════════════════════════════════════════════
-// PAGE NAVIGATION
-// ═══════════════════════════════════════════════════════════════
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  const map = { home: 0, risk: 1, diet: 2, metrics: 3, pills: 4, doctor: 5, rewards: 6, alerts: 7 };
-  if (map[id] !== undefined) document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
-  if (id === 'metrics') setTimeout(initMetricCharts, 80);
-  if (id === 'home') setTimeout(initHomeChart, 80);
-  // Glucy context
-  if (id === 'diet') setGlucySpeech("Let's see what you ate today! I'll rate it for your sugar levels! 🥗");
-  if (id === 'rewards') setGlucySpeech("You're on a 12-day streak! I'm SO proud of you! 🏆");
-  if (id === 'risk') setGlucySpeech("Move the sliders to see how each factor affects your risk score.");
-  if (id === 'doctor') setGlucySpeech("Your doctor is here to help. Chat securely! 👨‍⚕️");
-}
-
-// ═══════════════════════════════════════════════════════════════
-// FOOD LOG
-// ═══════════════════════════════════════════════════════════════
-const FOOD_DB = {
-  'white rice': { e: '🍚', s: 'avoid', r: 'High GI — spikes blood sugar fast!' },
-  'brown rice': { e: '🍚', s: 'good', r: 'Lower GI, more fibre. Great choice!' },
-  'jollof rice': { e: '🍛', s: 'ok', r: 'Moderate — reduce portion, add vegetables.' },
-  'banana': { e: '🍌', s: 'ok', r: 'Eat unripe/green only. Ripe spikes sugar.' },
-  'plantain': { e: '🍌', s: 'ok', r: 'Boiled is fine. Avoid fried kelewele.' },
-  'spinach': { e: '🥬', s: 'good', r: 'Excellent — eat freely at every meal!' },
-  'kontomire': { e: '🥬', s: 'good', r: 'Great local choice — low GI!' },
-  'kenkey': { e: '🫓', s: 'ok', r: 'Half ball max with lots of fish.' },
-  'fish': { e: '🐟', s: 'good', r: 'Excellent protein — omega-3 reduces inflammation.' },
-  'grilled fish': { e: '🐟', s: 'good', r: 'Perfect choice! Grilled beats fried always.' },
-  'soda': { e: '🥤', s: 'avoid', r: 'Pure sugar spike — avoid entirely!' },
-  'malt': { e: '🥤', s: 'avoid', r: 'Very high sugar. Switch to zobo (unsweetened).' },
-  'eggs': { e: '🥚', s: 'good', r: 'Zero carbs, high protein. Ideal!' },
-  'chicken': { e: '🍗', s: 'good', r: 'Lean protein. Grill or bake — never fry.' },
-  'bread': { e: '🍞', s: 'avoid', r: 'Refined flour = blood sugar spike. Switch to whole grain.' },
-  'oats': { e: '🌾', s: 'good', r: 'Beta-glucan fibre slows glucose absorption.' },
-  'groundnuts': { e: '🥜', s: 'good', r: 'Slows digestion. 30g as snack is ideal.' },
-  'water': { e: '💧', s: 'good', r: 'Always drink more! Helps kidneys flush glucose.' },
-};
-let foodLog = [];
-
-function addFood() {
-  const inp = document.getElementById('food-in');
-  const v = inp.value.trim().toLowerCase();
-  if (!v) return;
-  let f = null;
-  for (const k of Object.keys(FOOD_DB)) { if (v.includes(k)) { f = { key: k, ...FOOD_DB[k] }; break; } }
-  if (!f) f = { key: v, e: '🍽️', s: 'ok', r: 'Unknown — ask your dietitian for guidance.' };
-  foodLog.push(f);
-  inp.value = '';
-  renderFoodLog();
-  toast(`${f.s === 'good' ? '✅' : f.s === 'avoid' ? '🚫' : '⚠️'} ${f.key} — ${f.r}`);
-  // Glucy reacts to food
-  if (f.s === 'avoid') {
-    setGlucyState(GLUCY_STATE.SAD);
-    setGlucySpeech(`Oh no! ${f.key} spikes blood sugar. Please swap it for a better option! 😢`);
-  } else if (f.s === 'good') {
-    setGlucyState(GLUCY_STATE.EAT);
-    setGlucySpeech(`Yum! ${f.key} is great for your sugar levels! I love it! 😋`);
-  } else {
-    setGlucySpeech(`${f.key} is okay in moderation. Watch your portion size! ⚠️`);
-  }
-}
-
-function renderFoodLog() {
-  const list = document.getElementById('food-list');
-  const empty = document.getElementById('food-empty');
-  const sum = document.getElementById('food-summary');
-  if (!foodLog.length) { list.innerHTML = ''; empty.style.display = 'block'; if(sum)sum.style.display = 'none'; return; }
-  empty.style.display = 'none';
-  if(sum)sum.style.display = 'grid';
-  let g = 0, o = 0, b = 0;
-  list.innerHTML = foodLog.map((f, i) => {
-    if (f.s === 'good') g++; else if (f.s === 'ok') o++; else b++;
-    const bc = f.s === 'good' ? 'bg-good' : f.s === 'ok' ? 'bg-ok' : 'bg-avoid';
-    const bt = f.s === 'good' ? '✓ Good' : f.s === 'ok' ? '⚠ Moderate' : '✗ Avoid';
-    return `<div class="food-item"><div class="fi-left"><div class="f-emoji">${f.e}</div><div><div class="f-name">${f.key}</div><div class="f-sub">${f.r}</div></div></div><div style="display:flex;align-items:center;gap:8px;"><span class="f-badge ${bc}">${bt}</span><span onclick="foodLog.splice(${i},1);renderFoodLog()" style="cursor:pointer;font-size:16px;color:var(--muted);">✕</span></div></div>`;
-  }).join('');
-  if(document.getElementById('fc-good'))document.getElementById('fc-good').textContent = g;
-  if(document.getElementById('fc-ok'))document.getElementById('fc-ok').textContent = o;
-  if(document.getElementById('fc-bad'))document.getElementById('fc-bad').textContent = b;
-  // Check if Daily Four complete
-  const totalLogs = foodLog.length;
-  if (totalLogs >= 3) {
-    setGlucyState(GLUCY_STATE.RUN);
-    showAchievement('🏃 Daily Four Complete! +50 pts earned!');
-  }
-}
-
-function dtab(t, btn) {
-  ['log', 'rec', 'avo', 'plan'].forEach(x => { const el = document.getElementById('dt-' + x); if (el) el.style.display = 'none'; });
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById('dt-' + t); if (el) el.style.display = 'block';
-  btn.classList.add('active');
-}
-
-// ═══════════════════════════════════════════════════════════════
-// RISK CALCULATOR
-// ═══════════════════════════════════════════════════════════════
-let fh = false;
-function setFH(v) {
-  fh = v;
-  document.getElementById('fh-y').className = 'btn ' + (v ? 'btn-gr' : 'btn-out');
-  document.getElementById('fh-n').className = 'btn ' + (v ? 'btn-out' : 'btn-gr');
-  calcRisk();
-}
-
-function calcRisk() {
-  const age = parseInt(document.querySelector('#page-risk input[oninput*="r-age"]')?.value || 45);
-  const bmi = parseFloat(document.querySelector('#page-risk input[oninput*="r-bmi"]')?.value || 27);
-  const glu = parseInt(document.querySelector('#page-risk input[oninput*="r-glu"]')?.value || 112);
-  const bp = parseInt(document.querySelector('#page-risk input[oninput*="r-bp"]')?.value || 118);
-  let s = 0;
-  if (glu > 200) s += 35; else if (glu > 140) s += 25; else if (glu > 100) s += 10;
-  if (bmi > 35) s += 25; else if (bmi > 30) s += 18; else if (bmi > 25) s += 8;
-  if (age > 60) s += 15; else if (age > 45) s += 10; else if (age > 35) s += 5;
-  if (fh) s += 12; if (bp > 140) s += 8; else if (bp > 120) s += 4;
-  s = Math.min(s, 99);
-  document.getElementById('risk-num').textContent = s;
-  let lbl, desc, clr;
-  if (s < 25) { lbl = '🟢 Low Risk'; desc = 'Great! Keep your healthy habits going.'; clr = '#58CC02'; }
-  else if (s < 50) { lbl = '🟡 Moderate Risk'; desc = 'Some risk factors. Reduce sugar, increase exercise.'; clr = '#FFC800'; }
-  else if (s < 70) { lbl = '🟠 High Risk'; desc = 'Multiple risk factors. Book a blood test in 4 weeks.'; clr = '#FF9600'; }
-  else { lbl = '🔴 Very High Risk'; desc = 'Urgent: please see your doctor as soon as possible.'; clr = '#FF4B4B'; }
-  document.getElementById('risk-lbl').textContent = lbl;
-  document.getElementById('risk-desc').textContent = desc;
-  document.getElementById('risk-num').style.color = clr;
-  document.getElementById('g-arc').style.strokeDashoffset = 251 - (s / 100) * 251;
-  document.getElementById('g-needle').setAttribute('transform', `rotate(${-90 + (s / 100) * 180},100,100)`);
-  // Glucy reacts to risk
-  const riskCard = document.getElementById('risk-glucy-card');
-  if (riskCard) {
-    if (s < 30) {
-      riskCard.className = 'glucy-status-card happy';
-      document.getElementById('glucy-risk-title').textContent = 'All clear! 🟢';
-      document.getElementById('glucy-risk-msg').textContent = 'Your risk is low. Keep logging and staying active!';
-    } else if (s < 60) {
-      riskCard.className = 'glucy-status-card warn';
-      document.getElementById('glucy-risk-title').textContent = 'Getting concerning ⚠️';
-      document.getElementById('glucy-risk-msg').textContent = 'Some risk factors detected. Adjust your diet and exercise more.';
-    } else {
-      riskCard.className = 'glucy-status-card sad';
-      document.getElementById('glucy-risk-title').textContent = 'Please see a doctor 😢';
-      document.getElementById('glucy-risk-msg').textContent = 'Multiple risk factors present. I am worried. Please book a doctor appointment!';
-      setGlucyState(GLUCY_STATE.SAD);
+    // Animation loop for all Glucy canvases
+    function animateGlucy() {
+      glucyT += 16;
+      // Main floating Glucy
+      const mc = document.getElementById('glucy-canvas-main');
+      if (mc) drawGlucy(mc.getContext('2d'), glucyT, glucyCurrentState, 80);
+      // Inline canvas on home page
+      const hc = document.getElementById('home-glucy-canvas');
+      if (hc) drawGlucy(hc.getContext('2d'), glucyT, glucyCurrentState, 60);
+      // Risk page canvas
+      const rc = document.getElementById('risk-glucy-canvas');
+      if (rc) drawGlucy(rc.getContext('2d'), glucyT, glucyCurrentState === GLUCY_STATE.SAD ? GLUCY_STATE.SAD : GLUCY_STATE.HAPPY, 60);
+      // Diet page canvas
+      const dc = document.getElementById('diet-glucy-canvas');
+      if (dc) drawGlucy(dc.getContext('2d'), glucyT, GLUCY_STATE.EAT, 60);
+      // Rewards page canvas
+      const rwc = document.getElementById('rewards-glucy-canvas');
+      if (rwc) drawGlucy(rwc.getContext('2d'), glucyT, GLUCY_STATE.RUN, 60);
+      requestAnimationFrame(animateGlucy);
     }
-  }
-  const factors = [
-    { l: 'Blood Sugar', v: glu > 140 ? 35 : glu > 100 ? 10 : 2, c: '#FF4B4B' },
-    { l: 'BMI', v: bmi > 30 ? 20 : bmi > 25 ? 8 : 2, c: '#FF9600' },
-    { l: 'Age', v: age > 50 ? 15 : age > 35 ? 7 : 2, c: '#CE82FF' },
-    { l: 'Family History', v: fh ? 12 : 1, c: '#1CB0F6' },
-    { l: 'Blood Pressure', v: bp > 130 ? 8 : 2, c: '#58CC02' },
-  ].sort((a, b) => b.v - a.v);
-  const mx = factors[0].v;
-  document.getElementById('shap-wrap').innerHTML = factors.map(f => `
+
+    function setGlucyState(state) {
+      glucyCurrentState = state;
+      const colors = { happy: '#58CC02', sad: '#FF4B4B', warn: '#FFC800', run: '#1CB0F6', eat: '#FF9600' };
+      const card = document.getElementById('home-glucy-card');
+      if (card) {
+        card.className = `glucy-status-card ${state}`;
+        const msgs = STATE_MESSAGES[state] || STATE_MESSAGES.happy;
+        const msg = msgs[Math.floor(Math.random() * msgs.length)];
+        const title = { happy: 'Glucy is Happy! 💚', sad: 'Glucy is worried 😢', warn: 'Glucy is concerned ⚠️', run: 'Glucy is running! 🏃', eat: 'Glucy is snacking! 😋' };
+        document.getElementById('glucy-home-title').textContent = title[state] || title.happy;
+        document.getElementById('glucy-home-msg').textContent = msg;
+        setGlucySpeech(msg);
+      }
+    }
+
+    function setGlucySpeech(text) {
+      const el = document.getElementById('glucy-speech');
+      el.textContent = text;
+      el.classList.add('show');
+      if (glucySpeechTimer) clearTimeout(glucySpeechTimer);
+      glucySpeechTimer = setTimeout(() => el.classList.remove('show'), 5000);
+    }
+
+    function toggleGlucySpeech() {
+      const msgs = STATE_MESSAGES[glucyCurrentState] || STATE_MESSAGES.happy;
+      setGlucySpeech(msgs[Math.floor(Math.random() * msgs.length)]);
+    }
+
+    // Determine Glucy state from health data
+    function computeGlucyState(glucose = 112, daysMissed = 0) {
+      if (daysMissed > 0) return GLUCY_STATE.SAD;
+      if (glucose > 200) return GLUCY_STATE.SAD;
+      if (glucose > 140) return GLUCY_STATE.WARN;
+      return GLUCY_STATE.HAPPY;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SPLASH SCREEN ANIMATION
+    // ═══════════════════════════════════════════════════════════════
+    let splashT = 0;
+    const splashCtx = document.getElementById('splash-canvas').getContext('2d');
+    const TIPS = [
+      '💡 Eating veggies before carbs cuts blood sugar spikes by 40%!',
+      '🏃 A 10-min walk after meals lowers glucose by 22%!',
+      '💧 Drinking water before eating reduces overeating by 30%!',
+      '🌙 Poor sleep raises blood sugar the next morning!',
+      '🥜 Groundnuts as a snack prevent late-night glucose spikes!',
+    ];
+    let tipIdx = 0;
+    function animateSplash() {
+      drawGlucy(splashCtx, splashT, GLUCY_STATE.HAPPY, 160);
+      splashT += 16;
+      requestAnimationFrame(animateSplash);
+    }
+    animateSplash();
+    setInterval(() => {
+      tipIdx = (tipIdx + 1) % TIPS.length;
+      const el = document.getElementById('splash-tip');
+      if (el) el.textContent = TIPS[tipIdx];
+    }, 2500);
+
+    setTimeout(() => {
+      const splash = document.getElementById('splash');
+      splash.style.transition = 'opacity .8s';
+      splash.style.opacity = '0';
+      setTimeout(() => {
+        splash.style.display = 'none';
+        document.getElementById('app').classList.add('show');
+        animateGlucy();
+        initHomeChart();
+        renderAll();
+        setGlucyState(computeGlucyState(112, 0));
+        setTimeout(() => setGlucySpeech("Welcome back, Amara! Your blood sugar looks great today! 💚"), 800);
+        checkSunday();
+        animateBodyLoop();
+      }, 800);
+    }, 4200);
+
+    // ═══════════════════════════════════════════════════════════════
+    // BODY CANVAS ANIMATION
+    // ═══════════════════════════════════════════════════════════════
+    let bodyT = 0;
+    let currentGender = 'female';
+    function updateBodyCanvas(g) { currentGender = g; }
+
+    function drawBody(gender, glucose) {
+      const canvas = document.getElementById('body-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 110, 200);
+      const bob = Math.sin(bodyT * 0.002) * 2;
+      ctx.save(); ctx.translate(55, 5 + bob);
+
+      // Head
+      ctx.fillStyle = '#FFD5B0'; ctx.strokeStyle = '#E0A870'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.ellipse(0, 15, 18, 20, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+      // Hair
+      ctx.fillStyle = gender === 'female' ? '#8B4513' : '#4A3728';
+      if (gender === 'female') {
+        ctx.beginPath(); ctx.ellipse(0, -4, 19, 14, 0, Math.PI, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(-18, 20, 5, 12, -0.3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(18, 20, 5, 12, 0.3, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.beginPath(); ctx.ellipse(0, -2, 18, 10, 0, Math.PI, Math.PI * 2); ctx.fill();
+      }
+
+      // Neck
+      ctx.fillStyle = '#FFD5B0';
+      ctx.beginPath(); ctx.rect(-6, 32, 12, 12); ctx.fill();
+
+      // Body — color reflects glucose level
+      const bodyColor = glucose > 200 ? '#FFD5D5' : glucose > 140 ? '#FFE8CC' : '#D5F0D5';
+      const bodyStroke = glucose > 200 ? '#FF4B4B' : glucose > 140 ? '#FF9600' : '#58CC02';
+      ctx.fillStyle = bodyColor; ctx.strokeStyle = bodyStroke; ctx.lineWidth = 2.5;
+      if (gender === 'female') {
+        ctx.beginPath(); ctx.moveTo(-20, 44); ctx.lineTo(-22, 90); ctx.lineTo(22, 90); ctx.lineTo(20, 44); ctx.closePath(); ctx.fill(); ctx.stroke();
+      } else {
+        ctx.beginPath(); ctx.roundRect(-22, 44, 44, 50, 6); ctx.fill(); ctx.stroke();
+      }
+
+      // Sugar indicator on body
+      ctx.fillStyle = bodyStroke; ctx.font = 'bold 10px Nunito,sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(glucose + ' mg/dL', 0, 72);
+      ctx.font = '8px Nunito,sans-serif';
+      ctx.fillText(glucose > 200 ? '⚠ See Doctor' : glucose > 140 ? 'Borderline' : '✓ OK', 0, 84);
+
+      // Arms
+      ctx.fillStyle = '#FFD5B0'; ctx.strokeStyle = '#E0A870'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(-22, 48); ctx.lineTo(-36, 80); ctx.lineTo(-30, 82); ctx.lineTo(-16, 52); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(22, 48); ctx.lineTo(36, 80); ctx.lineTo(30, 82); ctx.lineTo(16, 52); ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      // Legs
+      ctx.beginPath(); ctx.moveTo(-16, 90); ctx.lineTo(-18, 145); ctx.lineTo(-8, 145); ctx.lineTo(-6, 90); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(6, 90); ctx.lineTo(8, 145); ctx.lineTo(18, 145); ctx.lineTo(16, 90); ctx.closePath(); ctx.fill(); ctx.stroke();
+
+      // Shoes
+      ctx.fillStyle = '#4A3728';
+      ctx.beginPath(); ctx.ellipse(-13, 146, 10, 5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(13, 146, 10, 5, 0, 0, Math.PI * 2); ctx.fill();
+
+      ctx.restore();
+    }
+
+    function animateBodyLoop() {
+      bodyT += 16;
+      drawBody(currentGender, 112);
+      requestAnimationFrame(animateBodyLoop);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // PAGE NAVIGATION
+    // ═══════════════════════════════════════════════════════════════
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      const map = { home: 0, risk: 1, diet: 2, metrics: 3, pills: 4, doctor: 5, rewards: 6, alerts: 7 };
+      if (map[id] !== undefined) document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
+      if (id === 'metrics') setTimeout(initMetricCharts, 80);
+      if (id === 'home') setTimeout(initHomeChart, 80);
+      // Glucy context
+      if (id === 'diet') setGlucySpeech("Let's see what you ate today! I'll rate it for your sugar levels! 🥗");
+      if (id === 'rewards') setGlucySpeech("You're on a 12-day streak! I'm SO proud of you! 🏆");
+      if (id === 'risk') setGlucySpeech("Move the sliders to see how each factor affects your risk score.");
+      if (id === 'doctor') setGlucySpeech("Your doctor is here to help. Chat securely! 👨‍⚕️");
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // FOOD LOG
+    // ═══════════════════════════════════════════════════════════════
+    const FOOD_DB = {
+      'white rice': { e: '🍚', s: 'avoid', r: 'High GI — spikes blood sugar fast!' },
+      'brown rice': { e: '🍚', s: 'good', r: 'Lower GI, more fibre. Great choice!' },
+      'jollof rice': { e: '🍛', s: 'ok', r: 'Moderate — reduce portion, add vegetables.' },
+      'banana': { e: '🍌', s: 'ok', r: 'Eat unripe/green only. Ripe spikes sugar.' },
+      'plantain': { e: '🍌', s: 'ok', r: 'Boiled is fine. Avoid fried kelewele.' },
+      'spinach': { e: '🥬', s: 'good', r: 'Excellent — eat freely at every meal!' },
+      'kontomire': { e: '🥬', s: 'good', r: 'Great local choice — low GI!' },
+      'kenkey': { e: '🫓', s: 'ok', r: 'Half ball max with lots of fish.' },
+      'fish': { e: '🐟', s: 'good', r: 'Excellent protein — omega-3 reduces inflammation.' },
+      'grilled fish': { e: '🐟', s: 'good', r: 'Perfect choice! Grilled beats fried always.' },
+      'soda': { e: '🥤', s: 'avoid', r: 'Pure sugar spike — avoid entirely!' },
+      'malt': { e: '🥤', s: 'avoid', r: 'Very high sugar. Switch to zobo (unsweetened).' },
+      'eggs': { e: '🥚', s: 'good', r: 'Zero carbs, high protein. Ideal!' },
+      'chicken': { e: '🍗', s: 'good', r: 'Lean protein. Grill or bake — never fry.' },
+      'bread': { e: '🍞', s: 'avoid', r: 'Refined flour = blood sugar spike. Switch to whole grain.' },
+      'oats': { e: '🌾', s: 'good', r: 'Beta-glucan fibre slows glucose absorption.' },
+      'groundnuts': { e: '🥜', s: 'good', r: 'Slows digestion. 30g as snack is ideal.' },
+      'water': { e: '💧', s: 'good', r: 'Always drink more! Helps kidneys flush glucose.' },
+    };
+    let foodLog = [];
+
+    function addFood() {
+      const inp = document.getElementById('food-in');
+      const v = inp.value.trim().toLowerCase();
+      if (!v) return;
+      let f = null;
+      for (const k of Object.keys(FOOD_DB)) { if (v.includes(k)) { f = { key: k, ...FOOD_DB[k] }; break; } }
+      if (!f) f = { key: v, e: '🍽️', s: 'ok', r: 'Unknown — ask your dietitian for guidance.' };
+      foodLog.push(f);
+      inp.value = '';
+      renderFoodLog();
+      toast(`${f.s === 'good' ? '✅' : f.s === 'avoid' ? '🚫' : '⚠️'} ${f.key} — ${f.r}`);
+      // Glucy reacts to food
+      if (f.s === 'avoid') {
+        setGlucyState(GLUCY_STATE.SAD);
+        setGlucySpeech(`Oh no! ${f.key} spikes blood sugar. Please swap it for a better option! 😢`);
+      } else if (f.s === 'good') {
+        setGlucyState(GLUCY_STATE.EAT);
+        setGlucySpeech(`Yum! ${f.key} is great for your sugar levels! I love it! 😋`);
+      } else {
+        setGlucySpeech(`${f.key} is okay in moderation. Watch your portion size! ⚠️`);
+      }
+    }
+
+    function renderFoodLog() {
+      const list = document.getElementById('food-list');
+      const empty = document.getElementById('food-empty');
+      const sum = document.getElementById('food-summary');
+      if (!foodLog.length) { list.innerHTML = ''; empty.style.display = 'block'; if (sum) sum.style.display = 'none'; return; }
+      empty.style.display = 'none';
+      if (sum) sum.style.display = 'grid';
+      let g = 0, o = 0, b = 0;
+      list.innerHTML = foodLog.map((f, i) => {
+        if (f.s === 'good') g++; else if (f.s === 'ok') o++; else b++;
+        const bc = f.s === 'good' ? 'bg-good' : f.s === 'ok' ? 'bg-ok' : 'bg-avoid';
+        const bt = f.s === 'good' ? '✓ Good' : f.s === 'ok' ? '⚠ Moderate' : '✗ Avoid';
+        return `<div class="food-item"><div class="fi-left"><div class="f-emoji">${f.e}</div><div><div class="f-name">${f.key}</div><div class="f-sub">${f.r}</div></div></div><div style="display:flex;align-items:center;gap:8px;"><span class="f-badge ${bc}">${bt}</span><span onclick="foodLog.splice(${i},1);renderFoodLog()" style="cursor:pointer;font-size:16px;color:var(--muted);">✕</span></div></div>`;
+      }).join('');
+      if (document.getElementById('fc-good')) document.getElementById('fc-good').textContent = g;
+      if (document.getElementById('fc-ok')) document.getElementById('fc-ok').textContent = o;
+      if (document.getElementById('fc-bad')) document.getElementById('fc-bad').textContent = b;
+      // Check if Daily Four complete
+      const totalLogs = foodLog.length;
+      if (totalLogs >= 3) {
+        setGlucyState(GLUCY_STATE.RUN);
+        showAchievement('🏃 Daily Four Complete! +50 pts earned!');
+      }
+    }
+
+    function dtab(t, btn) {
+      ['log', 'rec', 'avo', 'plan'].forEach(x => { const el = document.getElementById('dt-' + x); if (el) el.style.display = 'none'; });
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const el = document.getElementById('dt-' + t); if (el) el.style.display = 'block';
+      btn.classList.add('active');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // RISK CALCULATOR
+    // ═══════════════════════════════════════════════════════════════
+    let fh = false;
+    function setFH(v) {
+      fh = v;
+      document.getElementById('fh-y').className = 'btn ' + (v ? 'btn-gr' : 'btn-out');
+      document.getElementById('fh-n').className = 'btn ' + (v ? 'btn-out' : 'btn-gr');
+      calcRisk();
+    }
+
+    function calcRisk() {
+      const age = parseInt(document.querySelector('#page-risk input[oninput*="r-age"]')?.value || 45);
+      const bmi = parseFloat(document.querySelector('#page-risk input[oninput*="r-bmi"]')?.value || 27);
+      const glu = parseInt(document.querySelector('#page-risk input[oninput*="r-glu"]')?.value || 112);
+      const bp = parseInt(document.querySelector('#page-risk input[oninput*="r-bp"]')?.value || 118);
+      let s = 0;
+      if (glu > 200) s += 35; else if (glu > 140) s += 25; else if (glu > 100) s += 10;
+      if (bmi > 35) s += 25; else if (bmi > 30) s += 18; else if (bmi > 25) s += 8;
+      if (age > 60) s += 15; else if (age > 45) s += 10; else if (age > 35) s += 5;
+      if (fh) s += 12; if (bp > 140) s += 8; else if (bp > 120) s += 4;
+      s = Math.min(s, 99);
+      document.getElementById('risk-num').textContent = s;
+      let lbl, desc, clr;
+      if (s < 25) { lbl = '🟢 Low Risk'; desc = 'Great! Keep your healthy habits going.'; clr = '#58CC02'; }
+      else if (s < 50) { lbl = '🟡 Moderate Risk'; desc = 'Some risk factors. Reduce sugar, increase exercise.'; clr = '#FFC800'; }
+      else if (s < 70) { lbl = '🟠 High Risk'; desc = 'Multiple risk factors. Book a blood test in 4 weeks.'; clr = '#FF9600'; }
+      else { lbl = '🔴 Very High Risk'; desc = 'Urgent: please see your doctor as soon as possible.'; clr = '#FF4B4B'; }
+      document.getElementById('risk-lbl').textContent = lbl;
+      document.getElementById('risk-desc').textContent = desc;
+      document.getElementById('risk-num').style.color = clr;
+      document.getElementById('g-arc').style.strokeDashoffset = 251 - (s / 100) * 251;
+      document.getElementById('g-needle').setAttribute('transform', `rotate(${-90 + (s / 100) * 180},100,100)`);
+      // Glucy reacts to risk
+      const riskCard = document.getElementById('risk-glucy-card');
+      if (riskCard) {
+        if (s < 30) {
+          riskCard.className = 'glucy-status-card happy';
+          document.getElementById('glucy-risk-title').textContent = 'All clear! 🟢';
+          document.getElementById('glucy-risk-msg').textContent = 'Your risk is low. Keep logging and staying active!';
+        } else if (s < 60) {
+          riskCard.className = 'glucy-status-card warn';
+          document.getElementById('glucy-risk-title').textContent = 'Getting concerning ⚠️';
+          document.getElementById('glucy-risk-msg').textContent = 'Some risk factors detected. Adjust your diet and exercise more.';
+        } else {
+          riskCard.className = 'glucy-status-card sad';
+          document.getElementById('glucy-risk-title').textContent = 'Please see a doctor 😢';
+          document.getElementById('glucy-risk-msg').textContent = 'Multiple risk factors present. I am worried. Please book a doctor appointment!';
+          setGlucyState(GLUCY_STATE.SAD);
+        }
+      }
+      const factors = [
+        { l: 'Blood Sugar', v: glu > 140 ? 35 : glu > 100 ? 10 : 2, c: '#FF4B4B' },
+        { l: 'BMI', v: bmi > 30 ? 20 : bmi > 25 ? 8 : 2, c: '#FF9600' },
+        { l: 'Age', v: age > 50 ? 15 : age > 35 ? 7 : 2, c: '#CE82FF' },
+        { l: 'Family History', v: fh ? 12 : 1, c: '#1CB0F6' },
+        { l: 'Blood Pressure', v: bp > 130 ? 8 : 2, c: '#58CC02' },
+      ].sort((a, b) => b.v - a.v);
+      const mx = factors[0].v;
+      document.getElementById('shap-wrap').innerHTML = factors.map(f => `
     <div class="shap-row"><div class="shap-lbl">${f.l}</div>
-    <div class="shap-track"><div class="shap-bar" style="width:${Math.max(12,(f.v/mx)*100)}%;background:${f.c};"><span>${f.v > 8 ? 'High' : f.v > 4 ? 'Moderate' : 'Low'}</span></div></div></div>`).join('');
-}
+    <div class="shap-track"><div class="shap-bar" style="width:${Math.max(12, (f.v / mx) * 100)}%;background:${f.c};"><span>${f.v > 8 ? 'High' : f.v > 4 ? 'Moderate' : 'Low'}</span></div></div></div>`).join('');
+    }
 
-// ═══════════════════════════════════════════════════════════════
-// CHAT
-// ═══════════════════════════════════════════════════════════════
-function sendMsg() {
-  const inp = document.getElementById('chat-in');
-  const t = inp.value.trim(); if (!t) return;
-  const msgs = document.getElementById('chat-msgs');
-  msgs.innerHTML += `<div class="msg msg-pat"><div class="msg-bubble">${t}</div></div>`;
-  inp.value = ''; msgs.scrollTop = msgs.scrollHeight;
-  setTimeout(() => {
-    msgs.innerHTML += `<div class="msg msg-doc"><div class="msg-name">Dr. Samuel Osei</div><div class="msg-bubble">Thanks for the update! I'll review your logs and adjust your plan. Keep logging! 💙</div></div>`;
-    msgs.scrollTop = msgs.scrollHeight;
-  }, 1200);
-}
+    // ═══════════════════════════════════════════════════════════════
+    // CHAT
+    // ═══════════════════════════════════════════════════════════════
+    function sendMsg() {
+      const inp = document.getElementById('chat-in');
+      const t = inp.value.trim(); if (!t) return;
+      const msgs = document.getElementById('chat-msgs');
+      msgs.innerHTML += `<div class="msg msg-pat"><div class="msg-bubble">${t}</div></div>`;
+      inp.value = ''; msgs.scrollTop = msgs.scrollHeight;
+      setTimeout(() => {
+        msgs.innerHTML += `<div class="msg msg-doc"><div class="msg-name">Dr. Samuel Osei</div><div class="msg-bubble">Thanks for the update! I'll review your logs and adjust your plan. Keep logging! 💙</div></div>`;
+        msgs.scrollTop = msgs.scrollHeight;
+      }, 1200);
+    }
 
-// ═══════════════════════════════════════════════════════════════
-// REWARDS
-// ═══════════════════════════════════════════════════════════════
-let pts = 1240;
-const ptsHistory = [
-  { a: 'Logged in', p: 10, t: 'Today 8:01 AM' },
-  { a: 'Daily full log', p: 50, t: 'Yesterday 9:45 PM' },
-  { a: '7-day streak bonus', p: 100, t: '5 days ago' },
-  { a: 'Signup bonus', p: 100, t: '12 days ago' },
-];
+    // ═══════════════════════════════════════════════════════════════
+    // REWARDS
+    // ═══════════════════════════════════════════════════════════════
+    let pts = 1240;
+    const ptsHistory = [
+      { a: 'Logged in', p: 10, t: 'Today 8:01 AM' },
+      { a: 'Daily full log', p: 50, t: 'Yesterday 9:45 PM' },
+      { a: '7-day streak bonus', p: 100, t: '5 days ago' },
+      { a: 'Signup bonus', p: 100, t: '12 days ago' },
+    ];
 
-function claimDaily() {
-  pts += 60;
-  ptsHistory.unshift({ a: 'Daily reward claimed', p: 60, t: 'Just now' });
-  document.getElementById('pts-display').textContent = pts.toLocaleString();
-  document.getElementById('tb-pts').textContent = pts.toLocaleString();
-  renderPtsHistory();
-  showAchievement('🎉 +60 Wellness Points!');
-  setGlucyState(GLUCY_STATE.RUN);
-  setGlucySpeech('Daily reward claimed! +60 points! You are unstoppable! 🏃');
-}
+    function claimDaily() {
+      pts += 60;
+      ptsHistory.unshift({ a: 'Daily reward claimed', p: 60, t: 'Just now' });
+      document.getElementById('pts-display').textContent = pts.toLocaleString();
+      document.getElementById('tb-pts').textContent = pts.toLocaleString();
+      renderPtsHistory();
+      showAchievement('🎉 +60 Wellness Points!');
+      setGlucyState(GLUCY_STATE.RUN);
+      setGlucySpeech('Daily reward claimed! +60 points! You are unstoppable! 🏃');
+    }
 
-function spendPts(cost, name) {
-  if (pts < cost) { toast('Not enough points! Keep logging to earn more 💪'); return; }
-  pts -= cost;
-  ptsHistory.unshift({ a: `Unlocked: ${name}`, p: -cost, t: 'Just now' });
-  document.getElementById('pts-display').textContent = pts.toLocaleString();
-  document.getElementById('tb-pts').textContent = pts.toLocaleString();
-  renderPtsHistory();
-  toast(`🎨 ${name} unlocked!`);
-}
+    function spendPts(cost, name) {
+      if (pts < cost) { toast('Not enough points! Keep logging to earn more 💪'); return; }
+      pts -= cost;
+      ptsHistory.unshift({ a: `Unlocked: ${name}`, p: -cost, t: 'Just now' });
+      document.getElementById('pts-display').textContent = pts.toLocaleString();
+      document.getElementById('tb-pts').textContent = pts.toLocaleString();
+      renderPtsHistory();
+      toast(`🎨 ${name} unlocked!`);
+    }
 
-function renderPtsHistory() {
-  const el = document.getElementById('pts-history'); if (!el) return;
-  el.innerHTML = ptsHistory.map(h => `
+    function renderPtsHistory() {
+      const el = document.getElementById('pts-history'); if (!el) return;
+      el.innerHTML = ptsHistory.map(h => `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1.5px solid var(--border);">
       <div><div style="font-size:13px;font-weight:700;">${h.a}</div><div style="font-size:11px;color:var(--muted);font-weight:600;">${h.t}</div></div>
       <div style="font-size:14px;font-weight:800;color:${h.p > 0 ? 'var(--g)' : 'var(--r)'};">${h.p > 0 ? '+' : ''}${h.p} pts</div>
     </div>`).join('');
-}
+    }
 
-// ═══════════════════════════════════════════════════════════════
-// PILLS
-// ═══════════════════════════════════════════════════════════════
-const pills = [
-  { n: 'Metformin 500mg', t: '8:00 AM', s: 'done' },
-  { n: 'Metformin 500mg', t: '2:00 PM', s: 'pend' },
-  { n: 'Glibenclamide 5mg', t: '8:00 PM', s: 'pend' },
-];
-function renderPills() {
-  const el = document.getElementById('pill-sched'); if (!el) return;
-  el.innerHTML = pills.map((p, i) => `
+    // ═══════════════════════════════════════════════════════════════
+    // PILLS
+    // ═══════════════════════════════════════════════════════════════
+    const pills = [
+      { n: 'Metformin 500mg', t: '8:00 AM', s: 'done' },
+      { n: 'Metformin 500mg', t: '2:00 PM', s: 'pend' },
+      { n: 'Glibenclamide 5mg', t: '8:00 PM', s: 'pend' },
+    ];
+    function renderPills() {
+      const el = document.getElementById('pill-sched'); if (!el) return;
+      el.innerHTML = pills.map((p, i) => `
     <div class="food-item" style="margin-bottom:8px;">
       <div class="fi-left"><div class="f-emoji">💊</div><div><div class="f-name">${p.n}</div><div class="f-sub">⏰ ${p.t}</div></div></div>
       <span class="f-badge ${p.s === 'done' ? 'bg-good' : 'bg-ok'}" onclick="pills[${i}].s=pills[${i}].s==='done'?'pend':'done';renderPills()" style="cursor:pointer;">${p.s === 'done' ? '✅ Taken' : '⏰ Mark done'}</span>
     </div>`).join('');
-}
+    }
 
-// ═══════════════════════════════════════════════════════════════
-// TASKS
-// ═══════════════════════════════════════════════════════════════
-const tasks = [
-  { d: true, t: '🩸 Log morning blood sugar', s: 'Done — 112 mg/dL' },
-  { d: true, t: '💊 Take morning Metformin', s: 'Done at 8:04 AM' },
-  { d: false, t: '🥗 Log your lunch', s: 'Not yet logged' },
-  { d: false, t: '💊 Take afternoon Metformin', s: 'Due at 2:00 PM' },
-  { d: false, t: '🏃 10-min walk after dinner', s: 'Lowers post-meal glucose' },
-];
-function renderTasks() {
-  const el = document.getElementById('task-list'); if (!el) return;
-  el.innerHTML = tasks.map((t, i) => `
+    // ═══════════════════════════════════════════════════════════════
+    // TASKS
+    // ═══════════════════════════════════════════════════════════════
+    const tasks = [
+      { d: true, t: '🩸 Log morning blood sugar', s: 'Done — 112 mg/dL' },
+      { d: true, t: '💊 Take morning Metformin', s: 'Done at 8:04 AM' },
+      { d: false, t: '🥗 Log your lunch', s: 'Not yet logged' },
+      { d: false, t: '💊 Take afternoon Metformin', s: 'Due at 2:00 PM' },
+      { d: false, t: '🏃 10-min walk after dinner', s: 'Lowers post-meal glucose' },
+    ];
+    function renderTasks() {
+      const el = document.getElementById('task-list'); if (!el) return;
+      el.innerHTML = tasks.map((t, i) => `
     <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1.5px solid var(--border);cursor:pointer;" onclick="tasks[${i}].d=!tasks[${i}].d;renderTasks();checkTaskComplete()">
       <div style="width:22px;height:22px;border-radius:50%;border:2px solid ${t.d ? 'var(--g)' : 'var(--border)'};background:${t.d ? 'var(--g)' : 'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">${t.d ? '<span style="color:#fff;font-size:12px;font-weight:900;">✓</span>' : ''}</div>
       <div><div style="font-size:13px;font-weight:700;${t.d ? 'text-decoration:line-through;opacity:0.5;' : ''}">${t.t}</div><div style="font-size:11px;color:var(--muted);font-weight:600;">${t.s}</div></div>
     </div>`).join('');
-}
-function checkTaskComplete() {
-  const done = tasks.filter(t => t.d).length;
-  if (done === tasks.length) {
-    setGlucyState(GLUCY_STATE.RUN);
-    showAchievement('🏆 All tasks complete! Perfect day!');
-    setGlucySpeech('You completed ALL your daily tasks! I am so happy for you! 🏃💚');
-  }
-}
+    }
+    function checkTaskComplete() {
+      const done = tasks.filter(t => t.d).length;
+      if (done === tasks.length) {
+        setGlucyState(GLUCY_STATE.RUN);
+        showAchievement('🏆 All tasks complete! Perfect day!');
+        setGlucySpeech('You completed ALL your daily tasks! I am so happy for you! 🏃💚');
+      }
+    }
 
-// ═══════════════════════════════════════════════════════════════
-// NOTIFICATIONS
-// ═══════════════════════════════════════════════════════════════
-const notifs = [
-  { i: '💊', bg: '#D7F5B1', h: 'Time for Metformin 500mg', p: 'Afternoon dose — 2:00 PM', t: '10 min ago', u: true },
-  { i: '🩸', bg: '#DDF4FF', h: 'Log afternoon blood sugar', p: "You haven't logged today's reading", t: '1h ago', u: true },
-  { i: '👨‍⚕️', bg: '#F0D9FF', h: 'Dr. Osei sent a message', p: '"Your readings look great!"', t: '2h ago', u: false },
-  { i: '🥗', bg: '#D7F5B1', h: 'Diet tip of the day', p: 'Eat veggies before carbs — reduces spikes by 40%!', t: '4h ago', u: false },
-  { i: '📅', bg: '#FFF0D3', h: 'Appointment reminder', p: 'Dr. Osei — Friday March 27 at 10:30 AM', t: '8h ago', u: false },
-];
-function renderNotifs() {
-  const el = document.getElementById('notif-list'); if (!el) return;
-  el.innerHTML = notifs.map(n => `
+    // ═══════════════════════════════════════════════════════════════
+    // NOTIFICATIONS
+    // ═══════════════════════════════════════════════════════════════
+    const notifs = [
+      { i: '💊', bg: '#D7F5B1', h: 'Time for Metformin 500mg', p: 'Afternoon dose — 2:00 PM', t: '10 min ago', u: true },
+      { i: '🩸', bg: '#DDF4FF', h: 'Log afternoon blood sugar', p: "You haven't logged today's reading", t: '1h ago', u: true },
+      { i: '👨‍⚕️', bg: '#F0D9FF', h: 'Dr. Osei sent a message', p: '"Your readings look great!"', t: '2h ago', u: false },
+      { i: '🥗', bg: '#D7F5B1', h: 'Diet tip of the day', p: 'Eat veggies before carbs — reduces spikes by 40%!', t: '4h ago', u: false },
+      { i: '📅', bg: '#FFF0D3', h: 'Appointment reminder', p: 'Dr. Osei — Friday March 27 at 10:30 AM', t: '8h ago', u: false },
+    ];
+    function renderNotifs() {
+      const el = document.getElementById('notif-list'); if (!el) return;
+      el.innerHTML = notifs.map(n => `
     <div class="notif-item ${n.u ? 'unread' : ''}">
       <div class="ni-icon" style="background:${n.bg};">${n.i}</div>
       <div class="ni-body"><h4>${n.h}</h4><p>${n.p}</p></div>
       <div class="ni-time">${n.t}</div>
     </div>`).join('');
-}
-
-// ═══════════════════════════════════════════════════════════════
-// SUNDAY FACTS
-// ═══════════════════════════════════════════════════════════════
-const SUNDAY_FACTS = [
-  "People with well-controlled diabetes live just as long as those without it. Your daily logs are adding YEARS to your life!",
-  "A 30-min walk 5 days a week reduces your A1C by up to 1%. As powerful as some medications!",
-  "Over 90% of Type 2 diabetes complications are preventable. You are already winning by showing up!",
-  "Checking blood sugar regularly is the #1 thing you can do to prevent complications. You are a champion!",
-  "Consistency beats perfection. One logged meal beats a 'perfect' day you skipped entirely!",
-];
-function checkSunday() {
-  if (new Date().getDay() === 0) {
-    const el = document.getElementById('sunday-banner');
-    if (el) {
-      el.style.display = 'block';
-      document.getElementById('sunday-fact').textContent = SUNDAY_FACTS[new Date().getMonth() % SUNDAY_FACTS.length];
     }
-  }
-}
 
-// ═══════════════════════════════════════════════════════════════
-// ACHIEVEMENT POP
-// ═══════════════════════════════════════════════════════════════
-function showAchievement(msg) {
-  const el = document.getElementById('achievement-pop');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3500);
-}
+    // ═══════════════════════════════════════════════════════════════
+    // SUNDAY FACTS
+    // ═══════════════════════════════════════════════════════════════
+    const SUNDAY_FACTS = [
+      "People with well-controlled diabetes live just as long as those without it. Your daily logs are adding YEARS to your life!",
+      "A 30-min walk 5 days a week reduces your A1C by up to 1%. As powerful as some medications!",
+      "Over 90% of Type 2 diabetes complications are preventable. You are already winning by showing up!",
+      "Checking blood sugar regularly is the #1 thing you can do to prevent complications. You are a champion!",
+      "Consistency beats perfection. One logged meal beats a 'perfect' day you skipped entirely!",
+    ];
+    function checkSunday() {
+      if (new Date().getDay() === 0) {
+        const el = document.getElementById('sunday-banner');
+        if (el) {
+          el.style.display = 'block';
+          document.getElementById('sunday-fact').textContent = SUNDAY_FACTS[new Date().getMonth() % SUNDAY_FACTS.length];
+        }
+      }
+    }
 
-// ═══════════════════════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════════════════════
-function toast(msg, dur = 3200) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.style.opacity = '1';
-  setTimeout(() => el.style.opacity = '0', dur);
-}
+    // ═══════════════════════════════════════════════════════════════
+    // ACHIEVEMENT POP
+    // ═══════════════════════════════════════════════════════════════
+    function showAchievement(msg) {
+      const el = document.getElementById('achievement-pop');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 3500);
+    }
 
-// ═══════════════════════════════════════════════════════════════
-// CHARTS
-// ═══════════════════════════════════════════════════════════════
-let homeChartDone = false, metricsDone = false;
+    // ═══════════════════════════════════════════════════════════════
+    // TOAST
+    // ═══════════════════════════════════════════════════════════════
+    function toast(msg, dur = 3200) {
+      const el = document.getElementById('toast');
+      el.textContent = msg; el.style.opacity = '1';
+      setTimeout(() => el.style.opacity = '0', dur);
+    }
 
-function initHomeChart() {
-  if (homeChartDone) return; homeChartDone = true;
-  const el = document.getElementById('home-chart'); if (!el) return;
-  new Chart(el, {
-    type: 'line',
-    data: {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      datasets: [
-        { data: [142, 128, 119, 135, 108, 115, 112], borderColor: '#58CC02', backgroundColor: 'rgba(88,204,2,0.08)', tension: 0.4, fill: true, pointBackgroundColor: '#58CC02', pointRadius: 5 },
-        { data: Array(7).fill(140), borderColor: '#E5E5E5', borderDash: [5, 5], pointRadius: 0 }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 80, max: 180, grid: { color: 'rgba(0,0,0,0.03)' } }, x: { grid: { display: false } } } }
-  });
-}
+    // ═══════════════════════════════════════════════════════════════
+    // CHARTS
+    // ═══════════════════════════════════════════════════════════════
+    let homeChartDone = false, metricsDone = false;
 
-function initMetricCharts() {
-  if (metricsDone) return; metricsDone = true;
-  const d30 = Array.from({ length: 30 }, (_, i) => i + 1);
-  new Chart(document.getElementById('c-sugar'), { type: 'line', data: { labels: d30, datasets: [{ data: d30.map(() => Math.round(95 + Math.random() * 90)), borderColor: '#58CC02', backgroundColor: 'rgba(88,204,2,0.07)', tension: 0.4, fill: true, pointRadius: 2 }, { data: Array(30).fill(140), borderColor: '#FF4B4B', borderDash: [4, 4], pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 70, max: 220 }, x: { ticks: { maxTicksLimit: 8 } } } } });
-  new Chart(document.getElementById('c-bmi'), { type: 'line', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'], datasets: [{ data: [29.1, 28.8, 28.5, 28.2, 28.0, 27.9, 27.8, 27.6, 27.5, 27.4], borderColor: '#1CB0F6', backgroundColor: 'rgba(28,176,246,0.07)', tension: 0.4, fill: true, pointRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 25, max: 32 } } } });
-  new Chart(document.getElementById('c-steps'), { type: 'bar', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], datasets: [{ data: [5200, 7800, 6100, 9200, 4800, 10200, 6420], backgroundColor: ['#58CC02', '#58CC02', '#58CC02', '#58CC02', '#FF9600', '#58CC02', '#1CB0F6'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 12000 } } } });
-  new Chart(document.getElementById('c-bp'), { type: 'line', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], datasets: [{ label: 'Systolic', data: [128, 122, 118, 125, 119, 115, 118], borderColor: '#FF4B4B', tension: 0.4, pointRadius: 4 }, { label: 'Diastolic', data: [82, 78, 76, 80, 75, 74, 76], borderColor: '#1CB0F6', tension: 0.4, pointRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
-}
+    function initHomeChart() {
+      if (homeChartDone) return; homeChartDone = true;
+      const el = document.getElementById('home-chart'); if (!el) return;
+      new Chart(el, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [
+            { data: [142, 128, 119, 135, 108, 115, 112], borderColor: '#58CC02', backgroundColor: 'rgba(88,204,2,0.08)', tension: 0.4, fill: true, pointBackgroundColor: '#58CC02', pointRadius: 5 },
+            { data: Array(7).fill(140), borderColor: '#E5E5E5', borderDash: [5, 5], pointRadius: 0 }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 80, max: 180, grid: { color: 'rgba(0,0,0,0.03)' } }, x: { grid: { display: false } } } }
+      });
+    }
 
-function renderAll() {
-  renderPills(); renderNotifs(); renderTasks(); renderPtsHistory(); calcRisk();
-}
-</script>
+    function initMetricCharts() {
+      if (metricsDone) return; metricsDone = true;
+      const d30 = Array.from({ length: 30 }, (_, i) => i + 1);
+      new Chart(document.getElementById('c-sugar'), { type: 'line', data: { labels: d30, datasets: [{ data: d30.map(() => Math.round(95 + Math.random() * 90)), borderColor: '#58CC02', backgroundColor: 'rgba(88,204,2,0.07)', tension: 0.4, fill: true, pointRadius: 2 }, { data: Array(30).fill(140), borderColor: '#FF4B4B', borderDash: [4, 4], pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 70, max: 220 }, x: { ticks: { maxTicksLimit: 8 } } } } });
+      new Chart(document.getElementById('c-bmi'), { type: 'line', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'], datasets: [{ data: [29.1, 28.8, 28.5, 28.2, 28.0, 27.9, 27.8, 27.6, 27.5, 27.4], borderColor: '#1CB0F6', backgroundColor: 'rgba(28,176,246,0.07)', tension: 0.4, fill: true, pointRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 25, max: 32 } } } });
+      new Chart(document.getElementById('c-steps'), { type: 'bar', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], datasets: [{ data: [5200, 7800, 6100, 9200, 4800, 10200, 6420], backgroundColor: ['#58CC02', '#58CC02', '#58CC02', '#58CC02', '#FF9600', '#58CC02', '#1CB0F6'] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 12000 } } } });
+      new Chart(document.getElementById('c-bp'), { type: 'line', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], datasets: [{ label: 'Systolic', data: [128, 122, 118, 125, 119, 115, 118], borderColor: '#FF4B4B', tension: 0.4, pointRadius: 4 }, { label: 'Diastolic', data: [82, 78, 76, 80, 75, 74, 76], borderColor: '#1CB0F6', tension: 0.4, pointRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+    }
+
+    function renderAll() {
+      renderPills(); renderNotifs(); renderTasks(); renderPtsHistory(); calcRisk();
+    }
+  </script>
 </body>
+
 </html>

@@ -43,6 +43,7 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://localhost:5173",
+        "https://glucocare.vercel.app",
         "https://glucocare.app",  # your production domain
     ]
 
