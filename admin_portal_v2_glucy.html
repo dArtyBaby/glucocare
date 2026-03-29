@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlucoCare Admin Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#028090;--teal-d:#016070;--teal-l:#E1F5EE;
+  --blue:#1CB0F6;--blue-l:#DDF4FF;
+  --red:#FF4B4B;--red-l:#FFDFE0;
+  --green:#58CC02;--green-l:#D7F5B1;--green-d:#3A8600;
+  --orange:#FF9600;--orange-l:#FFF0D3;
+  --yellow:#FFC800;--yellow-l:#FFF6CC;
+  --purple:#CE82FF;--purple-l:#F0D9FF;
+  --bg:#F0F4F8;--card:#fff;--text:#1A202C;--muted:#718096;--border:#E2E8F0;
+  --sidebar-w:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+
+/* ═══════════════ LOGIN PAGE ═══════════════ */
+#login-page{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#1A202C 0%,#028090 100%);
+}
+.login-box{
+  background:var(--card);border-radius:24px;padding:40px;
+  width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,0.3);
+}
+.login-glucy-wrap{text-align:center;margin-bottom:20px;}
+#login-glucy-canvas{width:100px;height:100px;cursor:pointer;}
+.login-title{font-family:'Fredoka One',cursive;font-size:28px;color:var(--teal);text-align:center;margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:24px;font-weight:500;}
+.login-glucy-speech{
+  background:var(--teal-l);border:2px solid var(--teal);border-radius:12px;
+  padding:10px 14px;font-size:13px;font-weight:600;color:var(--teal-d);
+  text-align:center;margin-bottom:20px;min-height:42px;transition:all .3s;
+}
+.form-group{margin-bottom:16px;}
+.form-label{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.05em;}
+.form-input{
+  width:100%;padding:12px 16px;border:2px solid var(--border);
+  border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;
+  outline:none;transition:border .15s;background:#fff;
+}
+.form-input:focus{border-color:var(--teal);}
+.form-input.error{border-color:var(--red);}
+.form-select{
+  width:100%;padding:12px 16px;border:2px solid var(--border);
+  border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;
+  outline:none;background:#fff;cursor:pointer;
+}
+.form-select:focus{border-color:var(--teal);}
+.login-btn{
+  width:100%;padding:14px;border:none;border-radius:14px;
+  background:var(--teal);color:#fff;font-family:'Inter',sans-serif;
+  font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;
+  transition:all .15s;box-shadow:0 4px 0 var(--teal-d);
+}
+.login-btn:hover{background:var(--teal-d);}
+.login-btn:active{transform:translateY(2px);box-shadow:0 2px 0 var(--teal-d);}
+.login-error{background:var(--red-l);border:2px solid var(--red);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;color:#991B1B;margin-top:12px;display:none;text-align:center;}
+
+/* ═══════════════ APP LAYOUT ═══════════════ */
+#admin-app{display:none;}
+#admin-app.show{display:flex;min-height:100vh;}
+
+/* SIDEBAR - VERTICAL LEFT NAV */
+.sidebar{
+  width:var(--sidebar-w);background:#1A202C;
+  display:flex;flex-direction:column;
+  position:fixed;height:100vh;z-index:100;
+  overflow:hidden;
+}
+.sb-logo{padding:20px 16px 12px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sb-logo-text{font-family:'Fredoka One',cursive;font-size:20px;color:#fff;}
+.sb-logo-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
+
+/* Glucy in sidebar */
+.sb-glucy{
+  padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;gap:10px;cursor:pointer;
+}
+#sb-glucy-canvas{width:44px;height:44px;flex-shrink:0;}
+.sb-glucy-text{font-size:11px;font-weight:600;color:rgba(255,255,255,.7);line-height:1.5;}
+.sb-glucy-state{width:8px;height:8px;border-radius:50%;margin-left:auto;flex-shrink:0;transition:background .5s;}
+
+.sb-role{
+  margin:10px 16px;background:rgba(2,128,144,.3);
+  border:1px solid rgba(2,128,144,.5);border-radius:8px;
+  padding:8px 10px;display:flex;align-items:center;gap:8px;
+}
+.sb-role-icon{font-size:18px;}
+.sb-role-name{font-size:12px;font-weight:700;color:#fff;}
+.sb-role-type{font-size:10px;color:rgba(255,255,255,.5);}
+.sb-nav{padding:10px 0;flex:1;overflow-y:auto;}
+.sb-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em;padding:8px 16px 4px;}
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;cursor:pointer;
+  color:rgba(255,255,255,.6);font-size:13px;font-weight:500;
+  transition:all .18s;border-left:3px solid transparent;
+  position:relative;
+}
+.sb-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+.sb-item.active{background:rgba(2,128,144,.25);color:#fff;border-left-color:var(--teal);}
+/* Slide-in animation on tab change */
+.sb-item.active::after{
+  content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:3px;height:20px;background:var(--teal);border-radius:4px 0 0 4px;
+}
+.sb-icon{font-size:16px;width:20px;text-align:center;}
+.sb-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:100px;}
+.sb-bottom{padding:12px 16px;border-top:1px solid rgba(255,255,255,.08);}
+.sb-user{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.sb-av{width:32px;height:32px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;}
+.sb-uname{font-size:12px;font-weight:600;color:#fff;}
+.sb-uemail{font-size:10px;color:rgba(255,255,255,.4);}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;}
+.topbar{
+  background:var(--card);border-bottom:1px solid var(--border);
+  padding:14px 24px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:50;
+}
+.topbar-title{font-size:18px;font-weight:700;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.tb-badge{display:flex;align-items:center;gap:5px;border:1px solid;border-radius:100px;padding:5px 12px;font-size:12px;font-weight:700;}
+.tb-ok{background:var(--green-l);border-color:var(--green);color:var(--green-d);}
+.tb-warn{background:var(--orange-l);border-color:var(--orange);color:#774400;}
+.tb-err{background:var(--red-l);border-color:var(--red);color:#991B1B;}
+.content{padding:24px;flex:1;}
+.page{display:none;}
+.page.active{display:block;animation:pageSlide .22s ease;}
+@keyframes pageSlide{from{opacity:0;transform:translateX(-12px);}to{opacity:1;transform:translateX(0);}}
+
+/* GLUCY INLINE CARD */
+.glucy-admin-card{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;border-radius:12px;border:1px solid;
+  margin-bottom:18px;transition:all .4s;
+}
+.glucy-admin-card.ok{background:var(--green-l);border-color:var(--green);}
+.glucy-admin-card.warn{background:var(--yellow-l);border-color:var(--yellow);}
+.glucy-admin-card.err{background:var(--red-l);border-color:var(--red);}
+.glucy-admin-card canvas{width:48px;height:48px;flex-shrink:0;}
+.gac-text h3{font-size:14px;font-weight:700;margin-bottom:2px;}
+.gac-text p{font-size:12px;font-weight:500;opacity:.8;}
+
+/* CARDS */
+.card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:20px;margin-bottom:16px;}
+.card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:14px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+
+/* STAT CARDS */
+.stat{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px;}
+.stat-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;}
+.stat-val{font-size:28px;font-weight:700;line-height:1;}
+.stat-ch{font-size:12px;font-weight:600;margin-top:4px;}
+.stat-ch.up{color:var(--green-d);}
+.stat-ch.down{color:var(--red);}
+.stat-bar{height:4px;border-radius:100px;background:var(--bg);margin-top:10px;overflow:hidden;}
+.stat-fill{height:100%;border-radius:100px;}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border);}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);background:var(--bg);}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:13px;font-weight:500;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:#F7FAFC;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 8px;border-radius:100px;}
+.badge.ok{background:var(--green-l);color:var(--green-d);}
+.badge.warn{background:var(--orange-l);color:#774400;}
+.badge.err{background:var(--red-l);color:#991B1B;}
+.badge.info{background:var(--blue-l);color:#0E6FAA;}
+.badge.purple{background:var(--purple-l);color:#6B21A8;}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .12s;border:1px solid;}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--teal);color:#fff;border-color:var(--teal);}
+.btn-primary:hover{background:var(--teal-d);}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--border);}
+.btn-ghost:hover{background:var(--bg);}
+.btn-danger{background:var(--red-l);color:var(--red);border-color:var(--red);}
+
+/* INPUTS */
+.inp{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;outline:none;background:#fff;width:100%;}
+.inp:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(2,128,144,.1);}
+.sel{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;background:#fff;outline:none;}
+.sel:focus{border-color:var(--teal);}
+
+/* CHART */
+.chart-box{position:relative;height:220px;}
+
+/* ALERT BANNERS */
+.alert{border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;font-weight:600;border:1px solid;}
+.alert.err{background:var(--red-l);border-color:var(--red);color:#991B1B;}
+.alert.warn{background:var(--orange-l);border-color:var(--orange);color:#774400;}
+.alert.ok{background:var(--green-l);border-color:var(--green);color:var(--green-d);}
+.alert.info{background:var(--blue-l);border-color:var(--blue);color:#0E6FAA;}
+
+/* USER ROW */
+.user-row{display:flex;align-items:center;gap:8px;}
+.user-av{width:30px;height:30px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--teal);}
+
+/* CODE BLOCK */
+.code{font-family:'Courier New',monospace;font-size:12px;background:#1A202C;color:#68D391;padding:14px 16px;border-radius:8px;overflow-x:auto;line-height:1.8;}
+.code .dim{color:#4A5568;}.code .key{color:#F6AD55;}.code .str{color:#68D391;}
+
+/* TAB ROW */
+.tab-row{display:flex;gap:4px;background:var(--bg);border-radius:8px;padding:3px;border:1px solid var(--border);margin-bottom:14px;}
+.tab-btn{flex:1;padding:7px 12px;border-radius:6px;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;}
+.tab-btn.active{background:var(--card);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.06);}
+
+/* LOG ENTRIES */
+.log-entry{font-family:'Courier New',monospace;font-size:12px;padding:8px 12px;border-radius:6px;margin-bottom:4px;display:flex;gap:8px;}
+.log-entry.info{background:#EBF8FF;color:#2C5282;}
+.log-entry.warn{background:#FFFBEB;color:#744210;}
+.log-entry.err{background:#FFF5F5;color:#742A2A;}
+.log-time{color:var(--muted);min-width:80px;flex-shrink:0;}
+
+/* CHAT */
+.chat-wrap{display:flex;flex-direction:column;height:320px;}
+.chat-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px 0;}
+.msg-d{align-self:flex-start;max-width:78%;}
+.msg-a{align-self:flex-end;max-width:78%;}
+.msg-b{padding:10px 13px;border-radius:16px;font-size:13px;font-weight:500;line-height:1.5;}
+.msg-d .msg-b{background:var(--bg);border:1px solid var(--border);border-bottom-left-radius:4px;}
+.msg-a .msg-b{background:var(--teal);color:#fff;border-bottom-right-radius:4px;}
+.msg-nm{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;}
+.chat-in-row{display:flex;gap:8px;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+
+/* TOAST */
+#admin-toast{position:fixed;bottom:24px;right:24px;background:#1A202C;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:300px;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     LOGIN PAGE
+═══════════════════════════════════════════ -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-glucy-wrap">
+      <canvas id="login-glucy-canvas" width="100" height="100"></canvas>
+    </div>
+    <div class="login-title">GlucoCare Admin</div>
+    <div class="login-sub">Sign in to your professional dashboard</div>
+    <div class="login-glucy-speech" id="login-speech">Hi! I'm Glucy. Enter your credentials and I'll let you in! 👋</div>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input type="email" class="form-input" id="login-email" placeholder="doctor@glucocare.app" oninput="onLoginType()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" id="login-pass" placeholder="••••••••" oninput="onLoginType()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Role</label>
+      <select class="form-select" id="login-role">
+        <option value="doctor">👨‍⚕️ Doctor</option>
+        <option value="analyst">📊 Data Analyst</option>
+        <option value="developer">💻 Software Developer</option>
+        <option value="admin">🔐 Administrator</option>
+      </select>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="login-error" id="login-error">❌ Wrong credentials. Please try again.</div>
+    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:16px;font-weight:500;">Demo credentials: any email + password "glucocare123"</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ADMIN APP
+═══════════════════════════════════════════ -->
+<div id="admin-app">
+
+  <nav class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">💙 GlucoCare</div>
+      <div class="sb-logo-sub">Admin Portal</div>
+    </div>
+
+    <!-- Glucy in sidebar -->
+    <div class="sb-glucy" onclick="glucyAdminSpeak()">
+      <canvas id="sb-glucy-canvas" width="44" height="44"></canvas>
+      <div class="sb-glucy-text" id="sb-glucy-text">System healthy. All clear! 💚</div>
+      <div class="sb-glucy-state" id="sb-glucy-dot" style="background:var(--green);"></div>
+    </div>
+
+    <div class="sb-role">
+      <div class="sb-role-icon" id="sb-role-icon">👨‍⚕️</div>
+      <div><div class="sb-role-name" id="sb-role-name">Dr. Samuel Osei</div><div class="sb-role-type" id="sb-role-type">Doctor</div></div>
+    </div>
+
+    <div class="sb-nav" id="sidebar-nav">
+      <!-- Populated dynamically based on role -->
+    </div>
+
+    <div class="sb-bottom">
+      <div class="sb-user" onclick="adminToast('Settings coming soon!')">
+        <div class="sb-av" id="sb-av-initials">SO</div>
+        <div><div class="sb-uname" id="sb-uname-text">Dr. S. Osei</div><div class="sb-uemail" id="sb-uemail-text">doctor@glucocare.app</div></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="topbar-right">
+        <div class="tb-badge tb-ok" id="api-status">🟢 API Online</div>
+        <div class="tb-badge tb-warn" id="alert-count-badge">⚠ 3 Alerts</div>
+        <button class="btn btn-ghost" style="font-size:12px;" onclick="doLogout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ═══ DASHBOARD (all roles) ═══ -->
+      <div id="page-dashboard" class="page active">
+        <div class="glucy-admin-card ok" id="dash-glucy-card">
+          <canvas width="48" height="48" id="dash-glucy-canvas"></canvas>
+          <div class="gac-text">
+            <h3 id="dash-glucy-title">System healthy! 💚</h3>
+            <p id="dash-glucy-msg">All services are online. 1,247 active patients. 3 alerts need your attention.</p>
+          </div>
+        </div>
+        <div class="g4" style="margin-bottom:18px;">
+          <div class="stat"><div class="stat-label">Total Patients</div><div class="stat-val">1,247</div><div class="stat-ch up">↑ +23 this month</div><div class="stat-bar"><div class="stat-fill" style="width:72%;background:var(--teal);"></div></div></div>
+          <div class="stat"><div class="stat-label">Active Today</div><div class="stat-val">384</div><div class="stat-ch up">↑ 30.8% DAU</div><div class="stat-bar"><div class="stat-fill" style="width:30%;background:var(--blue);"></div></div></div>
+          <div class="stat"><div class="stat-label">High Risk Alerts</div><div class="stat-val" style="color:var(--red);">3</div><div class="stat-ch down">↑ +1 today</div><div class="stat-bar"><div class="stat-fill" style="width:12%;background:var(--red);"></div></div></div>
+          <div class="stat"><div class="stat-label">Avg Streak</div><div class="stat-val">8.4</div><div class="stat-ch up">↑ from 6.1</div><div class="stat-bar"><div class="stat-fill" style="width:84%;background:var(--orange);"></div></div></div>
+        </div>
+        <div class="g2" style="margin-bottom:16px;">
+          <div class="card"><div class="card-title">Daily Active Users — 30 Days</div><div class="chart-box"><canvas id="dau-chart"></canvas></div></div>
+          <div class="card"><div class="card-title">Risk Distribution</div><div class="chart-box"><canvas id="risk-dist-chart"></canvas></div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-title">Urgent Alerts</div>
+            <div class="alert err">🚨 Kwame A. — Glucose 287 mg/dL — 14 min ago</div>
+            <div class="alert err">🚨 Ama B. — Glucose 312 mg/dL — 1h ago</div>
+            <div class="alert warn">⚠️ Joseph K. — Missed 3 doses this week</div>
+            <button class="btn btn-primary" style="margin-top:8px;" onclick="pg('alerts')">View All →</button>
+          </div>
+          <div class="card">
+            <div class="card-title" id="my-patients-title">My Patients Today</div>
+            <div id="patient-mini-list"></div>
+            <button class="btn btn-ghost" style="width:100%;margin-top:8px;" onclick="pg('patients')">View All →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PATIENTS (Doctor only) ═══ -->
+      <div id="page-patients" class="page">
+        <div class="glucy-admin-card ok" style="margin-bottom:16px;">
+          <canvas width="48" height="48" id="patients-glucy-canvas"></canvas>
+          <div class="gac-text"><h3>Your assigned patients only 👨‍⚕️</h3><p>You can only see and message patients assigned to you by the admin.</p></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:14px;">
+          <input type="text" class="inp" placeholder="Search patients..." style="max-width:280px;" oninput="filterPatients(this.value)">
+          <select class="sel" onchange="filterByRisk(this.value)"><option>All risk levels</option><option>Low Risk</option><option>Moderate Risk</option><option>High Risk</option></select>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Patient</th><th>Risk</th><th>Last Glucose</th><th>Streak</th><th>Last Active</th><th>Status</th><th>Access</th><th>Actions</th></tr></thead>
+            <tbody id="patient-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ PATIENT DETAIL (Doctor only) ═══ -->
+      <div id="page-patient-detail" class="page">
+        <div class="card" style="margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;">
+            <div style="width:54px;height:54px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--teal);">AO</div>
+            <div><div style="font-size:18px;font-weight:700;">Amara Osei</div><div style="font-size:13px;color:var(--muted);">amara@example.com · Type 2 Diabetic · Ghana</div></div>
+            <div style="margin-left:auto;display:flex;gap:8px;">
+              <button class="btn btn-primary" onclick="pg('messages')">💬 Message</button>
+              <button class="btn btn-danger" onclick="revokeAccess('Amara Osei')">🚫 Remove Access</button>
+              <span class="badge warn">Moderate Risk</span>
+            </div>
+          </div>
+          <div class="g4">
+            <div style="text-align:center;padding:10px;"><div style="font-size:24px;font-weight:700;color:var(--teal);">112</div><div style="font-size:11px;color:var(--muted);">Last glucose</div></div>
+            <div style="text-align:center;padding:10px;"><div style="font-size:24px;font-weight:700;color:var(--orange);">🔥 12</div><div style="font-size:11px;color:var(--muted);">Day streak</div></div>
+            <div style="text-align:center;padding:10px;"><div style="font-size:24px;font-weight:700;color:var(--green-d);">87%</div><div style="font-size:11px;color:var(--muted);">Pill adherence</div></div>
+            <div style="text-align:center;padding:10px;"><div style="font-size:24px;font-weight:700;color:var(--blue);">1,240</div><div style="font-size:11px;color:var(--muted);">Wellness pts</div></div>
+          </div>
+        </div>
+        <div class="g2">
+          <div class="card"><div class="card-title">30-Day Glucose Trend</div><div class="chart-box"><canvas id="pt-chart"></canvas></div></div>
+          <div class="card">
+            <div class="card-title">Recent Food Log</div>
+            <table class="tbl" style="font-size:12px;">
+              <thead><tr><th>Food</th><th>Category</th><th>Time</th></tr></thead>
+              <tbody>
+                <tr><td>Kontomire stew</td><td><span class="badge ok">Good</span></td><td>Today 7:30 AM</td></tr>
+                <tr><td>White rice</td><td><span class="badge err">Avoid</span></td><td>Yesterday 1 PM</td></tr>
+                <tr><td>Grilled fish</td><td><span class="badge ok">Good</span></td><td>Yesterday 1 PM</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ MESSAGES (Doctor only) ═══ -->
+      <div id="page-messages" class="page">
+        <div class="g2">
+          <div class="card">
+            <div class="card-title">Patient Conversations (Assigned Only)</div>
+            <div id="msg-list"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Chat — Amara Osei</div>
+            <div class="chat-wrap">
+              <div class="chat-msgs" id="admin-chat-msgs">
+                <div class="msg-d"><div class="msg-nm">Amara Osei</div><div class="msg-b">Good morning Doctor! I switched to brown rice.</div></div>
+                <div class="msg-a"><div class="msg-b">Excellent! Keep your portions to half a cup. 💪</div></div>
+              </div>
+              <div class="chat-in-row">
+                <input type="text" class="inp" id="admin-chat-in" placeholder="Send message to patient..." onkeydown="if(event.key==='Enter')sendAdminMsg()">
+                <button class="btn btn-primary" onclick="sendAdminMsg()">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ ANALYTICS (Analyst + Dev + Admin) ═══ -->
+      <div id="page-analytics" class="page">
+        <div class="alert info">📊 All data is anonymised. No PII visible in this view.</div>
+        <div class="glucy-admin-card ok" style="margin-bottom:14px;">
+          <canvas width="48" height="48" id="analytics-glucy-canvas"></canvas>
+          <div class="gac-text"><h3>Retention dropped 12% this week ⚠️</h3><p>Users skip dinner logs most often. Consider sending a dinner reminder push at 7 PM.</p></div>
+        </div>
+        <div class="g3" style="margin-bottom:16px;">
+          <div class="stat"><div class="stat-label">Avg Logs/User/Day</div><div class="stat-val">2.4</div><div class="stat-ch up">↑ from 1.8</div></div>
+          <div class="stat"><div class="stat-label">Model AUC</div><div class="stat-val" style="color:var(--green-d);">0.84</div><div class="stat-ch up">✓ Healthy</div></div>
+          <div class="stat"><div class="stat-label">Push CTR</div><div class="stat-val">62%</div><div class="stat-ch up">↑ Above 50%</div></div>
+        </div>
+        <div class="g2" style="margin-bottom:16px;">
+          <div class="card"><div class="card-title">Glucose Distribution</div><div class="chart-box"><canvas id="dist-chart"></canvas></div></div>
+          <div class="card"><div class="card-title">Streak Retention Curve</div><div class="chart-box"><canvas id="retention-chart"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div class="card-title" style="margin-bottom:0;">Top Foods Logged</div>
+            <button class="btn btn-ghost" style="font-size:12px;">⬇ Export CSV</button>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>Food</th><th>Times Logged</th><th>Category</th><th>BG Impact</th></tr></thead>
+            <tbody>
+              <tr><td>White rice</td><td>847</td><td><span class="badge err">Avoid</span></td><td style="color:var(--red);">High spike</td></tr>
+              <tr><td>Eggs</td><td>631</td><td><span class="badge ok">Good</span></td><td style="color:var(--green-d);">Stable</td></tr>
+              <tr><td>Kontomire</td><td>492</td><td><span class="badge ok">Good</span></td><td style="color:var(--green-d);">Excellent</td></tr>
+              <tr><td>Malt drink</td><td>388</td><td><span class="badge err">Avoid</span></td><td style="color:var(--red);">+42 avg</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ ML MONITOR (Dev + Admin) ═══ -->
+      <div id="page-ml-monitor" class="page">
+        <div class="glucy-admin-card ok" style="margin-bottom:14px;" id="ml-glucy-card">
+          <canvas width="48" height="48" id="ml-glucy-canvas"></canvas>
+          <div class="gac-text"><h3 id="ml-glucy-title">Model performing well 🤖</h3><p id="ml-glucy-msg">AUC 0.84 — inference time 3ms — last retrained 7 days ago</p></div>
+        </div>
+        <div class="g4" style="margin-bottom:16px;">
+          <div class="stat"><div class="stat-label">Model AUC</div><div class="stat-val" style="color:var(--green-d);">0.84</div><div class="stat-ch up">✓ Healthy</div></div>
+          <div class="stat"><div class="stat-label">Inference Time</div><div class="stat-val">3ms</div><div class="stat-ch up">✓ Fast</div></div>
+          <div class="stat"><div class="stat-label">Daily Predictions</div><div class="stat-val">4,821</div><div class="stat-ch up">↑ +12%</div></div>
+          <div class="stat"><div class="stat-label">Last Retrain</div><div class="stat-val" style="font-size:18px;">7 days ago</div><div class="stat-ch">Monthly schedule</div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-title">Feature Importance (XGBoost Native)</div>
+            <div id="shap-admin"></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:8px;padding:8px;background:var(--bg);border-radius:8px;">WHY XGBoost Native: SHAP requires C++ Build Tools on Windows. XGBoost's built-in gain importance is equally interpretable, requires zero compilation, and works on all platforms.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Retrain Model</div>
+            <div class="alert info">Retraining uses last 30 days of verified glucose logs. Takes ~2 minutes.</div>
+            <button class="btn btn-primary" onclick="simulateRetrain()">🔄 Start Retraining</button>
+            <div id="retrain-status" style="margin-top:12px;display:none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ API EXPLORER (Dev only) ═══ -->
+      <div id="page-api-explorer" class="page">
+        <div class="alert info">🔑 Using admin JWT token. All requests authenticated.</div>
+        <div class="g2">
+          <div>
+            <div class="card" style="margin-bottom:12px;">
+              <div class="card-title">Test Endpoint</div>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-bottom:10px;">
+                <select class="sel" id="api-method"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select>
+                <select class="sel" id="api-endpoint">
+                  <option>/health</option>
+                  <option>/api/v1/auth/me</option>
+                  <option>/api/v1/logs/glucose</option>
+                  <option>/api/v1/predict/risk</option>
+                  <option>/api/v1/rewards/claim-daily</option>
+                  <option>/api/v1/doctor/patients</option>
+                </select>
+              </div>
+              <textarea class="inp" id="api-body" rows="4" style="resize:vertical;font-family:'Courier New',monospace;font-size:12px;margin-bottom:10px;">{"glucose_level": 142, "bmi": 27.4, "age": 45}</textarea>
+              <button class="btn btn-primary" onclick="testApi()">▶ Send Request</button>
+            </div>
+            <div class="card">
+              <div class="card-title">Endpoints</div>
+              <table class="tbl" style="font-size:12px;">
+                <thead><tr><th>Endpoint</th><th>Auth</th></tr></thead>
+                <tbody>
+                  <tr><td>POST /api/v1/auth/register</td><td>None</td></tr>
+                  <tr><td>POST /api/v1/logs/glucose</td><td>Patient JWT</td></tr>
+                  <tr><td>POST /api/v1/predict/risk</td><td>Patient JWT</td></tr>
+                  <tr><td>GET /api/v1/doctor/patients</td><td>Doctor JWT</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card"><div class="card-title">Response</div><div class="code" id="api-response" style="min-height:300px;"><span class="dim">// Click Send Request to see response</span></div></div>
+        </div>
+      </div>
+
+      <!-- ═══ SYSTEM LOGS (Dev only) ═══ -->
+      <div id="page-system-logs" class="page">
+        <div class="glucy-admin-card ok" style="margin-bottom:14px;" id="logs-glucy-card">
+          <canvas width="48" height="48" id="logs-glucy-canvas"></canvas>
+          <div class="gac-text"><h3 id="logs-glucy-title">Systems nominal 🟢</h3><p>No critical errors in the last hour. 1 warning about a rate limit.</p></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button class="btn btn-ghost" onclick="filterLogs('all',this)" style="font-size:12px;">All</button>
+          <button class="btn btn-ghost" onclick="filterLogs('err',this)" style="font-size:12px;">Errors</button>
+          <button class="btn btn-ghost" onclick="filterLogs('warn',this)" style="font-size:12px;">Warnings</button>
+          <button class="btn btn-ghost" onclick="filterLogs('info',this)" style="font-size:12px;">Info</button>
+          <button class="btn btn-primary" style="margin-left:auto;font-size:12px;" onclick="clearLogs()">Clear</button>
+        </div>
+        <div class="card" style="padding:12px;"><div id="log-list"></div></div>
+      </div>
+
+      <!-- ═══ DEPLOYMENT (Dev + Admin) ═══ -->
+      <div id="page-deployment" class="page">
+        <div class="g4" style="margin-bottom:16px;">
+          <div class="stat"><div class="stat-label">API Status</div><div class="stat-val" style="color:var(--green-d);">Online</div><div class="stat-ch up">✓ 99.9% uptime</div></div>
+          <div class="stat"><div class="stat-label">Docker Image</div><div class="stat-val" style="font-size:16px;">glucocare:v1</div><div class="stat-ch">Built 2h ago</div></div>
+          <div class="stat"><div class="stat-label">Workers</div><div class="stat-val">4</div><div class="stat-ch up">Uvicorn · 0% CPU</div></div>
+          <div class="stat"><div class="stat-label">DB Connections</div><div class="stat-val">8/20</div><div class="stat-ch up">Pool healthy</div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-title">Services Health</div>
+            <table class="tbl">
+              <thead><tr><th>Service</th><th>Status</th><th>Latency</th></tr></thead>
+              <tbody>
+                <tr><td>FastAPI</td><td><span class="badge ok">Online</span></td><td>3ms</td></tr>
+                <tr><td>PostgreSQL (Supabase)</td><td><span class="badge ok">Online</span></td><td>12ms</td></tr>
+                <tr><td>Redis</td><td><span class="badge ok">Online</span></td><td>1ms</td></tr>
+                <tr><td>Celery Workers</td><td><span class="badge ok">3 Active</span></td><td>—</td></tr>
+                <tr><td>Firebase FCM</td><td><span class="badge ok">Online</span></td><td>—</td></tr>
+                <tr><td>XGBoost Model</td><td><span class="badge ok">Loaded</span></td><td>3ms</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-title">Commands</div>
+            <div class="code">
+              <span class="dim"># Local dev (no Docker)</span><br>
+              <span class="key">uvicorn</span> main:app --reload --port 8000<br><br>
+              <span class="dim"># Docker</span><br>
+              <span class="key">docker</span> compose up --build<br><br>
+              <span class="dim"># Train ML model</span><br>
+              <span class="key">python</span> -c <span class="str">"from services.ml_service import train_and_save_model; train_and_save_model()"</span><br><br>
+              <span class="dim"># Tests</span><br>
+              <span class="key">pytest</span> tests/ -v --cov=.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ ALERTS ═══ -->
+      <div id="page-alerts" class="page">
+        <div class="glucy-admin-card err" style="margin-bottom:14px;">
+          <canvas width="48" height="48" id="alerts-glucy-canvas"></canvas>
+          <div class="gac-text"><h3>3 patients need attention now! 😢</h3><p>Two high glucose readings above 250 mg/dL in the last 2 hours. Please review immediately.</p></div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Patient</th><th>Alert</th><th>Value</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><div class="user-row"><div class="user-av">KA</div>Kwame Asante</div></td><td><span class="badge err">High Glucose</span></td><td style="color:var(--red);font-weight:700;">287 mg/dL</td><td>14 min ago</td><td><span class="badge warn">Unreviewed</span></td><td><button class="btn btn-primary" style="font-size:11px;padding:5px 10px;" onclick="pg('patient-detail')">Review</button></td></tr>
+              <tr><td><div class="user-row"><div class="user-av">AB</div>Ama Boateng</div></td><td><span class="badge err">High Glucose</span></td><td style="color:var(--red);font-weight:700;">312 mg/dL</td><td>1h ago</td><td><span class="badge warn">Unreviewed</span></td><td><button class="btn btn-primary" style="font-size:11px;padding:5px 10px;">Review</button></td></tr>
+              <tr><td><div class="user-row"><div class="user-av">JK</div>Joseph Kumi</div></td><td><span class="badge warn">Missed Doses</span></td><td>3 this week</td><td>2h ago</td><td><span class="badge warn">Unreviewed</span></td><td><button class="btn btn-primary" style="font-size:11px;padding:5px 10px;">Message</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ USER MANAGEMENT (Admin only) ═══ -->
+      <div id="page-user-management" class="page">
+        <div class="g2" style="margin-bottom:16px;">
+          <div class="card">
+            <div class="card-title">Add New User</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <input type="text" class="inp" placeholder="Full name">
+              <input type="email" class="inp" placeholder="Email address">
+              <select class="sel" style="width:100%;"><option>Doctor</option><option>Data Analyst</option><option>Software Developer</option><option>Admin</option></select>
+              <button class="btn btn-primary">+ Add User</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Doctor–Patient Assignments</div>
+            <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px;">Doctors only see patients assigned to them. Revoked access is logged in the audit trail.</div>
+            <table class="tbl" style="font-size:12px;">
+              <thead><tr><th>Doctor</th><th>Patients</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td>Dr. S. Osei</td><td>12 assigned</td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;">Manage</button></td></tr>
+                <tr><td>Dr. A. Mensah</td><td>8 assigned</td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;">Manage</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">All System Users</div>
+          <table class="tbl">
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><div class="user-row"><div class="user-av">SO</div>Dr. Samuel Osei</div></td><td>doctor@glucocare.app</td><td><span class="badge info">Doctor</span></td><td><span class="badge ok">Active</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;">Edit</button> <button class="btn btn-danger" style="font-size:11px;padding:4px 8px;">Deactivate</button></td></tr>
+              <tr><td><div class="user-row"><div class="user-av">PN</div>Priya Nair</div></td><td>analyst@glucocare.app</td><td><span class="badge purple">Analyst</span></td><td><span class="badge ok">Active</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;">Edit</button> <button class="btn btn-danger" style="font-size:11px;padding:4px 8px;">Deactivate</button></td></tr>
+              <tr><td><div class="user-row"><div class="user-av">KD</div>Kofi Dev</div></td><td>dev@glucocare.app</td><td><span class="badge warn">Developer</span></td><td><span class="badge ok">Active</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;">Edit</button> <button class="btn btn-danger" style="font-size:11px;padding:4px 8px;">Deactivate</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ AUDIT LOGS (Admin only) ═══ -->
+      <div id="page-audit" class="page">
+        <div class="alert info">📋 Every data access action is logged. This view is read-only and cannot be deleted.</div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Timestamp</th><th>User</th><th>Action</th><th>Patient</th><th>IP Address</th></tr></thead>
+            <tbody>
+              <tr><td>2026-03-27 10:32:01</td><td>Dr. S. Osei</td><td>Viewed glucose logs</td><td>Amara Osei</td><td>196.45.12.8</td></tr>
+              <tr><td>2026-03-27 10:28:15</td><td>Dr. S. Osei</td><td>Sent message to patient</td><td>Amara Osei</td><td>196.45.12.8</td></tr>
+              <tr><td>2026-03-27 09:45:33</td><td>Priya Nair</td><td>Exported anonymised analytics</td><td>N/A</td><td>105.163.44.2</td></tr>
+              <tr><td>2026-03-27 09:12:00</td><td>System</td><td>Celery medication reminders sent</td><td>384 patients</td><td>Internal</td></tr>
+              <tr><td>2026-03-27 00:05:01</td><td>System</td><td>Streak reset job — 23 resets</td><td>Multiple</td><td>Internal</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ SECURITY (Admin + Dev) ═══ -->
+      <div id="page-security" class="page">
+        <div class="glucy-admin-card ok" style="margin-bottom:14px;" id="sec-glucy-card">
+          <canvas width="48" height="48" id="sec-glucy-canvas"></canvas>
+          <div class="gac-text"><h3 id="sec-glucy-title">No security incidents 🔐</h3><p>0 unauthorized access attempts today. Rate limiter has blocked 12 suspicious requests.</p></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-title">Recent Security Events</div>
+            <div class="alert ok">✓ No unauthorized access attempts today</div>
+            <div class="alert warn">⚠ Rate limit triggered: 196.45.12.x — 52/60 req/min</div>
+            <table class="tbl" style="font-size:12px;margin-top:10px;">
+              <thead><tr><th>Time</th><th>Event</th><th>IP</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>10:12</td><td>Rate limit approached</td><td>196.45.12.8</td><td><span class="badge warn">Monitored</span></td></tr>
+                <tr><td>09:44</td><td>Failed login attempt</td><td>105.163.44.1</td><td><span class="badge ok">Blocked</span></td></tr>
+                <tr><td>08:31</td><td>Successful login</td><td>196.45.12.8</td><td><span class="badge ok">OK</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-title">Security Config</div>
+            <div style="font-size:13px;font-weight:700;line-height:2.4;">
+              JWT Expiry: <span style="color:var(--teal);">24 hours</span><br>
+              Rate Limit: <span style="color:var(--teal);">60 req/min per IP</span><br>
+              Failed Login Lock: <span style="color:var(--teal);">After 5 attempts</span><br>
+              Row Level Security: <span style="color:var(--green-d);">✓ Enabled (Supabase)</span><br>
+              HTTPS: <span style="color:var(--green-d);">✓ Enforced</span><br>
+              Data Encryption: <span style="color:var(--green-d);">✓ AES-256 at rest</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end content -->
+  </div><!-- end main -->
+</div><!-- end admin-app -->
+
+<div id="admin-toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// GLUCY ENGINE (shared with patient app)
+// ═══════════════════════════════════════════════════════════════
+const GLUCY_STATES = { HAPPY:'happy', SAD:'sad', WARN:'warn', RUN:'run', EAT:'eat' };
+let adminGlucyT = 0;
+let loginGlucyT = 0;
+let loginGlucyState = 'happy';
+
+function drawGlucy(ctx, t, state='happy', size=80) {
+  ctx.clearRect(0, 0, size, size);
+  const scale = size / 80;
+  const bob = Math.sin(t * 0.003) * 4 * scale;
+  ctx.save();
+  ctx.translate(size/2, size/2 + bob);
+  ctx.scale(scale, scale);
+
+  const colors = { happy:'#7FE842', sad:'#FF8080', warn:'#FFD740', run:'#40C8FF', eat:'#FFB240' };
+  const tops = { happy:'#A8F060', sad:'#FFA0A0', warn:'#FFE880', run:'#80DCFF', eat:'#FFD080' };
+  const sides = { happy:'#58C502', sad:'#CC5555', warn:'#CC9900', run:'#0E9AC0', eat:'#CC8000' };
+  const col = colors[state]||'#7FE842';
+
+  const grd = ctx.createRadialGradient(0,0,8,0,0,30);
+  grd.addColorStop(0, col+'30'); grd.addColorStop(1, col+'00');
+  ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(0,0,30,0,Math.PI*2); ctx.fill();
+
+  ctx.fillStyle=col; ctx.strokeStyle=sides[state]||'#3A8600'; ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.roundRect(-22,-22,44,44,8); ctx.fill(); ctx.stroke();
+  ctx.fillStyle=tops[state]||'#A8F060';
+  ctx.beginPath(); ctx.moveTo(-22,-22); ctx.lineTo(-11,-33); ctx.lineTo(33,-33); ctx.lineTo(22,-22); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.fillStyle=sides[state]||'#58C502';
+  ctx.beginPath(); ctx.moveTo(22,-22); ctx.lineTo(33,-33); ctx.lineTo(33,11); ctx.lineTo(22,22); ctx.closePath(); ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.ellipse(-9,-4,7,9,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(9,-4,7,9,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#3C3C3C';
+  const blink = Math.sin(t*0.001) > 0.96;
+  if(state==='sad'){
+    ctx.beginPath(); ctx.ellipse(-9,-2,3.5,4,-0.3,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(9,-2,3.5,4,0.3,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#80C0FF';
+    ctx.beginPath(); ctx.ellipse(-13,6+Math.sin(t*0.005)*3,2,3,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(13,6+Math.sin(t*0.005+1)*3,2,3,0,0,Math.PI*2); ctx.fill();
+  } else if(blink){
+    ctx.fillRect(-15,-4,10,3); ctx.fillRect(5,-4,10,3);
+  } else {
+    ctx.beginPath(); ctx.ellipse(-9,-3,3.5,4.5,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(9,-3,3.5,4.5,0,0,Math.PI*2); ctx.fill();
+  }
+  ctx.fillStyle='rgba(255,255,255,.8)';
+  ctx.beginPath(); ctx.ellipse(-7,-6,1.5,2.5,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(11,-6,1.5,2.5,0,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#2d6800'; ctx.lineWidth=2; ctx.lineCap='round';
+  if(state==='sad') { ctx.beginPath(); ctx.arc(0,12,8,0.3,Math.PI-0.3,true); ctx.stroke(); }
+  else { ctx.beginPath(); ctx.arc(0,4,8,0.2,Math.PI-0.2); ctx.stroke(); }
+  ctx.fillStyle=`rgba(255,120,120,${state==='run'?.6:.35})`;
+  ctx.beginPath(); ctx.ellipse(-17,4,5,3.5,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(17,4,5,3.5,0,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle=sides[state]||'#3A8600'; ctx.lineWidth=4;
+  if(state==='run'){
+    const a=Math.sin(t*0.015)*12;
+    ctx.beginPath(); ctx.moveTo(-22,0); ctx.lineTo(-38,a-8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(22,0); ctx.lineTo(38,-a-8); ctx.stroke();
+    const lg=Math.sin(t*0.015)*10;
+    ctx.strokeStyle=col;
+    ctx.beginPath(); ctx.moveTo(-10,22); ctx.lineTo(-16,36+lg); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(10,22); ctx.lineTo(16,36-lg); ctx.stroke();
+  } else {
+    ctx.beginPath(); ctx.moveTo(-22,0); ctx.lineTo(-36,Math.sin(t*0.004)*6-8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(22,0); ctx.lineTo(36,Math.sin(t*0.004+1)*6-8); ctx.stroke();
+  }
+  if(state==='happy'||state==='run'){
+    for(let i=0;i<3;i++){
+      const a=t*0.002+i*2.1,r=34+Math.sin(t*0.003+i)*6;
+      ctx.fillStyle=`rgba(255,200,0,${.4+Math.sin(t*0.005+i)*.4})`;
+      ctx.beginPath(); ctx.arc(Math.cos(a)*r,Math.sin(a)*r,1.5+Math.sin(t*0.005+i)*1,0,Math.PI*2); ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
+// Animate all admin Glucy canvases
+function animateAdminGlucy() {
+  adminGlucyT += 16;
+  const sbCtx = document.getElementById('sb-glucy-canvas')?.getContext('2d');
+  if(sbCtx) drawGlucy(sbCtx, adminGlucyT, currentAdminGlucyState, 44);
+  const canvases = [
+    ['dash-glucy-canvas',44,currentAdminGlucyState],
+    ['patients-glucy-canvas',48,'happy'],
+    ['analytics-glucy-canvas',48,'warn'],
+    ['ml-glucy-canvas',48,'happy'],
+    ['alerts-glucy-canvas',48,'sad'],
+    ['logs-glucy-canvas',48,'happy'],
+    ['sec-glucy-canvas',48,'happy'],
+  ];
+  canvases.forEach(([id,sz,st]) => {
+    const el = document.getElementById(id);
+    if(el) drawGlucy(el.getContext('2d'), adminGlucyT, st, sz);
+  });
+  requestAnimationFrame(animateAdminGlucy);
+}
+
+// Login Glucy animation
+function animateLoginGlucy() {
+  loginGlucyT += 16;
+  const el = document.getElementById('login-glucy-canvas');
+  if(el) drawGlucy(el.getContext('2d'), loginGlucyT, loginGlucyState, 100);
+  if(document.getElementById('login-page').style.display !== 'none') {
+    requestAnimationFrame(animateLoginGlucy);
+  }
+}
+animateLoginGlucy();
+
+// ═══════════════════════════════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════════════════════════════
+const ROLES = {
+  doctor: { icon:'👨‍⚕️', name:'Dr. Samuel Osei', type:'Doctor', av:'SO', email:'doctor@glucocare.app' },
+  analyst: { icon:'📊', name:'Dr. Priya Nair', type:'Data Analyst', av:'PN', email:'analyst@glucocare.app' },
+  developer: { icon:'💻', name:'Kofi Mensah', type:'Software Developer', av:'KD', email:'dev@glucocare.app' },
+  admin: { icon:'🔐', name:'Admin User', type:'Administrator', av:'AD', email:'admin@glucocare.app' },
+};
+
+const NAV_SECTIONS = {
+  all: [
+    { id:'dashboard', icon:'📊', label:'Dashboard' },
+    { id:'alerts', icon:'🚨', label:'Alerts', badge:3 },
+  ],
+  doctor: [
+    { section:'Patients' },
+    { id:'patients', icon:'👥', label:'My Patients' },
+    { id:'patient-detail', icon:'📋', label:'Patient Detail' },
+    { id:'messages', icon:'💬', label:'Messages' },
+  ],
+  analyst: [
+    { section:'Analytics' },
+    { id:'analytics', icon:'📈', label:'Data Analytics' },
+    { id:'reports', icon:'📄', label:'Reports' },
+  ],
+  developer: [
+    { section:'Developer' },
+    { id:'analytics', icon:'📈', label:'Analytics' },
+    { id:'ml-monitor', icon:'🤖', label:'ML Monitor' },
+    { id:'api-explorer', icon:'⚡', label:'API Explorer' },
+    { id:'system-logs', icon:'📝', label:'System Logs' },
+    { id:'deployment', icon:'🚀', label:'Deployment' },
+    { id:'security', icon:'🔐', label:'Security' },
+  ],
+  admin: [
+    { section:'Management' },
+    { id:'analytics', icon:'📈', label:'Analytics' },
+    { id:'ml-monitor', icon:'🤖', label:'ML Monitor' },
+    { id:'user-management', icon:'👥', label:'User Management' },
+    { id:'audit', icon:'📜', label:'Audit Logs' },
+    { id:'security', icon:'🔐', label:'Security' },
+    { id:'deployment', icon:'🚀', label:'Deployment' },
+  ],
+};
+
+let currentRole = 'doctor';
+let currentAdminGlucyState = 'happy';
+let loginAttempts = 0;
+
+function onLoginType() {
+  loginGlucyState = 'warn';
+  document.getElementById('login-speech').textContent = 'Checking your credentials... 🔍';
+}
+
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const role = document.getElementById('login-role').value;
+  const errEl = document.getElementById('login-error');
+  if (!email || pass !== 'glucocare123') {
+    loginAttempts++;
+    loginGlucyState = 'sad';
+    document.getElementById('login-speech').textContent = loginAttempts >= 3
+      ? `${loginAttempts} failed attempts! Account may be locked. 😢`
+      : 'Wrong password! Please try again. 😢';
+    errEl.style.display = 'block';
+    setTimeout(() => { loginGlucyState = 'happy'; document.getElementById('login-speech').textContent = 'Hi! I\'m Glucy. Enter your credentials! 👋'; }, 3000);
+    return;
+  }
+  errEl.style.display = 'none';
+  loginGlucyState = 'run';
+  document.getElementById('login-speech').textContent = '✓ Welcome! Loading your dashboard... 🏃';
+  setTimeout(() => {
+    document.getElementById('login-page').style.display = 'none';
+    currentRole = role;
+    initAdminApp(role);
+  }, 1000);
+}
+
+function doLogout() {
+  document.getElementById('admin-app').classList.remove('show');
+  document.getElementById('login-page').style.display = 'flex';
+  loginGlucyState = 'happy';
+  animateLoginGlucy();
+}
+
+function initAdminApp(role) {
+  const r = ROLES[role];
+  document.getElementById('sb-role-icon').textContent = r.icon;
+  document.getElementById('sb-role-name').textContent = r.name;
+  document.getElementById('sb-role-type').textContent = r.type;
+  document.getElementById('sb-av-initials').textContent = r.av;
+  document.getElementById('sb-uname-text').textContent = r.name;
+  document.getElementById('sb-uemail-text').textContent = r.email;
+
+  // Build sidebar nav
+  const nav = document.getElementById('sidebar-nav');
+  const items = [...NAV_SECTIONS.all, ...(NAV_SECTIONS[role] || [])];
+  nav.innerHTML = items.map(item => {
+    if (item.section) return `<div class="sb-section">${item.section}</div>`;
+    return `<div class="sb-item" id="nav-${item.id}" onclick="pg('${item.id}')">
+      <span class="sb-icon">${item.icon}</span> ${item.label}
+      ${item.badge ? `<span class="sb-badge">${item.badge}</span>` : ''}
+    </div>`;
+  }).join('');
+
+  // Glucy state based on alerts
+  setAdminGlucyState(3 > 0 ? 'warn' : 'happy', 3 > 0 ? '⚠ 3 alerts need your attention!' : 'All systems healthy! 💚');
+
+  document.getElementById('admin-app').classList.add('show');
+  animateAdminGlucy();
+  renderAdminData();
+  pg('dashboard');
+  setTimeout(initDashCharts, 100);
+}
+
+function setAdminGlucyState(state, msg) {
+  currentAdminGlucyState = state;
+  const colors = { happy: 'var(--green)', warn: 'var(--yellow)', sad: 'var(--red)' };
+  document.getElementById('sb-glucy-dot').style.background = colors[state] || colors.happy;
+  document.getElementById('sb-glucy-text').textContent = msg;
+  const badge = document.getElementById('alert-count-badge');
+  if (state === 'sad' || state === 'warn') {
+    badge.className = 'tb-badge tb-err';
+    badge.textContent = '🚨 3 Alerts';
+  } else {
+    badge.className = 'tb-badge tb-ok';
+    badge.textContent = '🟢 All Clear';
+  }
+}
+
+function glucyAdminSpeak() {
+  const msgs = {
+    happy: 'All systems are healthy! Everyone is logging well today. 💚',
+    warn: '3 patients need your attention. Please check the Alerts tab! ⚠️',
+    sad: 'Critical issue detected! Immediate action required! 🚨',
+  };
+  document.getElementById('sb-glucy-text').textContent = msgs[currentAdminGlucyState] || msgs.happy;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+function pg(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  const navItem = document.getElementById('nav-' + id);
+  if (navItem) navItem.classList.add('active');
+  const titles = { dashboard:'Dashboard', patients:'My Patients', 'patient-detail':'Patient Detail', messages:'Messages', analytics:'Data Analytics', 'ml-monitor':'ML Monitor', 'api-explorer':'API Explorer', 'system-logs':'System Logs', deployment:'Deployment', alerts:'Alerts', 'user-management':'User Management', audit:'Audit Logs', security:'Security', reports:'Reports' };
+  document.getElementById('page-title').textContent = titles[id] || id;
+  if(id==='analytics')setTimeout(initAnalyticsCharts,100);
+  if(id==='patient-detail')setTimeout(initPtChart,100);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DATA RENDERING
+// ═══════════════════════════════════════════════════════════════
+const PATIENTS = [
+  {id:1,name:'Amara Osei',initials:'AO',risk:47,glucose:112,streak:12,active:'2h ago',status:'moderate',access:true},
+  {id:2,name:'Kwame Asante',initials:'KA',risk:82,glucose:287,streak:0,active:'14min ago',status:'vhigh',access:true},
+  {id:3,name:'Ama Boateng',initials:'AB',risk:78,glucose:312,streak:3,active:'1h ago',status:'high',access:true},
+  {id:4,name:'Joseph Kumi',initials:'JK',risk:34,glucose:98,streak:21,active:'3h ago',status:'low',access:true},
+  {id:5,name:'Efua Agyei',initials:'EA',risk:55,glucose:148,streak:0,active:'Yesterday',status:'moderate',access:false},
+];
+
+function renderPatients(list) {
+  const tbody = document.getElementById('patient-tbody'); if(!tbody) return;
+  tbody.innerHTML = list.map(p => {
+    const bc = p.status==='low'?'ok':p.status==='moderate'?'warn':'err';
+    const sl = p.status==='low'?'Low':p.status==='moderate'?'Moderate':p.status==='high'?'High':'Very High';
+    const gc = p.glucose>250?'color:var(--red);font-weight:700;':p.glucose>140?'color:var(--orange);font-weight:700;':'';
+    const accessBadge = p.access ? '<span class="badge ok">Active</span>' : '<span class="badge err">Revoked</span>';
+    return `<tr>
+      <td><div class="user-row"><div class="user-av">${p.initials}</div>${p.name}</div></td>
+      <td><span class="badge ${bc}">${sl} ${p.risk}%</span></td>
+      <td style="${gc}">${p.glucose} mg/dL</td>
+      <td>🔥 ${p.streak}d</td>
+      <td>${p.active}</td>
+      <td>${accessBadge}</td>
+      <td>
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;" onclick="pg('patient-detail')">View</button>
+        ${p.access ? `<button class="btn btn-danger" style="font-size:11px;padding:4px 8px;margin-left:4px;" onclick="revokeAccess('${p.name}')">Revoke</button>` : `<button class="btn btn-primary" style="font-size:11px;padding:4px 8px;margin-left:4px;" onclick="restoreAccess('${p.name}')">Restore</button>`}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function revokeAccess(name) {
+  adminToast(`Access revoked for ${name}. Doctor can no longer see their data.`);
+  setAdminGlucyState('warn', `Access revoked for ${name} — logged in audit trail.`);
+}
+function restoreAccess(name) { adminToast(`Access restored for ${name}`); }
+function filterPatients(q) { renderPatients(PATIENTS.filter(p => p.name.toLowerCase().includes(q.toLowerCase()))); }
+function filterByRisk(v) {
+  const map = {'All risk levels':null,'Low Risk':'low','Moderate Risk':'moderate','High Risk':'high'};
+  const f = map[v];
+  renderPatients(f ? PATIENTS.filter(p => p.status === f) : PATIENTS);
+}
+
+function renderPatientMini() {
+  const el = document.getElementById('patient-mini-list'); if(!el) return;
+  el.innerHTML = PATIENTS.slice(0,4).map(p => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);">
+      <div class="user-av">${p.initials}</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:600;">${p.name}</div><div style="font-size:11px;color:var(--muted);">${p.glucose} mg/dL · ${p.active}</div></div>
+      <span class="badge ${p.glucose>200?'err':p.glucose>140?'warn':'ok'}">${p.glucose>200?'High':p.glucose>140?'Watch':'OK'}</span>
+    </div>`).join('');
+}
+
+const MSG_LIST = [
+  {initials:'AO',name:'Amara Osei',last:'Thank you Doctor!',time:'2m',unread:true},
+  {initials:'JK',name:'Joseph Kumi',last:'When is my appointment?',time:'1h',unread:true},
+  {initials:'KM',name:'Kofi Mensah',last:'My glucose was 88 today!',time:'3h',unread:false},
+];
+function renderMsgList() {
+  const el = document.getElementById('msg-list'); if(!el) return;
+  el.innerHTML = MSG_LIST.map(m => `
+    <div style="display:flex;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+      <div class="user-av" style="${m.unread?'background:var(--teal);color:#fff;':''}">${m.initials}</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:${m.unread?700:600};">${m.name}</div><div style="font-size:12px;color:var(--muted);">${m.last}</div></div>
+      <div style="font-size:11px;color:var(--muted);">${m.time}</div>
+      ${m.unread?'<div style="width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0;"></div>':''}
+    </div>`).join('');
+}
+
+function sendAdminMsg() {
+  const inp = document.getElementById('admin-chat-in');
+  const t = inp.value.trim(); if(!t) return;
+  const msgs = document.getElementById('admin-chat-msgs');
+  msgs.innerHTML += `<div class="msg-a"><div class="msg-b">${t}</div></div>`;
+  inp.value = ''; msgs.scrollTop = msgs.scrollHeight;
+}
+
+const LOGS = [
+  {t:'info',ts:'10:32',m:'POST /api/v1/logs/glucose 201 — user:amara@example.com'},
+  {t:'info',ts:'10:31',m:'POST /api/v1/rewards/claim-daily 200 — streak:12'},
+  {t:'warn',ts:'10:28',m:'High glucose alert: Kwame Asante 287 mg/dL — FCM sent'},
+  {t:'err', ts:'10:22',m:'Firebase FCM token invalid — token cleared from DB'},
+  {t:'info',ts:'10:18',m:'GET /api/v1/doctor/patients 200 — 247 records'},
+  {t:'warn',ts:'10:12',m:'Rate limit approaching: 52/60 req/min from 196.45.x.x'},
+  {t:'info',ts:'09:55',m:'Celery: medication reminders — 384 notifications sent'},
+  {t:'info',ts:'00:05',m:'Celery: streak reset job — 23 broken streaks reset'},
+];
+function renderLogs(f='all') {
+  const el = document.getElementById('log-list'); if(!el) return;
+  const filtered = f==='all' ? LOGS : LOGS.filter(l => l.t===f);
+  el.innerHTML = filtered.map(l => `<div class="log-entry ${l.t}"><span class="log-time">${l.ts}</span><span>[${l.t.toUpperCase()}]</span><span>${l.m}</span></div>`).join('');
+  if(filtered.some(l=>l.t==='err')) setAdminGlucyState('sad','Error detected in system logs! Please investigate! 🚨');
+}
+function filterLogs(f,btn) { document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderLogs(f); }
+function clearLogs() { document.getElementById('log-list').innerHTML = `<div class="log-entry info"><span class="log-time">${new Date().toLocaleTimeString()}</span><span>[INFO]</span><span>Logs cleared</span></div>`; }
+
+const SHAP_DATA=[{l:'Blood Glucose',pct:35,c:'#FF4B4B'},{l:'BMI',pct:22,c:'#FF9600'},{l:'Age',pct:15,c:'#CE82FF'},{l:'Family History',pct:12,c:'#1CB0F6'},{l:'Blood Pressure',pct:8,c:'#58CC02'},{l:'Insulin',pct:5,c:'#FFC800'}];
+function renderShap() {
+  const el = document.getElementById('shap-admin'); if(!el) return;
+  el.innerHTML = SHAP_DATA.map(f=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><div style="min-width:120px;font-size:12px;font-weight:600;">${f.l}</div><div style="flex:1;background:var(--bg);border-radius:6px;height:18px;overflow:hidden;"><div style="width:${f.pct}%;height:100%;background:${f.c};border-radius:6px;display:flex;align-items:center;padding-left:6px;"><span style="font-size:10px;font-weight:800;color:#fff;">${f.pct}%</span></div></div></div>`).join('');
+}
+
+function testApi() {
+  const method = document.getElementById('api-method').value;
+  const endpoint = document.getElementById('api-endpoint').value;
+  const responses = {
+    '/health': '{\n  "status": "healthy",\n  "version": "1.0.0"\n}',
+    '/api/v1/predict/risk': '{\n  "risk_score": 47.2,\n  "risk_label": "Moderate Risk",\n  "recommendation": "Some risk factors...",\n  "model_confidence": 0.472\n}',
+    '/api/v1/rewards/claim-daily': '{\n  "success": true,\n  "points_earned": 60,\n  "new_streak": 13,\n  "message": "+60 points! Day 13 streak!"\n}',
+  };
+  document.getElementById('api-response').innerHTML = `<span class="dim">// ${method} ${endpoint}\n// 200 OK · 4ms\n\n</span>${responses[endpoint]||'{\n  "success": true\n}'}`;
+}
+
+function simulateRetrain() {
+  const el = document.getElementById('retrain-status');
+  el.style.display = 'block'; el.className = 'alert info';
+  el.textContent = '🔄 Loading 4,821 glucose logs...';
+  setAdminGlucyState('warn','Model retraining in progress...');
+  setTimeout(()=>el.textContent='🔄 Training XGBoost (200 trees)...',1500);
+  setTimeout(()=>el.textContent='🔄 Computing feature importance...',3000);
+  setTimeout(()=>{el.className='alert ok';el.textContent='✓ Complete! New AUC: 0.86 (improved from 0.84). Deployed.';setAdminGlucyState('happy','Model retrained! AUC improved to 0.86! Great work! 💚');},4500);
+}
+
+function renderAdminData() { renderPatients(PATIENTS); renderPatientMini(); renderMsgList(); renderLogs(); renderShap(); }
+
+function adminToast(msg,dur=3000) {
+  const el=document.getElementById('admin-toast'); el.textContent=msg; el.style.opacity='1';
+  setTimeout(()=>el.style.opacity='0',dur);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════════════════════════
+let dashDone=false, analytDone=false, ptDone=false;
+function initDashCharts(){
+  if(dashDone)return; dashDone=true;
+  new Chart(document.getElementById('dau-chart'),{type:'line',data:{labels:Array.from({length:30},(_,i)=>i+1),datasets:[{data:Array.from({length:30},()=>Math.round(300+Math.random()*120)),borderColor:'#028090',backgroundColor:'rgba(2,128,144,.07)',tension:.4,fill:true,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:200,max:500},x:{ticks:{maxTicksLimit:8}}}}});
+  new Chart(document.getElementById('risk-dist-chart'),{type:'doughnut',data:{labels:['Low','Moderate','High','Very High'],datasets:[{data:[42,31,18,9],backgroundColor:['#58CC02','#FFC800','#FF9600','#FF4B4B']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+}
+function initAnalyticsCharts(){
+  if(analytDone)return; analytDone=true;
+  new Chart(document.getElementById('dist-chart'),{type:'bar',data:{labels:['60-80','80-100','100-120','120-140','140-160','160+'],datasets:[{data:[45,189,312,287,198,147],backgroundColor:['#58CC02','#58CC02','#58CC02','#58CC02','#FFC800','#FF4B4B']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  new Chart(document.getElementById('retention-chart'),{type:'line',data:{labels:['Day 1','Day 3','Day 7','Day 14','Day 21','Day 30'],datasets:[{data:[100,78,52,38,29,21],borderColor:'#1CB0F6',tension:.4,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+}
+function initPtChart(){
+  if(ptDone)return; ptDone=true;
+  const d30=Array.from({length:30},(_,i)=>i+1);
+  new Chart(document.getElementById('pt-chart'),{type:'line',data:{labels:d30,datasets:[{data:d30.map(()=>Math.round(95+Math.random()*80)),borderColor:'#028090',backgroundColor:'rgba(2,128,144,.07)',tension:.4,fill:true,pointRadius:2},{data:Array(30).fill(140),borderColor:'#FF4B4B',borderDash:[4,4],pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:60,max:220}}}});
+}
+</script>
+</body>
+</html>

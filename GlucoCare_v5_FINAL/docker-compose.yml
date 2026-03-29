@@ -1,0 +1,96 @@
+# docker-compose.yml - GlucoCare Local Development Stack
+# BEFORE RUNNING: Make sure Docker Desktop is open and whale icon stopped animating
+# HOW TO RUN: docker compose up --build   (no "version:" field - was deprecated)
+
+services:
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: glucocare_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-glucocare}:${POSTGRES_PASSWORD:-glucocare_dev_password_123}@db:5432/${POSTGRES_DB:-glucocare_db}
+    volumes:
+      - ./backend:/app
+      - ./backend/ml:/app/ml
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - glucocare_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  db:
+    image: postgres:16-alpine
+    container_name: glucocare_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-glucocare}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-glucocare_dev_password_123}
+      POSTGRES_DB: ${POSTGRES_DB:-glucocare_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - glucocare_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-glucocare}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: glucocare_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - glucocare_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: glucocare_celery
+    restart: unless-stopped
+    command: celery -A worker.celery_app worker --loglevel=info --concurrency=2
+    env_file:
+      - ./backend/.env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+      - redis
+    networks:
+      - glucocare_network
+    profiles:
+      - full
+
+volumes:
+  postgres_data:
+
+networks:
+  glucocare_network:
+    driver: bridge

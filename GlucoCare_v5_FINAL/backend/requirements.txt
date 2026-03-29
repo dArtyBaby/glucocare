@@ -1,0 +1,50 @@
+# GlucoCare requirements.txt — Python 3.13 compatible
+# Last updated: March 2026
+# KEY FIXES:
+#   1. shap REMOVED — requires Microsoft C++ Build Tools (not available on all Windows)
+#      Replaced with XGBoost native feature importance (works everywhere, no compilation)
+#   2. httpx==0.27.2 — do NOT upgrade to 0.28.x (breaks supabase gotrue/postgrest)
+#   3. numpy/scikit-learn/xgboost install separately to avoid group failure
+
+# Core API
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+gunicorn==23.0.0
+
+# Database
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+alembic==1.14.0
+
+# Supabase (requires httpx<0.28)
+supabase==2.10.0
+pydantic-settings==2.6.1
+pydantic[email]==2.10.3
+httpx==0.27.2
+
+# Auth
+PyJWT==2.10.1
+cryptography==43.0.3
+
+# ML — Python 3.13 pre-built wheels, no compilation needed
+numpy==2.1.3
+pandas==2.2.3
+joblib==1.4.2
+scikit-learn==1.5.2
+xgboost==2.1.3
+# NOTE: shap removed — requires C++ Build Tools on Windows
+# XGBoost native feature importance is used instead (see services/ml_service.py)
+# To optionally install shap: pip install shap --only-binary=:all:
+
+# Firebase
+firebase-admin==6.6.0
+
+# Tasks
+celery[redis]==5.4.0
+redis==5.2.1
+slowapi==0.1.9
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
